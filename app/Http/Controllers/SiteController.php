@@ -2,64 +2,69 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreSiteRequest;
+use App\Http\Requests\UpdateSiteRequest;
 use App\Models\Site;
-use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class SiteController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(): Response
     {
-        //
+        return Inertia::render('sites/index', [
+            'sites' => Site::query()->orderBy('company_name')->get(),
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function create(): Response
     {
-        //
+        return Inertia::render('sites/create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(StoreSiteRequest $request): RedirectResponse
     {
-        //
+        $validated = $request->validated();
+        $validated['template'] = filled($validated['template'] ?? null)
+            ? $validated['template']
+            : 'default';
+
+        $site = Site::create($validated);
+
+        return redirect()->route('sites.show', $site);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Site $site)
+    public function show(Site $site): Response
     {
-        //
+        return Inertia::render('sites/show', [
+            'site' => $site,
+        ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Site $site)
+    public function edit(Site $site): Response
     {
-        //
+        return Inertia::render('sites/edit', [
+            'site' => $site,
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Site $site)
+    public function update(UpdateSiteRequest $request, Site $site): RedirectResponse
     {
-        //
+        $validated = $request->validated();
+        if (array_key_exists('template', $validated) && ! filled($validated['template'])) {
+            $validated['template'] = 'default';
+        }
+
+        $site->update($validated);
+
+        return redirect()->route('sites.show', $site);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Site $site)
+    public function destroy(Site $site): RedirectResponse
     {
-        //
+        $site->delete();
+
+        return redirect()->route('sites.index');
     }
 }
