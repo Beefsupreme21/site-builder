@@ -2,14 +2,22 @@
 
 namespace App\Http\Requests;
 
+use App\Http\Requests\Concerns\ValidatesSiteInput;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreSiteRequest extends FormRequest
 {
+    use ValidatesSiteInput;
+
     public function authorize(): bool
     {
         return true;
+    }
+
+    protected function prepareForValidation(): void
+    {
+        $this->normalizeTemplateInput();
     }
 
     /**
@@ -17,13 +25,6 @@ class StoreSiteRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'slug' => ['required', 'string', 'max:255', 'unique:sites,slug'],
-            'template' => ['nullable', 'string', 'max:255'],
-            'company_name' => ['required', 'string', 'max:255'],
-            'phone' => ['nullable', 'string', 'max:255'],
-            'email' => ['nullable', 'string', 'email', 'max:255'],
-            'logo' => ['nullable', 'string', 'max:2048'],
-        ];
+        return $this->siteRules();
     }
 }

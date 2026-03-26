@@ -1,7 +1,9 @@
+import type { SiteTemplate } from '@/lib/site-templates';
+
 export type Site = {
     id: number;
     slug: string;
-    template: string;
+    template: SiteTemplate;
     company_name: string;
     phone: string | null;
     email: string | null;

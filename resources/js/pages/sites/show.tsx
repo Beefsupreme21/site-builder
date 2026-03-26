@@ -2,6 +2,7 @@ import {
     destroy,
     edit,
     index,
+    preview,
 } from '@/actions/App/Http/Controllers/SiteController';
 import type { Site } from '@/types/site';
 import { Form, Head, Link } from '@inertiajs/react';
@@ -15,7 +16,15 @@ export default function SitesShow({ site }: { site: Site }) {
                     <h1 className="text-xl font-semibold text-neutral-900">
                         {site.company_name}
                     </h1>
-                    <div className="flex gap-2">
+                    <div className="flex flex-wrap gap-2">
+                        <Link
+                            href={preview.url(site)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="rounded border border-neutral-300 bg-white px-3 py-1.5 text-sm text-neutral-800 hover:bg-neutral-50"
+                        >
+                            Preview
+                        </Link>
                         <Link
                             href={edit.url(site)}
                             className="rounded border border-neutral-300 bg-white px-3 py-1.5 text-sm text-neutral-800 hover:bg-neutral-50"

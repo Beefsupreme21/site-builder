@@ -2,6 +2,7 @@ import {
     create,
     destroy,
     edit,
+    preview,
     show,
 } from '@/actions/App/Http/Controllers/SiteController';
 import type { Site } from '@/types/site';
@@ -81,6 +82,14 @@ export default function SitesIndex({ sites }: { sites: Site[] }) {
                                                     className={btnSecondary}
                                                 >
                                                     View
+                                                </Link>
+                                                <Link
+                                                    href={preview.url(site)}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className={btnSecondary}
+                                                >
+                                                    Preview
                                                 </Link>
                                                 <Link
                                                     href={edit.url(site)}

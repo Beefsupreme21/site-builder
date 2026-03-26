@@ -6,6 +6,7 @@ use App\Http\Requests\StoreSiteRequest;
 use App\Http\Requests\UpdateSiteRequest;
 use App\Models\Site;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -25,12 +26,7 @@ class SiteController extends Controller
 
     public function store(StoreSiteRequest $request): RedirectResponse
     {
-        $validated = $request->validated();
-        $validated['template'] = filled($validated['template'] ?? null)
-            ? $validated['template']
-            : 'default';
-
-        $site = Site::create($validated);
+        $site = Site::create($request->validated());
 
         return redirect()->route('sites.show', $site);
     }
@@ -42,6 +38,14 @@ class SiteController extends Controller
         ]);
     }
 
+    public function preview(Site $site): View
+    {
+        return view(
+            'sites.templates.'.$site->previewTemplateKey(),
+            ['site' => $site],
+        );
+    }
+
     public function edit(Site $site): Response
     {
         return Inertia::render('sites/edit', [
@@ -51,12 +55,7 @@ class SiteController extends Controller
 
     public function update(UpdateSiteRequest $request, Site $site): RedirectResponse
     {
-        $validated = $request->validated();
-        if (array_key_exists('template', $validated) && ! filled($validated['template'])) {
-            $validated['template'] = 'default';
-        }
-
-        $site->update($validated);
+        $site->update($request->validated());
 
         return redirect()->route('sites.show', $site);
     }
