@@ -31,7 +31,7 @@ test('preview renders alternate blade template', function () {
         ->assertOk()
         ->assertViewIs('sites.templates.alternate')
         ->assertSee('Demo Gym', false)
-        ->assertSee('Template: alternate', false);
+        ->assertSee('Our team', false);
 });
 
 test('preview falls back to default view for unknown template value', function () {

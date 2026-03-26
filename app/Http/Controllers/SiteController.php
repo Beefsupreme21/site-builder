@@ -28,14 +28,7 @@ class SiteController extends Controller
     {
         $site = Site::create($request->validated());
 
-        return redirect()->route('sites.show', $site);
-    }
-
-    public function show(Site $site): Response
-    {
-        return Inertia::render('sites/show', [
-            'site' => $site,
-        ]);
+        return redirect()->route('sites.edit', $site);
     }
 
     public function preview(Site $site): View
@@ -57,7 +50,7 @@ class SiteController extends Controller
     {
         $site->update($request->validated());
 
-        return redirect()->route('sites.show', $site);
+        return redirect()->route('sites.edit', $site);
     }
 
     public function destroy(Site $site): RedirectResponse

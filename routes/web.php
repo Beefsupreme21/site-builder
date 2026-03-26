@@ -8,4 +8,4 @@ Route::inertia('/', 'welcome')->name('home');
 Route::get('/preview/{site:slug}', [SiteController::class, 'preview'])
     ->name('sites.preview');
 
-Route::resource('sites', SiteController::class);
+Route::resource('sites', SiteController::class)->except(['show']);

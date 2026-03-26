@@ -3,7 +3,6 @@ import {
     destroy,
     edit,
     preview,
-    show,
 } from '@/actions/App/Http/Controllers/SiteController';
 import type { Site } from '@/types/site';
 import { Form, Head, Link } from '@inertiajs/react';
@@ -63,7 +62,7 @@ export default function SitesIndex({ sites }: { sites: Site[] }) {
                                     <tr key={site.id} className="bg-white">
                                         <td className="px-4 py-3">
                                             <Link
-                                                href={show.url(site)}
+                                                href={edit.url(site)}
                                                 className="font-medium text-neutral-900 underline-offset-2 hover:underline"
                                             >
                                                 {site.company_name}
@@ -77,20 +76,12 @@ export default function SitesIndex({ sites }: { sites: Site[] }) {
                                         </td>
                                         <td className="px-4 py-3 text-right">
                                             <div className="flex justify-end gap-2">
-                                                <Link
-                                                    href={show.url(site)}
-                                                    className={btnSecondary}
-                                                >
-                                                    View
-                                                </Link>
-                                                <Link
+                                                <a
                                                     href={preview.url(site)}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
                                                     className={btnSecondary}
                                                 >
                                                     Preview
-                                                </Link>
+                                                </a>
                                                 <Link
                                                     href={edit.url(site)}
                                                     className={btnSecondary}
