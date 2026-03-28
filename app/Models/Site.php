@@ -5,6 +5,7 @@ namespace App\Models;
 use Database\Factories\SiteFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Site extends Model
 {
@@ -36,5 +37,13 @@ class Site extends Model
         return in_array($this->template, self::TEMPLATES, true)
             ? $this->template
             : 'default';
+    }
+
+    /**
+     * @return HasMany<Lead, $this>
+     */
+    public function leads(): HasMany
+    {
+        return $this->hasMany(Lead::class);
     }
 }

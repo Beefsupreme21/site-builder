@@ -19,7 +19,7 @@ class SiteSeeder extends Seeder
                 'company_name' => 'Acme Hardware Co.',
                 'phone' => '(555) 123-4567',
                 'email' => 'hello@acmehardware.example',
-                'logo' => null,
+                'logo' => 'images/seeds/acme-hardware.svg',
             ],
             [
                 'slug' => 'blue-ocean-dental',
@@ -27,7 +27,7 @@ class SiteSeeder extends Seeder
                 'company_name' => 'Blue Ocean Dental',
                 'phone' => '(555) 234-5678',
                 'email' => 'appointments@blueoceandental.example',
-                'logo' => 'https://placehold.co/200x56/png?text=Blue+Ocean',
+                'logo' => 'images/seeds/blue-ocean-dental.svg',
             ],
             [
                 'slug' => 'northside-cafe',
@@ -35,7 +35,7 @@ class SiteSeeder extends Seeder
                 'company_name' => 'Northside Café',
                 'phone' => '(555) 345-6789',
                 'email' => 'info@northsidecafe.example',
-                'logo' => null,
+                'logo' => 'images/seeds/northside-cafe.svg',
             ],
             [
                 'slug' => 'summit-fitness',
@@ -43,7 +43,7 @@ class SiteSeeder extends Seeder
                 'company_name' => 'Summit Fitness Studio',
                 'phone' => '(555) 456-7890',
                 'email' => 'train@summitfitness.example',
-                'logo' => null,
+                'logo' => 'images/seeds/summit-fitness.svg',
             ],
         ];
 

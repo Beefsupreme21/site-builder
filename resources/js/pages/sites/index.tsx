@@ -1,3 +1,4 @@
+import { index as leadsIndex } from '@/actions/App/Http/Controllers/LeadController';
 import {
     create,
     destroy,
@@ -19,12 +20,17 @@ export default function SitesIndex({ sites }: { sites: Site[] }) {
                     <h1 className="text-2xl font-semibold text-neutral-900">
                         Sites
                     </h1>
-                    <Link
-                        href={create.url()}
-                        className="rounded-md bg-neutral-900 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-800"
-                    >
-                        New site
-                    </Link>
+                    <div className="flex flex-wrap items-center gap-2">
+                        <Link href={leadsIndex.url()} className={btnSecondary}>
+                            Leads
+                        </Link>
+                        <Link
+                            href={create.url()}
+                            className="rounded-md bg-neutral-900 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-800"
+                        >
+                            New site
+                        </Link>
+                    </div>
                 </div>
 
                 {sites.length === 0 ? (
@@ -78,6 +84,8 @@ export default function SitesIndex({ sites }: { sites: Site[] }) {
                                             <div className="flex justify-end gap-2">
                                                 <a
                                                     href={preview.url(site)}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
                                                     className={btnSecondary}
                                                 >
                                                     Preview

@@ -215,6 +215,8 @@ export default function SitesEdit({ site }: { site: Site }) {
                         </Link>
                         <a
                             href={preview.url(site)}
+                            target="_blank"
+                            rel="noopener noreferrer"
                             className="ml-auto rounded-lg border border-neutral-200 px-5 py-2.5 text-sm font-medium text-neutral-700 hover:bg-neutral-50"
                         >
                             Open preview
