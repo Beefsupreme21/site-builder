@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 64">
-  <rect width="320" height="64" rx="10" fill="#075985"/>
-  <ellipse cx="36" cy="32" rx="14" ry="18" fill="#e0f2fe" opacity=".95"/>
-  <path fill="#38bdf8" d="M30 26c4-6 14-6 18 0-3 4-6 10-9 14-3-4-6-10-9-14Z"/>
-  <text x="58" y="42" fill="#f0f9ff" font-family="system-ui,Segoe UI,sans-serif" font-size="20" font-weight="700">Blue Ocean Dental</text>
-</svg>

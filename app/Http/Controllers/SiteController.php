@@ -26,9 +26,9 @@ class SiteController extends Controller
 
     public function store(StoreSiteRequest $request): RedirectResponse
     {
-        $site = Site::create($request->validated());
+        Site::create($request->validated());
 
-        return redirect()->route('sites.edit', $site);
+        return redirect()->route('sites.index');
     }
 
     public function preview(Site $site): View

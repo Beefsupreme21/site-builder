@@ -1,10 +1,15 @@
 <?php
 
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\LeadController;
 use App\Http\Controllers\SiteController;
 use Illuminate\Support\Facades\Route;
 
 Route::inertia('/', 'welcome')->name('home');
+
+Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
+Route::post('/chat', [ChatController::class, 'store'])->name('chat.store');
+Route::post('/chat/clear', [ChatController::class, 'clear'])->name('chat.clear');
 
 Route::get('/preview/{site:slug}', [SiteController::class, 'preview'])
     ->name('sites.preview');

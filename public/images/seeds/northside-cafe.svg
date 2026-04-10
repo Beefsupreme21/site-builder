@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 64">
-  <rect width="300" height="64" rx="10" fill="#422006"/>
-  <path fill="#fde68a" d="M22 42V24c0-4 3.5-7 8-7h4c2.8 0 5 2.2 5 5v6c0 1.7-1.3 3-3 3h-6v11h-8Zm8-16v6h4v-6h-4Z"/>
-  <ellipse cx="40" cy="46" rx="10" ry="3" fill="#78350f" opacity=".5"/>
-  <text x="58" y="42" fill="#fffbeb" font-family="system-ui,Segoe UI,sans-serif" font-size="20" font-weight="700">Northside Café</text>
-</svg>
