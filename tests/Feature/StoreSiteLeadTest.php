@@ -3,10 +3,11 @@
 use App\Models\Lead;
 use App\Models\Site;
 
-test('contact form stores a lead and redirects to preview with fragment', function () {
+test('contact form stores a lead and redirects to contact page', function () {
     $site = Site::factory()->create(['slug' => 'gym-demo']);
+    $contact = $site->contactPage();
 
-    $response = $this->from(route('sites.preview', $site))
+    $response = $this->from(route('sites.preview', [$site, $contact]))
         ->post(route('sites.contact.store', $site), [
             'first_name' => 'Jane',
             'last_name' => 'Doe',
@@ -15,7 +16,7 @@ test('contact form stores a lead and redirects to preview with fragment', functi
             'message' => 'Interested in training.',
         ]);
 
-    $response->assertRedirect(route('sites.preview', $site).'#contact');
+    $response->assertRedirect(route('sites.preview', [$site, $contact]));
     $response->assertSessionHas('lead_submitted', true);
 
     $this->assertDatabaseHas('leads', [

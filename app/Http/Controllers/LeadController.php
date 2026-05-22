@@ -44,9 +44,14 @@ class LeadController extends Controller
             ]);
         }
 
+        $redirectPage = $site->contactPage() ?? $site->homePage();
+
+        if ($redirectPage === null) {
+            return redirect()->route('sites.preview.home', $site);
+        }
+
         return redirect()
-            ->route('sites.preview', $site)
-            ->withFragment('contact')
+            ->route('sites.preview', [$site, $redirectPage])
             ->with('lead_submitted', true);
     }
 }

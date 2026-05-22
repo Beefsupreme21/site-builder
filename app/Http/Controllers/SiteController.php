@@ -26,16 +26,44 @@ class SiteController extends Controller
 
     public function store(StoreSiteRequest $request): RedirectResponse
     {
-        Site::create($request->validated());
+        $site = Site::create($request->validated());
 
-        return redirect()->route('sites.index');
+        return redirect()->route('sites.show', $site);
     }
 
-    public function preview(Site $site): View
+    public function show(Site $site): Response
     {
+        return Inertia::render('sites/show', [
+            'site' => $site->load('pages'),
+        ]);
+    }
+
+    public function previewHome(Site $site): RedirectResponse
+    {
+        $page = $site->homePage();
+
+        if ($page === null) {
+            abort(404);
+        }
+
+        return redirect()->route('sites.preview', [$site, $page]);
+    }
+
+    public function preview(Site $site, string $page): View
+    {
+        $site->load('pages');
+
+        $sitePage = $site->pages()->where('slug', $page)->firstOrFail();
+
+        $template = $site->previewTemplateKey();
+
         return view(
-            'sites.templates.'.$site->previewTemplateKey(),
-            ['site' => $site],
+            "sites.templates.{$template}.pages.show",
+            [
+                'site' => $site,
+                'sitePage' => $sitePage,
+                'currentPage' => $sitePage,
+            ],
         );
     }
 
@@ -50,7 +78,7 @@ class SiteController extends Controller
     {
         $site->update($request->validated());
 
-        return redirect()->route('sites.edit', $site);
+        return redirect()->route('sites.show', $site);
     }
 
     public function destroy(Site $site): RedirectResponse

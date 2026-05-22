@@ -1,0 +1,29 @@
+<?php
+
+namespace App\Http\Requests;
+
+use App\Http\Requests\Concerns\ValidatesSitePageInput;
+use App\Models\Site;
+use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Foundation\Http\FormRequest;
+
+class StoreSitePageRequest extends FormRequest
+{
+    use ValidatesSitePageInput;
+
+    public function authorize(): bool
+    {
+        return true;
+    }
+
+    /**
+     * @return array<string, ValidationRule|array<mixed>|string>
+     */
+    public function rules(): array
+    {
+        /** @var Site $site */
+        $site = $this->route('site');
+
+        return $this->sitePageRules($site);
+    }
+}
