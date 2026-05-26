@@ -16,13 +16,6 @@ class UpdateSiteRequest extends FormRequest
         return true;
     }
 
-    protected function prepareForValidation(): void
-    {
-        if ($this->has('template')) {
-            $this->normalizeTemplateInput();
-        }
-    }
-
     /**
      * @return array<string, ValidationRule|array<mixed>|string>
      */

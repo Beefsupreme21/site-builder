@@ -6,6 +6,7 @@ use Database\Factories\SitePageFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class SitePage extends Model
 {
@@ -19,7 +20,6 @@ class SitePage extends Model
         'site_id',
         'slug',
         'title',
-        'content',
         'sort_order',
     ];
 
@@ -28,22 +28,20 @@ class SitePage extends Model
         return 'slug';
     }
 
-    public function isContactPage(): bool
-    {
-        return $this->slug === 'contact';
-    }
-
-    public function isHomePage(): bool
-    {
-        return $this->slug === 'home';
-    }
-
     /**
      * @return BelongsTo<Site, $this>
      */
     public function site(): BelongsTo
     {
         return $this->belongsTo(Site::class);
+    }
+
+    /**
+     * @return HasMany<BlockPage, $this>
+     */
+    public function blockPages(): HasMany
+    {
+        return $this->hasMany(BlockPage::class)->orderBy('sort_order');
     }
 
     public function previewUrl(): string

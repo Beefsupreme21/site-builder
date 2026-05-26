@@ -2,11 +2,7 @@ import { FormErrors } from '@/components/ui/form-errors';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { sites } from '@/lib/routes';
-import { SITE_TEMPLATES } from '@/lib/site-templates';
 import { Form, Head, Link } from '@inertiajs/react';
-
-const selectClass =
-    'mt-1.5 w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-sm text-neutral-900 shadow-sm focus:border-neutral-500 focus:outline-none focus:ring-2 focus:ring-neutral-400/30';
 
 const sectionTitle =
     'border-b border-neutral-100 pb-2 text-xs font-semibold uppercase tracking-wide text-neutral-500';
@@ -52,26 +48,6 @@ export default function SitesCreate() {
                                                 required
                                                 className="max-w-full"
                                             />
-                                        </div>
-                                        <div>
-                                            <Label htmlFor="site-create-template">
-                                                Template
-                                            </Label>
-                                            <select
-                                                id="site-create-template"
-                                                name="template"
-                                                defaultValue="default"
-                                                className={selectClass}
-                                            >
-                                                {SITE_TEMPLATES.map((t) => (
-                                                    <option
-                                                        key={t.value}
-                                                        value={t.value}
-                                                    >
-                                                        {t.label}
-                                                    </option>
-                                                ))}
-                                            </select>
                                         </div>
                                         <div>
                                             <Label htmlFor="site-create-company_name">

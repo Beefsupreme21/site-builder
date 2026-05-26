@@ -8,20 +8,17 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('site_pages', function (Blueprint $table) {
+        Schema::create('block_pages', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('site_id')->constrained()->cascadeOnDelete();
-            $table->string('slug');
-            $table->string('title');
+            $table->foreignId('site_page_id')->constrained()->cascadeOnDelete();
+            $table->longText('content');
             $table->unsignedSmallInteger('sort_order')->default(0);
             $table->timestamps();
-
-            $table->unique(['site_id', 'slug']);
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('site_pages');
+        Schema::dropIfExists('block_pages');
     }
 };

@@ -15,11 +15,6 @@ class StoreSiteRequest extends FormRequest
         return true;
     }
 
-    protected function prepareForValidation(): void
-    {
-        $this->normalizeTemplateInput();
-    }
-
     /**
      * @return array<string, ValidationRule|array<mixed>|string>
      */

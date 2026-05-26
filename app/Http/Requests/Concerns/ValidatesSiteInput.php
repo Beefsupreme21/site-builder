@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Concerns;
 
-use App\Models\Site;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Validation\Rule;
 
@@ -24,21 +23,10 @@ trait ValidatesSiteInput
                     ? Rule::unique('sites', 'slug')->ignore($ignoreSiteId)
                     : Rule::unique('sites', 'slug'),
             ],
-            'template' => ['nullable', 'string', Rule::in(Site::TEMPLATES)],
             'company_name' => ['required', 'string', 'max:255'],
             'phone' => ['nullable', 'string', 'max:255'],
             'email' => ['nullable', 'string', 'email', 'max:255'],
             'logo' => ['nullable', 'string', 'max:2048'],
         ];
-    }
-
-    /**
-     * Ensure template is never stored empty; database column is non-nullable.
-     */
-    protected function normalizeTemplateInput(): void
-    {
-        if (! filled($this->input('template'))) {
-            $this->merge(['template' => 'default']);
-        }
     }
 }

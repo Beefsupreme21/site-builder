@@ -4,14 +4,10 @@ import { Label } from '@/components/ui/label';
 import { sitePages, sites } from '@/lib/routes';
 import { Head, Link, useForm } from '@inertiajs/react';
 
-const textareaClass =
-    'mt-1.5 w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-sm text-neutral-900 shadow-sm focus:border-neutral-500 focus:outline-none focus:ring-2 focus:ring-neutral-400/30';
-
 export default function SitePagesCreate({ site, nextSortOrder }) {
     const form = useForm({
         slug: '',
         title: '',
-        content: '',
         sort_order: nextSortOrder,
     });
 
@@ -75,18 +71,6 @@ export default function SitePagesCreate({ site, nextSortOrder }) {
                                 }
                                 required
                                 className="max-w-full"
-                            />
-                        </div>
-                        <div>
-                            <Label htmlFor="page-content">Content</Label>
-                            <textarea
-                                id="page-content"
-                                rows={6}
-                                value={form.data.content}
-                                onChange={(e) =>
-                                    form.setData('content', e.target.value)
-                                }
-                                className={textareaClass}
                             />
                         </div>
                         <div>

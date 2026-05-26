@@ -1,4 +1,4 @@
-import { leads, sitePreview, sites } from '@/lib/routes';
+import { sitePreview, sites } from '@/lib/routes';
 import { Form, Head, Link } from '@inertiajs/react';
 
 const btnSecondary =
@@ -13,17 +13,12 @@ export default function SitesIndex({ sites: siteList }) {
                     <h1 className="text-2xl font-semibold text-neutral-900">
                         Sites
                     </h1>
-                    <div className="flex flex-wrap items-center gap-2">
-                        <Link href={leads.index()} className={btnSecondary}>
-                            Leads
-                        </Link>
-                        <Link
-                            href={sites.create()}
-                            className="rounded-md bg-neutral-900 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-800"
-                        >
-                            New site
-                        </Link>
-                    </div>
+                    <Link
+                        href={sites.create()}
+                        className="rounded-md bg-neutral-900 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-800"
+                    >
+                        New site
+                    </Link>
                 </div>
 
                 {siteList.length === 0 ? (
@@ -48,9 +43,6 @@ export default function SitesIndex({ sites: siteList }) {
                                     <th className="px-4 py-3 text-left font-medium text-neutral-700">
                                         Slug
                                     </th>
-                                    <th className="px-4 py-3 text-left font-medium text-neutral-700">
-                                        Template
-                                    </th>
                                     <th className="px-4 py-3 text-right font-medium text-neutral-700">
                                         Actions
                                     </th>
@@ -69,9 +61,6 @@ export default function SitesIndex({ sites: siteList }) {
                                         </td>
                                         <td className="px-4 py-3 text-neutral-600">
                                             {site.slug}
-                                        </td>
-                                        <td className="px-4 py-3 text-neutral-600">
-                                            {site.template}
                                         </td>
                                         <td className="px-4 py-3 text-right">
                                             <div className="flex justify-end gap-2">

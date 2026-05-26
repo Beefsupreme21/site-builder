@@ -13,8 +13,6 @@ use Illuminate\Support\Str;
 class SitePageFactory extends Factory
 {
     /**
-     * Define the model's default state.
-     *
      * @return array<string, mixed>
      */
     public function definition(): array
@@ -25,7 +23,6 @@ class SitePageFactory extends Factory
             'site_id' => Site::factory(),
             'slug' => Str::slug($title),
             'title' => ucwords($title),
-            'content' => fake()->paragraph(),
             'sort_order' => fake()->numberBetween(0, 10),
         ];
     }

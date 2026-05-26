@@ -39,7 +39,7 @@ class SitePageController extends Controller
     {
         return Inertia::render('sites/pages/edit', [
             'site' => $site,
-            'page' => $page,
+            'page' => $page->load('blockPages'),
         ]);
     }
 

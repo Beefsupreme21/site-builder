@@ -55,16 +55,10 @@ class SiteController extends Controller
 
         $sitePage = $site->pages()->where('slug', $page)->firstOrFail();
 
-        $template = $site->previewTemplateKey();
-
-        return view(
-            "sites.templates.{$template}.pages.show",
-            [
-                'site' => $site,
-                'sitePage' => $sitePage,
-                'currentPage' => $sitePage,
-            ],
-        );
+        return view('sites.show', [
+            'site' => $site,
+            'page' => $sitePage,
+        ]);
     }
 
     public function edit(Site $site): Response

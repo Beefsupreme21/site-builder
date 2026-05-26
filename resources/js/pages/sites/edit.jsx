@@ -2,11 +2,7 @@ import { FormErrors } from '@/components/ui/form-errors';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { sitePreview, sites } from '@/lib/routes';
-import { SITE_TEMPLATES } from '@/lib/site-templates';
 import { Head, Link, useForm } from '@inertiajs/react';
-
-const selectClass =
-    'mt-1.5 w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-sm text-neutral-900 shadow-sm focus:border-neutral-500 focus:outline-none focus:ring-2 focus:ring-neutral-400/30';
 
 const fieldWrap = 'space-y-6';
 const sectionTitle =
@@ -15,7 +11,6 @@ const sectionTitle =
 export default function SitesEdit({ site }) {
     const form = useForm({
         slug: site.slug,
-        template: site.template,
         company_name: site.company_name,
         phone: site.phone ?? '',
         email: site.email ?? '',
@@ -44,7 +39,7 @@ export default function SitesEdit({ site }) {
                         Site settings
                     </h1>
                     <p className="mt-1 text-sm text-neutral-600">
-                        Template, contact details, and branding.
+                        Slug, contact details, and branding.
                     </p>
                 </header>
 
@@ -70,32 +65,6 @@ export default function SitesEdit({ site }) {
                                         required
                                         className="max-w-full"
                                     />
-                                </div>
-                                <div>
-                                    <Label htmlFor="site-edit-template">
-                                        Template
-                                    </Label>
-                                    <select
-                                        id="site-edit-template"
-                                        name="template"
-                                        value={form.data.template}
-                                        onChange={(e) =>
-                                            form.setData(
-                                                'template',
-                                                e.target.value,
-                                            )
-                                        }
-                                        className={selectClass}
-                                    >
-                                        {SITE_TEMPLATES.map((t) => (
-                                            <option
-                                                key={t.value}
-                                                value={t.value}
-                                            >
-                                                {t.label}
-                                            </option>
-                                        ))}
-                                    </select>
                                 </div>
                                 <div>
                                     <Label htmlFor="site-edit-company_name">

@@ -26,7 +26,7 @@ export default function SitesShow({ site }) {
                                 {site.company_name}
                             </h1>
                             <p className="mt-1 text-sm text-neutral-600">
-                                {site.slug} · {site.template}
+                                {site.slug}
                             </p>
                         </div>
                         <div className="flex flex-wrap gap-2">

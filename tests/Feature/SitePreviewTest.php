@@ -5,10 +5,9 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
-test('preview renders default page', function () {
+test('preview renders the page', function () {
     $site = Site::factory()->create([
         'slug' => 'demo-dental',
-        'template' => 'default',
         'company_name' => 'Demo Dental',
     ]);
 
@@ -16,7 +15,7 @@ test('preview renders default page', function () {
 
     $this->get(route('sites.preview', [$site, $home]))
         ->assertOk()
-        ->assertViewIs('sites.templates.default.pages.show')
+        ->assertViewIs('sites.show')
         ->assertSee('Demo Dental', false);
 });
 
@@ -25,36 +24,6 @@ test('preview home redirects to first page', function () {
 
     $this->get(route('sites.preview.home', $site))
         ->assertRedirect(route('sites.preview', [$site, $site->homePage()]));
-});
-
-test('preview renders alternate page by slug', function () {
-    $site = Site::factory()->create([
-        'slug' => 'demo-gym',
-        'template' => 'alternate',
-    ]);
-
-    $about = $site->pages()->where('slug', 'about')->first();
-
-    $this->get(route('sites.preview', [$site, $about]))
-        ->assertOk()
-        ->assertViewIs('sites.templates.alternate.pages.show')
-        ->assertSee('About Us', false);
-});
-
-test('preview falls back to default template for unknown template value', function () {
-    $site = Site::factory()->create([
-        'slug' => 'legacy-site',
-        'template' => 'legacy-removed',
-    ]);
-
-    $this->get(route('sites.preview.home', $site))
-        ->assertRedirect();
-
-    $home = $site->homePage();
-
-    $this->get(route('sites.preview', [$site, $home]))
-        ->assertOk()
-        ->assertViewIs('sites.templates.default.pages.show');
 });
 
 test('preview returns 404 for unknown slug', function () {
@@ -67,11 +36,12 @@ test('preview returns 404 for unknown page slug', function () {
     $this->get("/preview/{$site->slug}/does-not-exist")->assertNotFound();
 });
 
-test('new sites receive default pages', function () {
-    $site = Site::factory()->create();
+test('new sites receive a home page named after the company', function () {
+    $site = Site::factory()->create(['company_name' => 'Acme Co']);
 
-    expect($site->pages)->toHaveCount(3);
-    expect($site->homePage()?->title)->toBe($site->company_name);
+    expect($site->pages)->toHaveCount(1);
+    expect($site->homePage()?->slug)->toBe('home');
+    expect($site->homePage()?->title)->toBe('Acme Co');
 });
 
 test('site show lists pages', function () {
@@ -81,7 +51,7 @@ test('site show lists pages', function () {
         ->assertOk()
         ->assertInertia(fn ($page) => $page
             ->component('sites/show')
-            ->has('site.pages', 3));
+            ->has('site.pages', 1));
 });
 
 test('pages can be added and removed', function () {
@@ -90,7 +60,6 @@ test('pages can be added and removed', function () {
     $this->post(route('sites.pages.store', $site), [
         'slug' => 'store',
         'title' => 'Store',
-        'content' => 'Browse our products.',
         'sort_order' => 3,
     ])->assertRedirect(route('sites.show', $site));
 
@@ -99,27 +68,23 @@ test('pages can be added and removed', function () {
 
     $this->get(route('sites.preview', [$site, $storePage]))
         ->assertOk()
-        ->assertSee('Browse our products.', false);
+        ->assertSee('Store', false);
 
-    $about = $site->pages()->where('slug', 'about')->first();
-
-    $this->delete(route('sites.pages.destroy', [$site, $about]))
+    $this->delete(route('sites.pages.destroy', [$site, $storePage]))
         ->assertRedirect(route('sites.show', $site));
 
-    expect($site->pages()->where('slug', 'about')->exists())->toBeFalse();
+    expect($site->pages()->where('slug', 'store')->exists())->toBeFalse();
 });
 
 test('page update persists changes', function () {
     $site = Site::factory()->create();
-    $page = $site->pages()->where('slug', 'about')->first();
+    $page = $site->homePage();
 
     $this->patch(route('sites.pages.update', [$site, $page]), [
-        'slug' => 'about',
-        'title' => 'Our story',
-        'content' => 'Updated about copy.',
-        'sort_order' => 1,
+        'slug' => 'home',
+        'title' => 'Welcome',
+        'sort_order' => 0,
     ])->assertRedirect(route('sites.show', $site));
 
-    expect($page->fresh()->title)->toBe('Our story');
-    expect($page->fresh()->content)->toBe('Updated about copy.');
+    expect($page->fresh()->title)->toBe('Welcome');
 });

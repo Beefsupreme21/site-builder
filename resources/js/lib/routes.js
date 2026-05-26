@@ -25,13 +25,17 @@ export const sitePages = {
     destroy: (site, page) => `/sites/${idOf(site)}/pages/${slugOf(page)}`,
 };
 
+export const pageBlocks = {
+    create: (site, page) =>
+        `/sites/${idOf(site)}/pages/${slugOf(page)}/blocks/create`,
+    store: (site, page) => `/sites/${idOf(site)}/pages/${slugOf(page)}/blocks`,
+    destroy: (site, page, blockPage) =>
+        `/sites/${idOf(site)}/pages/${slugOf(page)}/blocks/${idOf(blockPage)}`,
+};
+
 export const sitePreview = {
     home: (site) => `/preview/${slugOf(site)}`,
     page: (site, page) => `/preview/${slugOf(site)}/${slugOf(page)}`,
-};
-
-export const leads = {
-    index: () => '/leads',
 };
 
 export const chat = {

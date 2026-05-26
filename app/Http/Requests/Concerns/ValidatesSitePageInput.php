@@ -24,7 +24,6 @@ trait ValidatesSitePageInput
                     ->ignore($ignorePageId),
             ],
             'title' => ['required', 'string', 'max:255'],
-            'content' => ['nullable', 'string', 'max:10000'],
             'sort_order' => ['nullable', 'integer', 'min:0', 'max:65535'],
         ];
     }
