@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Block;
 use App\Models\Site;
 use Illuminate\Database\Seeder;
 
@@ -40,11 +41,26 @@ class SiteSeeder extends Seeder
             ],
         ];
 
+        $libraryBlocks = Block::query()->orderBy('id')->get();
+
         foreach ($sites as $attributes) {
-            Site::updateOrCreate(
+            $site = Site::updateOrCreate(
                 ['slug' => $attributes['slug']],
                 $attributes,
             );
+
+            $home = $site->homePage();
+
+            if ($home === null || $home->blockPages()->exists()) {
+                continue;
+            }
+
+            foreach ($libraryBlocks as $i => $block) {
+                $home->blockPages()->create([
+                    'content' => $block->default_content,
+                    'sort_order' => $i + 1,
+                ]);
+            }
         }
     }
 }

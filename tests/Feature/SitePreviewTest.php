@@ -51,7 +51,23 @@ test('site show lists pages', function () {
         ->assertOk()
         ->assertInertia(fn ($page) => $page
             ->component('sites/show')
-            ->has('site.pages', 1));
+            ->has('site.pages', 1)
+            ->missing('site.pages.0.block_pages'));
+});
+
+test('page show lists blocks for a page', function () {
+    $site = Site::factory()->create(['company_name' => 'Acme']);
+    $page = $site->homePage();
+    $page->blockPages()->create([
+        'content' => '<p>Hello</p>',
+        'sort_order' => 1,
+    ]);
+
+    $this->get(route('sites.pages.show', [$site, $page]))
+        ->assertOk()
+        ->assertInertia(fn ($response) => $response
+            ->component('sites/pages/show')
+            ->has('page.block_pages', 1));
 });
 
 test('pages can be added and removed', function () {
@@ -84,7 +100,7 @@ test('page update persists changes', function () {
         'slug' => 'home',
         'title' => 'Welcome',
         'sort_order' => 0,
-    ])->assertRedirect(route('sites.show', $site));
+    ])->assertRedirect(route('sites.pages.show', [$site, $page]));
 
     expect($page->fresh()->title)->toBe('Welcome');
 });

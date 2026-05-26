@@ -1,0 +1,44 @@
+import { pageBlocks } from '@/lib/routes';
+import { Link } from '@inertiajs/react';
+
+const btn =
+    'inline-flex items-center justify-center rounded-md border border-neutral-300 bg-white px-2.5 py-1 text-xs font-medium text-neutral-800 shadow-sm hover:bg-neutral-50 disabled:cursor-not-allowed disabled:opacity-40';
+
+export function BlockReorderButtons({ site, page, blocks, block }) {
+    const index = blocks.findIndex((b) => b.id === block.id);
+
+    return (
+        <div className="flex gap-2">
+            {[
+                { label: 'Move up', direction: 'up', disabled: index <= 0 },
+                {
+                    label: 'Move down',
+                    direction: 'down',
+                    disabled: index === blocks.length - 1,
+                },
+            ].map(({ label, direction, disabled }) =>
+                disabled ? (
+                    <button
+                        key={direction}
+                        type="button"
+                        disabled
+                        className={btn}
+                    >
+                        {label}
+                    </button>
+                ) : (
+                    <Link
+                        key={direction}
+                        href={pageBlocks.move(site, page, block, direction)}
+                        method="patch"
+                        preserveScroll
+                        className={btn}
+                        as="button"
+                    >
+                        {label}
+                    </Link>
+                ),
+            )}
+        </div>
+    );
+}

@@ -53,7 +53,7 @@ class SiteController extends Controller
     {
         $site->load('pages');
 
-        $sitePage = $site->pages()->where('slug', $page)->firstOrFail();
+        $sitePage = $site->pages()->where('slug', $page)->with('blockPages')->firstOrFail();
 
         return view('sites.show', [
             'site' => $site,

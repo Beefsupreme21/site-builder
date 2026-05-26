@@ -2,22 +2,25 @@ import { FormErrors } from '@/components/ui/form-errors';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { sites } from '@/lib/routes';
+import {
+    backLink,
+    btnCancel,
+    btnSubmit,
+    formActions,
+    formCard,
+    formSectionTitle,
+    formWrap,
+} from '@/lib/ui';
 import { Form, Head, Link } from '@inertiajs/react';
-
-const sectionTitle =
-    'border-b border-neutral-100 pb-2 text-xs font-semibold uppercase tracking-wide text-neutral-500';
 
 export default function SitesCreate() {
     return (
         <>
             <Head title="New site" />
-            <div className="mx-auto max-w-xl px-4 py-8 sm:px-6">
+            <div className={formWrap}>
                 <header className="mb-8">
                     <p className="text-sm text-neutral-500">
-                        <Link
-                            href={sites.index()}
-                            className="font-medium text-neutral-700 hover:text-neutral-900"
-                        >
+                        <Link href={sites.index()} className={backLink}>
                             ← Sites
                         </Link>
                     </p>
@@ -31,69 +34,60 @@ export default function SitesCreate() {
 
                 <Form action={sites.store()} method="post">
                     {({ errors, processing }) => (
-                        <div className="rounded-xl border border-neutral-200 bg-white p-6 shadow-sm sm:p-8">
+                        <div className={formCard}>
                             <FormErrors errors={errors} />
 
                             <div className="space-y-8">
-                                <div>
-                                    <h2 className={sectionTitle}>Site</h2>
+                                <section>
+                                    <h2 className={formSectionTitle}>Site</h2>
                                     <div className="mt-4 space-y-4">
                                         <div>
-                                            <Label htmlFor="site-create-slug">
-                                                Slug
-                                            </Label>
+                                            <Label htmlFor="slug">Slug</Label>
                                             <Input
-                                                id="site-create-slug"
+                                                id="slug"
                                                 name="slug"
                                                 required
-                                                className="max-w-full"
                                             />
                                         </div>
                                         <div>
-                                            <Label htmlFor="site-create-company_name">
+                                            <Label htmlFor="company_name">
                                                 Company name
                                             </Label>
                                             <Input
-                                                id="site-create-company_name"
+                                                id="company_name"
                                                 name="company_name"
                                                 required
-                                                className="max-w-full"
                                             />
                                         </div>
                                     </div>
-                                </div>
+                                </section>
 
-                                <div>
-                                    <h2 className={sectionTitle}>Contact</h2>
+                                <section>
+                                    <h2 className={formSectionTitle}>
+                                        Contact
+                                    </h2>
                                     <div className="mt-4 space-y-4">
                                         <div>
-                                            <Label htmlFor="site-create-phone">
-                                                Phone
-                                            </Label>
-                                            <Input
-                                                id="site-create-phone"
-                                                name="phone"
-                                                className="max-w-full"
-                                            />
+                                            <Label htmlFor="phone">Phone</Label>
+                                            <Input id="phone" name="phone" />
                                         </div>
                                         <div>
-                                            <Label htmlFor="site-create-email">
-                                                Email
-                                            </Label>
+                                            <Label htmlFor="email">Email</Label>
                                             <Input
-                                                id="site-create-email"
+                                                id="email"
                                                 name="email"
                                                 type="email"
-                                                className="max-w-full"
                                             />
                                         </div>
                                     </div>
-                                </div>
+                                </section>
 
-                                <div>
-                                    <h2 className={sectionTitle}>Branding</h2>
+                                <section>
+                                    <h2 className={formSectionTitle}>
+                                        Branding
+                                    </h2>
                                     <div className="mt-4">
-                                        <Label htmlFor="site-create-logo">
+                                        <Label htmlFor="logo">
                                             Logo URL or path
                                         </Label>
                                         <p className="mt-0.5 text-xs text-neutral-500">
@@ -104,27 +98,23 @@ export default function SitesCreate() {
                                             .
                                         </p>
                                         <Input
-                                            id="site-create-logo"
+                                            id="logo"
                                             name="logo"
-                                            className="max-w-full"
                                             placeholder="https://…"
                                         />
                                     </div>
-                                </div>
+                                </section>
                             </div>
 
-                            <div className="mt-8 flex flex-wrap gap-3 border-t border-neutral-100 pt-6">
+                            <div className={formActions}>
                                 <button
                                     type="submit"
                                     disabled={processing}
-                                    className="rounded-lg bg-neutral-900 px-5 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-neutral-800 disabled:opacity-60"
+                                    className={btnSubmit}
                                 >
                                     Create site
                                 </button>
-                                <Link
-                                    href={sites.index()}
-                                    className="rounded-lg border border-neutral-300 bg-white px-5 py-2.5 text-sm font-medium text-neutral-800 shadow-sm hover:bg-neutral-50"
-                                >
+                                <Link href={sites.index()} className={btnCancel}>
                                     Cancel
                                 </Link>
                             </div>

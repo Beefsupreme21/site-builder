@@ -1,33 +1,32 @@
-import { sitePreview, sites } from '@/lib/routes';
+import { sites } from '@/lib/routes';
+import {
+    btnDanger,
+    btnPrimary,
+    btnSecondary,
+    emptyState,
+    linkTitle,
+    pageWrap,
+} from '@/lib/ui';
 import { Form, Head, Link } from '@inertiajs/react';
-
-const btnSecondary =
-    'inline-flex items-center justify-center rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-sm font-medium text-neutral-800 shadow-sm hover:bg-neutral-50';
 
 export default function SitesIndex({ sites: siteList }) {
     return (
         <>
             <Head title="Sites" />
-            <div className="mx-auto max-w-5xl p-6">
+            <div className={pageWrap}>
                 <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
                     <h1 className="text-2xl font-semibold text-neutral-900">
                         Sites
                     </h1>
-                    <Link
-                        href={sites.create()}
-                        className="rounded-md bg-neutral-900 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-800"
-                    >
+                    <Link href={sites.create()} className={btnPrimary}>
                         New site
                     </Link>
                 </div>
 
                 {siteList.length === 0 ? (
-                    <p className="text-neutral-600">
+                    <p className={emptyState}>
                         No sites yet.{' '}
-                        <Link
-                            href={sites.create()}
-                            className="font-medium text-neutral-900 underline"
-                        >
+                        <Link href={sites.create()} className={linkTitle}>
                             Create one
                         </Link>
                         .
@@ -50,11 +49,11 @@ export default function SitesIndex({ sites: siteList }) {
                             </thead>
                             <tbody className="divide-y divide-neutral-200">
                                 {siteList.map((site) => (
-                                    <tr key={site.id} className="bg-white">
+                                    <tr key={site.id}>
                                         <td className="px-4 py-3">
                                             <Link
                                                 href={sites.show(site)}
-                                                className="font-medium text-neutral-900 underline-offset-2 hover:underline"
+                                                className={linkTitle}
                                             >
                                                 {site.company_name}
                                             </Link>
@@ -64,21 +63,11 @@ export default function SitesIndex({ sites: siteList }) {
                                         </td>
                                         <td className="px-4 py-3 text-right">
                                             <div className="flex justify-end gap-2">
-                                                <a
-                                                    href={sitePreview.home(
-                                                        site,
-                                                    )}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className={btnSecondary}
-                                                >
-                                                    Preview
-                                                </a>
                                                 <Link
                                                     href={sites.show(site)}
                                                     className={btnSecondary}
                                                 >
-                                                    Manage
+                                                    Edit
                                                 </Link>
                                                 <Form
                                                     action={sites.destroy(site)}
@@ -91,7 +80,9 @@ export default function SitesIndex({ sites: siteList }) {
                                                             disabled={
                                                                 processing
                                                             }
-                                                            className={`${btnSecondary} border-red-200 text-red-800 hover:bg-red-50`}
+                                                            className={
+                                                                btnDanger
+                                                            }
                                                             onClick={(e) => {
                                                                 if (
                                                                     !confirm(
@@ -114,15 +105,6 @@ export default function SitesIndex({ sites: siteList }) {
                         </table>
                     </div>
                 )}
-
-                <p className="mt-8">
-                    <Link
-                        href="/"
-                        className="text-sm text-neutral-600 underline"
-                    >
-                        ← Home
-                    </Link>
-                </p>
             </div>
         </>
     );

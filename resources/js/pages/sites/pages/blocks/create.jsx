@@ -9,7 +9,7 @@ export default function PageBlocksCreate({ site, page, blocks }) {
                 <header className="mb-8">
                     <p className="text-sm text-neutral-500">
                         <Link
-                            href={sitePages.edit(site, page)}
+                            href={sitePages.show(site, page)}
                             className="font-medium text-neutral-700 hover:text-neutral-900"
                         >
                             ← {page.title}

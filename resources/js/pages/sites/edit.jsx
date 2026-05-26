@@ -2,11 +2,16 @@ import { FormErrors } from '@/components/ui/form-errors';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { sitePreview, sites } from '@/lib/routes';
+import {
+    backLink,
+    btnCancel,
+    btnSubmit,
+    formActions,
+    formCard,
+    formSectionTitle,
+    formWrap,
+} from '@/lib/ui';
 import { Head, Link, useForm } from '@inertiajs/react';
-
-const fieldWrap = 'space-y-6';
-const sectionTitle =
-    'border-b border-neutral-100 pb-2 text-xs font-semibold uppercase tracking-wide text-neutral-500';
 
 export default function SitesEdit({ site }) {
     const form = useForm({
@@ -25,13 +30,10 @@ export default function SitesEdit({ site }) {
     return (
         <>
             <Head title={`Edit ${site.company_name}`} />
-            <div className="mx-auto max-w-xl px-4 py-8 sm:px-6">
+            <div className={formWrap}>
                 <header className="mb-8">
                     <p className="text-sm text-neutral-500">
-                        <Link
-                            href={sites.show(site)}
-                            className="font-medium text-neutral-700 hover:text-neutral-900"
-                        >
+                        <Link href={sites.show(site)} className={backLink}>
                             ← {site.company_name}
                         </Link>
                     </p>
@@ -43,36 +45,30 @@ export default function SitesEdit({ site }) {
                     </p>
                 </header>
 
-                <form
-                    onSubmit={submit}
-                    className="rounded-xl border border-neutral-200 bg-white p-6 shadow-sm sm:p-8"
-                >
+                <form onSubmit={submit} className={formCard}>
                     <FormErrors errors={form.errors} />
 
-                    <div className={fieldWrap}>
-                        <div>
-                            <h2 className={sectionTitle}>Site</h2>
+                    <div className="space-y-8">
+                        <section>
+                            <h2 className={formSectionTitle}>Site</h2>
                             <div className="mt-4 space-y-4">
                                 <div>
-                                    <Label htmlFor="site-edit-slug">Slug</Label>
+                                    <Label htmlFor="slug">Slug</Label>
                                     <Input
-                                        id="site-edit-slug"
-                                        name="slug"
+                                        id="slug"
                                         value={form.data.slug}
                                         onChange={(e) =>
                                             form.setData('slug', e.target.value)
                                         }
                                         required
-                                        className="max-w-full"
                                     />
                                 </div>
                                 <div>
-                                    <Label htmlFor="site-edit-company_name">
+                                    <Label htmlFor="company_name">
                                         Company name
                                     </Label>
                                     <Input
-                                        id="site-edit-company_name"
-                                        name="company_name"
+                                        id="company_name"
                                         value={form.data.company_name}
                                         onChange={(e) =>
                                             form.setData(
@@ -81,22 +77,18 @@ export default function SitesEdit({ site }) {
                                             )
                                         }
                                         required
-                                        className="max-w-full"
                                     />
                                 </div>
                             </div>
-                        </div>
+                        </section>
 
-                        <div>
-                            <h2 className={sectionTitle}>Contact</h2>
+                        <section>
+                            <h2 className={formSectionTitle}>Contact</h2>
                             <div className="mt-4 space-y-4">
                                 <div>
-                                    <Label htmlFor="site-edit-phone">
-                                        Phone
-                                    </Label>
+                                    <Label htmlFor="phone">Phone</Label>
                                     <Input
-                                        id="site-edit-phone"
-                                        name="phone"
+                                        id="phone"
                                         value={form.data.phone}
                                         onChange={(e) =>
                                             form.setData(
@@ -104,16 +96,12 @@ export default function SitesEdit({ site }) {
                                                 e.target.value,
                                             )
                                         }
-                                        className="max-w-full"
                                     />
                                 </div>
                                 <div>
-                                    <Label htmlFor="site-edit-email">
-                                        Email
-                                    </Label>
+                                    <Label htmlFor="email">Email</Label>
                                     <Input
-                                        id="site-edit-email"
-                                        name="email"
+                                        id="email"
                                         type="email"
                                         value={form.data.email}
                                         onChange={(e) =>
@@ -122,18 +110,15 @@ export default function SitesEdit({ site }) {
                                                 e.target.value,
                                             )
                                         }
-                                        className="max-w-full"
                                     />
                                 </div>
                             </div>
-                        </div>
+                        </section>
 
-                        <div>
-                            <h2 className={sectionTitle}>Branding</h2>
+                        <section>
+                            <h2 className={formSectionTitle}>Branding</h2>
                             <div className="mt-4">
-                                <Label htmlFor="site-edit-logo">
-                                    Logo URL or path
-                                </Label>
+                                <Label htmlFor="logo">Logo URL or path</Label>
                                 <p className="mt-0.5 text-xs text-neutral-500">
                                     Full https URL or a path passed to{' '}
                                     <code className="rounded bg-neutral-100 px-1 py-0.5 text-[0.8rem]">
@@ -141,38 +126,33 @@ export default function SitesEdit({ site }) {
                                     </code>
                                 </p>
                                 <Input
-                                    id="site-edit-logo"
-                                    name="logo"
+                                    id="logo"
                                     value={form.data.logo}
                                     onChange={(e) =>
                                         form.setData('logo', e.target.value)
                                     }
-                                    className="max-w-full"
                                     placeholder="https://…"
                                 />
                             </div>
-                        </div>
+                        </section>
                     </div>
 
-                    <div className="mt-8 flex flex-wrap gap-3 border-t border-neutral-100 pt-6">
+                    <div className={formActions}>
                         <button
                             type="submit"
                             disabled={form.processing}
-                            className="rounded-lg bg-neutral-900 px-5 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-neutral-800 disabled:opacity-60"
+                            className={btnSubmit}
                         >
                             Save changes
                         </button>
-                        <Link
-                            href={sites.show(site)}
-                            className="rounded-lg border border-neutral-300 bg-white px-5 py-2.5 text-sm font-medium text-neutral-800 shadow-sm hover:bg-neutral-50"
-                        >
+                        <Link href={sites.show(site)} className={btnCancel}>
                             Cancel
                         </Link>
                         <a
                             href={sitePreview.home(site)}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="ml-auto rounded-lg border border-neutral-200 px-5 py-2.5 text-sm font-medium text-neutral-700 hover:bg-neutral-50"
+                            className={`${btnCancel} ml-auto`}
                         >
                             Open preview
                         </a>

@@ -35,11 +35,19 @@ class SitePageController extends Controller
         return redirect()->route('sites.show', $site);
     }
 
+    public function show(Site $site, SitePage $page): Response
+    {
+        return Inertia::render('sites/pages/show', [
+            'site' => $site,
+            'page' => $page->load('blockPages'),
+        ]);
+    }
+
     public function edit(Site $site, SitePage $page): Response
     {
         return Inertia::render('sites/pages/edit', [
             'site' => $site,
-            'page' => $page->load('blockPages'),
+            'page' => $page,
         ]);
     }
 
@@ -47,7 +55,7 @@ class SitePageController extends Controller
     {
         $page->update($request->validated());
 
-        return redirect()->route('sites.show', $site);
+        return redirect()->route('sites.pages.show', [$site, $page]);
     }
 
     public function destroy(Site $site, SitePage $page): RedirectResponse

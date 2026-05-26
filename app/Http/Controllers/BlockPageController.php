@@ -44,14 +44,34 @@ class BlockPageController extends Controller
             'sort_order' => (int) $page->blockPages()->max('sort_order') + 1,
         ]);
 
-        return redirect()->route('sites.pages.edit', [$site, $page]);
+        return redirect()->route('sites.pages.show', [$site, $page]);
     }
 
     public function destroy(Site $site, SitePage $page, BlockPage $blockPage): RedirectResponse
     {
-        // Scoped route bindings ensure $blockPage already belongs to $page.
         $blockPage->delete();
 
-        return redirect()->route('sites.pages.edit', [$site, $page]);
+        return redirect()->back();
+    }
+
+    public function move(Site $site, SitePage $page, BlockPage $blockPage, string $direction): RedirectResponse
+    {
+        $neighbor = $direction === 'up'
+            ? $page->blockPages()
+                ->where('sort_order', '<', $blockPage->sort_order)
+                ->orderByDesc('sort_order')
+                ->first()
+            : $page->blockPages()
+                ->where('sort_order', '>', $blockPage->sort_order)
+                ->orderBy('sort_order')
+                ->first();
+
+        if ($neighbor !== null) {
+            $currentOrder = $blockPage->sort_order;
+            $blockPage->update(['sort_order' => $neighbor->sort_order]);
+            $neighbor->update(['sort_order' => $currentOrder]);
+        }
+
+        return redirect()->back();
     }
 }

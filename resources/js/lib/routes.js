@@ -20,6 +20,7 @@ export const sites = {
 export const sitePages = {
     create: (site) => `/sites/${idOf(site)}/pages/create`,
     store: (site) => `/sites/${idOf(site)}/pages`,
+    show: (site, page) => `/sites/${idOf(site)}/pages/${slugOf(page)}`,
     edit: (site, page) => `/sites/${idOf(site)}/pages/${slugOf(page)}/edit`,
     update: (site, page) => `/sites/${idOf(site)}/pages/${slugOf(page)}`,
     destroy: (site, page) => `/sites/${idOf(site)}/pages/${slugOf(page)}`,
@@ -31,6 +32,8 @@ export const pageBlocks = {
     store: (site, page) => `/sites/${idOf(site)}/pages/${slugOf(page)}/blocks`,
     destroy: (site, page, blockPage) =>
         `/sites/${idOf(site)}/pages/${slugOf(page)}/blocks/${idOf(blockPage)}`,
+    move: (site, page, blockPage, direction) =>
+        `/sites/${idOf(site)}/pages/${slugOf(page)}/blocks/${idOf(blockPage)}/move/${direction}`,
 };
 
 export const sitePreview = {

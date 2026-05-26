@@ -20,7 +20,7 @@ Route::get('/preview/{site:slug}/{page}', [SiteController::class, 'preview'])
 
 Route::resource('sites', SiteController::class);
 Route::resource('sites.pages', SitePageController::class)
-    ->except(['index', 'show'])
+    ->except(['index'])
     ->scoped(['page' => 'slug']);
 
 Route::scopeBindings()->group(function () {
@@ -30,4 +30,7 @@ Route::scopeBindings()->group(function () {
         ->name('sites.pages.blocks.store');
     Route::delete('/sites/{site}/pages/{page:slug}/blocks/{block_page}', [BlockPageController::class, 'destroy'])
         ->name('sites.pages.blocks.destroy');
+    Route::patch('/sites/{site}/pages/{page:slug}/blocks/{block_page}/move/{direction}', [BlockPageController::class, 'move'])
+        ->whereIn('direction', ['up', 'down'])
+        ->name('sites.pages.blocks.move');
 });
