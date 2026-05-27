@@ -1,7 +1,15 @@
 import { FormErrors } from '@/components/ui/form-errors';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { PageHeader } from '@/components/page-header';
 import { sitePages, sites } from '@/lib/routes';
+import {
+    btnCancel,
+    btnSubmit,
+    formActions,
+    formCard,
+} from '@/lib/ui';
+import AppLayout from '@/layouts/app-layout.jsx';
 import { Head, Link, useForm } from '@inertiajs/react';
 
 export default function SitePagesCreate({ site, nextSortOrder }) {
@@ -19,95 +27,80 @@ export default function SitePagesCreate({ site, nextSortOrder }) {
     return (
         <>
             <Head title={`Add page · ${site.company_name}`} />
-            <div className="mx-auto max-w-xl px-4 py-8 sm:px-6">
-                <header className="mb-8">
-                    <p className="text-sm text-neutral-500">
-                        <Link
-                            href={sites.show(site)}
-                            className="font-medium text-neutral-700 hover:text-neutral-900"
-                        >
-                            ← {site.company_name}
-                        </Link>
-                    </p>
-                    <h1 className="mt-3 text-2xl font-semibold tracking-tight text-neutral-900">
-                        Add page
-                    </h1>
-                </header>
+            <PageHeader
+                backHref={sites.show(site)}
+                backLabel={`Back to ${site.company_name}`}
+                title="Add page"
+            />
 
-                <form
-                    onSubmit={submit}
-                    className="rounded-xl border border-neutral-200 bg-white p-6 shadow-sm sm:p-8"
-                >
-                    <FormErrors errors={form.errors} />
+            <form onSubmit={submit} className={formCard}>
+                <FormErrors errors={form.errors} />
 
-                    <div className="space-y-4">
-                        <div>
-                            <Label htmlFor="page-slug">Slug</Label>
-                            <p className="mt-0.5 text-xs text-neutral-500">
-                                URL segment, e.g.{' '}
-                                <code className="rounded bg-neutral-100 px-1 py-0.5">
-                                    store
-                                </code>{' '}
-                                → /preview/{site.slug}/store
-                            </p>
-                            <Input
-                                id="page-slug"
-                                value={form.data.slug}
-                                onChange={(e) =>
-                                    form.setData('slug', e.target.value)
-                                }
-                                required
-                                className="max-w-full"
-                                placeholder="store"
-                            />
-                        </div>
-                        <div>
-                            <Label htmlFor="page-title">Title</Label>
-                            <Input
-                                id="page-title"
-                                value={form.data.title}
-                                onChange={(e) =>
-                                    form.setData('title', e.target.value)
-                                }
-                                required
-                                className="max-w-full"
-                            />
-                        </div>
-                        <div>
-                            <Label htmlFor="page-sort_order">Sort order</Label>
-                            <Input
-                                id="page-sort_order"
-                                type="number"
-                                min={0}
-                                value={form.data.sort_order}
-                                onChange={(e) =>
-                                    form.setData(
-                                        'sort_order',
-                                        Number(e.target.value),
-                                    )
-                                }
-                                className="max-w-full"
-                            />
-                        </div>
+                <div className="space-y-4">
+                    <div>
+                        <Label htmlFor="page-slug">Slug</Label>
+                        <p className="mt-0.5 text-xs text-neutral-500">
+                            URL segment, e.g.{' '}
+                            <code className="rounded bg-neutral-100 px-1 py-0.5">
+                                store
+                            </code>{' '}
+                            → /preview/{site.slug}/store
+                        </p>
+                        <Input
+                            id="page-slug"
+                            value={form.data.slug}
+                            onChange={(e) =>
+                                form.setData('slug', e.target.value)
+                            }
+                            required
+                            placeholder="store"
+                        />
                     </div>
-
-                    <div className="mt-8 flex flex-wrap gap-3 border-t border-neutral-100 pt-6">
-                        <button
-                            type="submit"
-                            disabled={form.processing}
-                            className="rounded-lg bg-neutral-900 px-5 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-neutral-800 disabled:opacity-60"
-                        >
-                            Create page
-                        </button>
-                        <Link
-                            href={sites.show(site)}
-                            className="rounded-lg border border-neutral-300 bg-white px-5 py-2.5 text-sm font-medium text-neutral-800 shadow-sm hover:bg-neutral-50"
-                        >
-                            Cancel
-                        </Link>
+                    <div>
+                        <Label htmlFor="page-title">Title</Label>
+                        <Input
+                            id="page-title"
+                            value={form.data.title}
+                            onChange={(e) =>
+                                form.setData('title', e.target.value)
+                            }
+                            required
+                        />
                     </div>
-                </form>
-            </div>
+                    <div>
+                        <Label htmlFor="page-sort_order">Sort order</Label>
+                        <Input
+                            id="page-sort_order"
+                            type="number"
+                            min={0}
+                            value={form.data.sort_order}
+                            onChange={(e) =>
+                                form.setData(
+                                    'sort_order',
+                                    Number(e.target.value),
+                                )
+                            }
+                        />
+                    </div>
+                </div>
+
+                <div className={formActions}>
+                    <button
+                        type="submit"
+                        disabled={form.processing}
+                        className={btnSubmit}
+                    >
+                        Create page
+                    </button>
+                    <Link href={sites.show(site)} className={btnCancel}>
+                        Cancel
+                    </Link>
+                </div>
+            </form>
         </>
     );
 }
+
+SitePagesCreate.layout = (page) => (
+    <AppLayout width="form">{page}</AppLayout>
+);

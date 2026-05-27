@@ -1,13 +1,10 @@
 import { FormErrors } from '@/components/ui/form-errors';
-import { chat } from '@/lib/routes';
+import { PageHeader } from '@/components/page-header';
+import { chat, sites } from '@/lib/routes';
+import { btnPrimary, btnSecondary } from '@/lib/ui';
+import AppLayout from '@/layouts/app-layout.jsx';
 import { Form, Head, Link } from '@inertiajs/react';
 import { useEffect, useRef } from 'react';
-
-const btnSecondary =
-    'inline-flex items-center justify-center rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-sm font-medium text-neutral-800 shadow-sm hover:bg-neutral-50 disabled:opacity-50';
-
-const btnPrimary =
-    'inline-flex items-center justify-center rounded-md bg-neutral-900 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-neutral-800 disabled:opacity-60';
 
 export default function ChatIndex({ messages }) {
     const endRef = useRef(null);
@@ -19,27 +16,24 @@ export default function ChatIndex({ messages }) {
     return (
         <>
             <Head title="Chat" />
-            <div className="mx-auto flex min-h-screen max-w-3xl flex-col p-6">
-                <header className="mb-4 flex flex-wrap items-center justify-between gap-4">
-                    <h1 className="text-2xl font-semibold text-neutral-900">
-                        Chat
-                    </h1>
-                    <div className="flex flex-wrap items-center gap-2">
-                        <Link
-                            href={chat.clear()}
-                            method="post"
-                            as="button"
-                            className={btnSecondary}
-                            disabled={messages.length === 0}
-                        >
-                            Clear history
-                        </Link>
-                        <Link href="/" className={btnSecondary}>
-                            Home
-                        </Link>
-                    </div>
-                </header>
+            <PageHeader
+                backHref={sites.index()}
+                backLabel="Back to sites"
+                title="Chat"
+                actions={
+                    <Link
+                        href={chat.clear()}
+                        method="post"
+                        as="button"
+                        className={btnSecondary}
+                        disabled={messages.length === 0}
+                    >
+                        Clear history
+                    </Link>
+                }
+            />
 
+            <div className="flex flex-col">
                 <div className="mb-4 min-h-[50vh] flex-1 space-y-4 overflow-y-auto rounded-lg border border-neutral-200 bg-white p-4">
                     {messages.length === 0 ? (
                         <p className="text-sm text-neutral-500">
@@ -112,3 +106,7 @@ export default function ChatIndex({ messages }) {
         </>
     );
 }
+
+ChatIndex.layout = (page) => (
+    <AppLayout width="narrow">{page}</AppLayout>
+);

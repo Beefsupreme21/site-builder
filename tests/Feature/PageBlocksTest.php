@@ -62,7 +62,8 @@ test('preview renders the block content for a page', function () {
     $this->get(route('sites.preview', [$site, $page]))
         ->assertOk()
         ->assertSee('Hello from the hero block', false)
-        ->assertSee('data-test-block', false);
+        ->assertSee('data-test-block', false)
+        ->assertSee('@tailwindcss/browser@4', false);
 
     $page->blockPages()->create([
         'content' => $block->default_content,

@@ -1,7 +1,16 @@
 import { FormErrors } from '@/components/ui/form-errors';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { sitePages, sites } from '@/lib/routes';
+import { PageHeader } from '@/components/page-header';
+import { sitePages, sitePreview } from '@/lib/routes';
+import {
+    btnCancel,
+    btnSecondary,
+    btnSubmit,
+    formActions,
+    formCard,
+} from '@/lib/ui';
+import AppLayout from '@/layouts/app-layout.jsx';
 import { Head, Link, useForm } from '@inertiajs/react';
 
 export default function SitePagesEdit({ site, page }) {
@@ -19,92 +28,88 @@ export default function SitePagesEdit({ site, page }) {
     return (
         <>
             <Head title={`Page settings · ${page.title}`} />
-            <div className="mx-auto max-w-xl px-4 py-8 sm:px-6">
-                <header className="mb-8">
-                    <p className="text-sm text-neutral-500">
-                        <Link
-                            href={sitePages.show(site, page)}
-                            className="font-medium text-neutral-700 hover:text-neutral-900"
-                        >
-                            ← {page.title}
-                        </Link>
-                    </p>
-                    <h1 className="mt-3 text-2xl font-semibold tracking-tight text-neutral-900">
-                        Page settings
-                    </h1>
-                    <p className="mt-1 text-sm text-neutral-600">
-                        Slug, title, and nav order.
-                    </p>
-                </header>
+            <PageHeader
+                backHref={sitePages.show(site, page)}
+                backLabel={`Back to ${page.title}`}
+                title="Page settings"
+                subtitle="Slug, title, and nav order."
+                actions={
+                    <a
+                        href={sitePreview.page(site, page)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={btnSecondary}
+                    >
+                        Preview
+                    </a>
+                }
+            />
 
-                <form
-                    onSubmit={submit}
-                    className="rounded-xl border border-neutral-200 bg-white p-6 shadow-sm sm:p-8"
-                >
-                    <FormErrors errors={form.errors} />
+            <form onSubmit={submit} className={formCard}>
+                <FormErrors errors={form.errors} />
 
-                    <div className="space-y-4">
-                        <div>
-                            <Label htmlFor="page-edit-slug">Slug</Label>
-                            <Input
-                                id="page-edit-slug"
-                                value={form.data.slug}
-                                onChange={(e) =>
-                                    form.setData('slug', e.target.value)
-                                }
-                                required
-                                className="max-w-full"
-                            />
-                        </div>
-                        <div>
-                            <Label htmlFor="page-edit-title">Title</Label>
-                            <Input
-                                id="page-edit-title"
-                                value={form.data.title}
-                                onChange={(e) =>
-                                    form.setData('title', e.target.value)
-                                }
-                                required
-                                className="max-w-full"
-                            />
-                        </div>
-                        <div>
-                            <Label htmlFor="page-edit-sort_order">
-                                Sort order
-                            </Label>
-                            <Input
-                                id="page-edit-sort_order"
-                                type="number"
-                                min={0}
-                                value={form.data.sort_order}
-                                onChange={(e) =>
-                                    form.setData(
-                                        'sort_order',
-                                        Number(e.target.value),
-                                    )
-                                }
-                                className="max-w-full"
-                            />
-                        </div>
+                <div className="space-y-4">
+                    <div>
+                        <Label htmlFor="page-edit-slug">Slug</Label>
+                        <Input
+                            id="page-edit-slug"
+                            value={form.data.slug}
+                            onChange={(e) =>
+                                form.setData('slug', e.target.value)
+                            }
+                            required
+                        />
                     </div>
-
-                    <div className="mt-8 flex flex-wrap gap-3 border-t border-neutral-100 pt-6">
-                        <button
-                            type="submit"
-                            disabled={form.processing}
-                            className="rounded-lg bg-neutral-900 px-5 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-neutral-800 disabled:opacity-60"
-                        >
-                            Save changes
-                        </button>
-                        <Link
-                            href={sitePages.show(site, page)}
-                            className="rounded-lg border border-neutral-300 bg-white px-5 py-2.5 text-sm font-medium text-neutral-800 shadow-sm hover:bg-neutral-50"
-                        >
-                            Cancel
-                        </Link>
+                    <div>
+                        <Label htmlFor="page-edit-title">Title</Label>
+                        <Input
+                            id="page-edit-title"
+                            value={form.data.title}
+                            onChange={(e) =>
+                                form.setData('title', e.target.value)
+                            }
+                            required
+                        />
                     </div>
-                </form>
-            </div>
+                    <div>
+                        <Label htmlFor="page-edit-sort_order">
+                            Sort order
+                        </Label>
+                        <Input
+                            id="page-edit-sort_order"
+                            type="number"
+                            min={0}
+                            value={form.data.sort_order}
+                            onChange={(e) =>
+                                form.setData(
+                                    'sort_order',
+                                    Number(e.target.value),
+                                )
+                            }
+                        />
+                    </div>
+                </div>
+
+                <div className={formActions}>
+                    <button
+                        type="submit"
+                        disabled={form.processing}
+                        className={btnSubmit}
+                    >
+                        Save changes
+                    </button>
+                    <Link
+                        href={sitePages.show(site, page)}
+                        className={btnCancel}
+                    >
+                        Cancel
+                    </Link>
+                </div>
+            </form>
         </>
     );
 }
+
+SitePagesEdit.layout = (page) => (
+    <AppLayout width="form">{page}</AppLayout>
+);
