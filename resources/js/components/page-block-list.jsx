@@ -1,6 +1,6 @@
-import { BlockPreview } from '@/components/sites/block-preview';
+import { BlockPreview } from '@/components/block-preview';
 import { pageBlocks } from '@/lib/routes';
-import { btnPrimary } from '@/lib/ui';
+import { btnPrimary, emptyState, linkTitle } from '@/lib/ui';
 import { Link } from '@inertiajs/react';
 
 export function PageBlockList({ site, page }) {
@@ -21,11 +21,11 @@ export function PageBlockList({ site, page }) {
             </div>
 
             {blocks.length === 0 ? (
-                <p className="rounded-lg border border-neutral-200 bg-white p-6 text-sm text-neutral-600">
+                <p className={emptyState}>
                     No blocks yet.{' '}
                     <Link
                         href={pageBlocks.create(site, page)}
-                        className="font-medium text-neutral-900 underline"
+                        className={linkTitle}
                     >
                         Add one
                     </Link>

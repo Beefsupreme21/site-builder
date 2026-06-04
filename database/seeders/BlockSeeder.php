@@ -27,7 +27,7 @@ class BlockSeeder extends Seeder
         foreach ($types as $type) {
             Block::updateOrCreate(
                 ['type' => $type],
-                ['default_content' => View::make("sites.blocks.{$type}")->render()],
+                ['default_content' => View::make("blocks.{$type}")->render()],
             );
         }
     }

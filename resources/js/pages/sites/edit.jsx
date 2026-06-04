@@ -1,6 +1,6 @@
-import { FormErrors } from '@/components/ui/form-errors';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { FormErrors } from '@/components/form-errors';
+import { Input } from '@/components/input';
+import { Label } from '@/components/label';
 import { PageHeader } from '@/components/page-header';
 import { sitePreview, sites } from '@/lib/routes';
 import {
@@ -11,7 +11,7 @@ import {
     formCard,
     formSectionTitle,
 } from '@/lib/ui';
-import AppLayout from '@/layouts/app-layout.jsx';
+import AppLayout from '@/layouts/app-layout';
 import { Head, Link, useForm } from '@inertiajs/react';
 
 export default function SitesEdit({ site }) {

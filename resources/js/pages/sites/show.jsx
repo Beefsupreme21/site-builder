@@ -1,7 +1,12 @@
 import { PageHeader } from '@/components/page-header';
 import { sitePages, sitePreview, sites } from '@/lib/routes';
-import { btnDanger, btnPrimary, btnSecondary } from '@/lib/ui';
-import AppLayout from '@/layouts/app-layout.jsx';
+import {
+    btnDanger,
+    btnPrimary,
+    btnSecondary,
+    emptyState,
+    linkTitle,
+} from '@/lib/ui';
 import { Form, Head, Link } from '@inertiajs/react';
 
 export default function SitesShow({ site }) {
@@ -42,11 +47,11 @@ export default function SitesShow({ site }) {
             </div>
 
             {pages.length === 0 ? (
-                <p className="rounded-lg border border-neutral-200 bg-white p-6 text-sm text-neutral-600">
+                <p className={emptyState}>
                     No pages yet.{' '}
                     <Link
                         href={sitePages.create(site)}
-                        className="font-medium text-neutral-900 underline"
+                        className={linkTitle}
                     >
                         Add one
                     </Link>
@@ -74,7 +79,7 @@ export default function SitesShow({ site }) {
                                     <td className="px-4 py-3">
                                         <Link
                                             href={sitePages.show(site, page)}
-                                            className="font-medium text-neutral-900 underline-offset-2 hover:underline"
+                                            className={linkTitle}
                                         >
                                             {page.title}
                                         </Link>
@@ -91,7 +96,7 @@ export default function SitesShow({ site }) {
                                                 )}
                                                 className={btnSecondary}
                                             >
-                                                Edit
+                                                Manage
                                             </Link>
                                             <Form
                                                 action={sitePages.destroy(
@@ -131,5 +136,3 @@ export default function SitesShow({ site }) {
         </>
     );
 }
-
-SitesShow.layout = (page) => <AppLayout>{page}</AppLayout>;

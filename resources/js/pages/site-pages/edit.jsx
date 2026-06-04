@@ -1,36 +1,48 @@
-import { FormErrors } from '@/components/ui/form-errors';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { FormErrors } from '@/components/form-errors';
+import { Input } from '@/components/input';
+import { Label } from '@/components/label';
 import { PageHeader } from '@/components/page-header';
-import { sitePages, sites } from '@/lib/routes';
+import { sitePages, sitePreview } from '@/lib/routes';
 import {
     btnCancel,
+    btnSecondary,
     btnSubmit,
     formActions,
     formCard,
 } from '@/lib/ui';
-import AppLayout from '@/layouts/app-layout.jsx';
+import AppLayout from '@/layouts/app-layout';
 import { Head, Link, useForm } from '@inertiajs/react';
 
-export default function SitePagesCreate({ site, nextSortOrder }) {
+export default function SitePagesEdit({ site, page }) {
     const form = useForm({
-        slug: '',
-        title: '',
-        sort_order: nextSortOrder,
+        slug: page.slug,
+        title: page.title,
+        sort_order: page.sort_order,
     });
 
     function submit(e) {
         e.preventDefault();
-        form.post(sitePages.store(site));
+        form.patch(sitePages.update(site, page));
     }
 
     return (
         <>
-            <Head title={`Add page · ${site.company_name}`} />
+            <Head title={`Page settings · ${page.title}`} />
             <PageHeader
-                backHref={sites.show(site)}
-                backLabel={`Back to ${site.company_name}`}
-                title="Add page"
+                backHref={sitePages.show(site, page)}
+                backLabel={`Back to ${page.title}`}
+                title="Page settings"
+                subtitle="Slug, title, and nav order."
+                actions={
+                    <a
+                        href={sitePreview.page(site, page)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={btnSecondary}
+                    >
+                        Preview
+                    </a>
+                }
             />
 
             <form onSubmit={submit} className={formCard}>
@@ -38,28 +50,20 @@ export default function SitePagesCreate({ site, nextSortOrder }) {
 
                 <div className="space-y-4">
                     <div>
-                        <Label htmlFor="page-slug">Slug</Label>
-                        <p className="mt-0.5 text-xs text-neutral-500">
-                            URL segment, e.g.{' '}
-                            <code className="rounded bg-neutral-100 px-1 py-0.5">
-                                store
-                            </code>{' '}
-                            → /preview/{site.slug}/store
-                        </p>
+                        <Label htmlFor="page-edit-slug">Slug</Label>
                         <Input
-                            id="page-slug"
+                            id="page-edit-slug"
                             value={form.data.slug}
                             onChange={(e) =>
                                 form.setData('slug', e.target.value)
                             }
                             required
-                            placeholder="store"
                         />
                     </div>
                     <div>
-                        <Label htmlFor="page-title">Title</Label>
+                        <Label htmlFor="page-edit-title">Title</Label>
                         <Input
-                            id="page-title"
+                            id="page-edit-title"
                             value={form.data.title}
                             onChange={(e) =>
                                 form.setData('title', e.target.value)
@@ -68,9 +72,11 @@ export default function SitePagesCreate({ site, nextSortOrder }) {
                         />
                     </div>
                     <div>
-                        <Label htmlFor="page-sort_order">Sort order</Label>
+                        <Label htmlFor="page-edit-sort_order">
+                            Sort order
+                        </Label>
                         <Input
-                            id="page-sort_order"
+                            id="page-edit-sort_order"
                             type="number"
                             min={0}
                             value={form.data.sort_order}
@@ -90,9 +96,12 @@ export default function SitePagesCreate({ site, nextSortOrder }) {
                         disabled={form.processing}
                         className={btnSubmit}
                     >
-                        Create page
+                        Save changes
                     </button>
-                    <Link href={sites.show(site)} className={btnCancel}>
+                    <Link
+                        href={sitePages.show(site, page)}
+                        className={btnCancel}
+                    >
                         Cancel
                     </Link>
                 </div>
@@ -101,6 +110,6 @@ export default function SitePagesCreate({ site, nextSortOrder }) {
     );
 }
 
-SitePagesCreate.layout = (page) => (
+SitePagesEdit.layout = (page) => (
     <AppLayout width="form">{page}</AppLayout>
 );

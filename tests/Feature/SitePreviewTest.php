@@ -15,7 +15,7 @@ test('preview renders the page', function () {
 
     $this->get(route('sites.preview', [$site, $home]))
         ->assertOk()
-        ->assertViewIs('sites.show')
+        ->assertViewIs('preview.show')
         ->assertSee('Demo Dental', false);
 });
 
@@ -66,7 +66,7 @@ test('page show lists blocks for a page', function () {
     $this->get(route('sites.pages.show', [$site, $page]))
         ->assertOk()
         ->assertInertia(fn ($response) => $response
-            ->component('sites/pages/show')
+            ->component('site-pages/show')
             ->has('page.block_pages', 1));
 });
 

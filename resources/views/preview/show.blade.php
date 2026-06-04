@@ -1,4 +1,4 @@
-@extends('sites.layout')
+@extends('preview.layout')
 
 @section('content')
     @forelse ($page->blockPages as $block)

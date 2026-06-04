@@ -16,7 +16,7 @@ class BlockPageController extends Controller
 {
     public function create(Site $site, SitePage $page): Response
     {
-        return Inertia::render('sites/pages/blocks/create', [
+        return Inertia::render('blocks/create', [
             'site' => $site,
             'page' => $page,
             'blocks' => Block::query()

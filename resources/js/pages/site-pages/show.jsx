@@ -1,8 +1,7 @@
-import { PageBlockList } from '@/components/sites/page-block-list';
+import { PageBlockList } from '@/components/page-block-list';
 import { PageHeader } from '@/components/page-header';
 import { sitePages, sitePreview, sites } from '@/lib/routes';
 import { btnSecondary } from '@/lib/ui';
-import AppLayout from '@/layouts/app-layout.jsx';
 import { Head, Link } from '@inertiajs/react';
 
 export default function SitePagesShow({ site, page }) {
@@ -37,5 +36,3 @@ export default function SitePagesShow({ site, page }) {
         </>
     );
 }
-
-SitePagesShow.layout = (page) => <AppLayout>{page}</AppLayout>;

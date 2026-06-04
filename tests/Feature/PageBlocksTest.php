@@ -174,7 +174,7 @@ test('block library picker page renders the available blocks', function () {
     $this->get(route('sites.pages.blocks.create', [$site, $page]))
         ->assertOk()
         ->assertInertia(fn ($response) => $response
-            ->component('sites/pages/blocks/create')
+            ->component('blocks/create')
             ->has('blocks', 5)
             ->where('blocks.0.type', 'hero_centered'));
 });

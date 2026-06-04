@@ -40,9 +40,3 @@ export const sitePreview = {
     home: (site) => `/preview/${slugOf(site)}`,
     page: (site, page) => `/preview/${slugOf(site)}/${slugOf(page)}`,
 };
-
-export const chat = {
-    index: () => '/chat',
-    store: () => '/chat',
-    clear: () => '/chat/clear',
-};

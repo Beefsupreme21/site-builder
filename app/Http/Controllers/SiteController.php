@@ -55,7 +55,7 @@ class SiteController extends Controller
 
         $sitePage = $site->pages()->where('slug', $page)->with('blockPages')->firstOrFail();
 
-        return view('sites.show', [
+        return view('preview.show', [
             'site' => $site,
             'page' => $sitePage,
         ]);

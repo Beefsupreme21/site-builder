@@ -1,7 +1,6 @@
 import { PageHeader } from '@/components/page-header';
 import { pageBlocks, sitePages } from '@/lib/routes';
 import { btnPrimary } from '@/lib/ui';
-import AppLayout from '@/layouts/app-layout.jsx';
 import { Form, Head } from '@inertiajs/react';
 
 export default function PageBlocksCreate({ site, page, blocks }) {
@@ -70,5 +69,3 @@ export default function PageBlocksCreate({ site, page, blocks }) {
         </>
     );
 }
-
-PageBlocksCreate.layout = (page) => <AppLayout>{page}</AppLayout>;

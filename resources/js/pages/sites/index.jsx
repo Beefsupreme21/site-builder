@@ -7,7 +7,6 @@ import {
     emptyState,
     linkTitle,
 } from '@/lib/ui';
-import AppLayout from '@/layouts/app-layout.jsx';
 import { Form, Head, Link } from '@inertiajs/react';
 
 export default function SitesIndex({ sites: siteList }) {
@@ -104,5 +103,3 @@ export default function SitesIndex({ sites: siteList }) {
         </>
     );
 }
-
-SitesIndex.layout = (page) => <AppLayout>{page}</AppLayout>;
