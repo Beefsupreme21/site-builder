@@ -19,6 +19,7 @@ class BlockPageController extends Controller
         return Inertia::render('blocks/create', [
             'site' => $site,
             'page' => $page,
+            'brandStyles' => view('preview.brand-styles', ['site' => $site])->render(),
             'blocks' => Block::query()
                 ->orderBy('id')
                 ->get()

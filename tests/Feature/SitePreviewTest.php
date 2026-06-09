@@ -1,6 +1,8 @@
 <?php
 
 use App\Models\Site;
+use App\Support\ColorPalette;
+use Database\Seeders\SiteSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
@@ -103,4 +105,48 @@ test('page update persists changes', function () {
     ])->assertRedirect(route('sites.pages.show', [$site, $page]));
 
     expect($page->fresh()->title)->toBe('Welcome');
+});
+
+test('site stores primary and secondary colors', function () {
+    $this->post(route('sites.store'), [
+        'slug' => 'branded-co',
+        'company_name' => 'Branded Co',
+        'primary_color' => '#2563eb',
+        'secondary_color' => '#abc',
+    ])->assertRedirect();
+
+    $site = Site::query()->where('slug', 'branded-co')->first();
+
+    expect($site)->not->toBeNull();
+    expect($site->primary_color)->toBe('#2563EB');
+    expect($site->secondary_color)->toBe('#AABBCC');
+});
+
+test('seeded sites include brand colors', function () {
+    $this->seed(SiteSeeder::class);
+
+    $site = Site::query()->where('slug', 'blue-ocean-dental')->first();
+
+    expect($site->primary_color)->toBe('#0284C7');
+    expect($site->secondary_color)->toBe('#0F766E');
+});
+
+test('brand styles fall back to defaults when no site is provided', function () {
+    $html = view('preview.brand-styles')->render();
+
+    expect($html)->toContain('--primary: '.ColorPalette::fromHex(ColorPalette::DEFAULT_PRIMARY)[500]);
+    expect($html)->toContain('--secondary: '.ColorPalette::fromHex(ColorPalette::DEFAULT_SECONDARY)[500]);
+});
+
+test('preview injects color theme variables when site has brand colors', function () {
+    $site = Site::factory()->create([
+        'primary_color' => '#2563EB',
+        'secondary_color' => '#64748B',
+    ]);
+
+    $this->get(route('sites.preview', [$site, $site->homePage()]))
+        ->assertOk()
+        ->assertSee('--primary: #2563EB', false)
+        ->assertSee('--secondary:', false)
+        ->assertSee('#2563EB', false);
 });

@@ -1,3 +1,4 @@
+import { ColorInput } from '@/components/color-input';
 import { FormErrors } from '@/components/form-errors';
 import { Input } from '@/components/input';
 import { Label } from '@/components/label';
@@ -21,6 +22,8 @@ export default function SitesEdit({ site }) {
         phone: site.phone ?? '',
         email: site.email ?? '',
         logo: site.logo ?? '',
+        primary_color: site.primary_color,
+        secondary_color: site.secondary_color,
     });
 
     function submit(e) {
@@ -114,21 +117,39 @@ export default function SitesEdit({ site }) {
 
                     <section>
                         <h2 className={formSectionTitle}>Branding</h2>
-                        <div className="mt-4">
-                            <Label htmlFor="logo">Logo URL or path</Label>
-                            <p className="mt-0.5 text-xs text-neutral-500">
-                                Full https URL or a path passed to{' '}
-                                <code className="rounded bg-neutral-100 px-1 py-0.5 text-[0.8rem]">
-                                    asset()
-                                </code>
-                            </p>
-                            <Input
-                                id="logo"
-                                value={form.data.logo}
-                                onChange={(e) =>
-                                    form.setData('logo', e.target.value)
+                        <div className="mt-4 space-y-4">
+                            <div>
+                                <Label htmlFor="logo">Logo URL or path</Label>
+                                <p className="mt-0.5 text-xs text-neutral-500">
+                                    Full https URL or a path passed to{' '}
+                                    <code className="rounded bg-neutral-100 px-1 py-0.5 text-[0.8rem]">
+                                        asset()
+                                    </code>
+                                </p>
+                                <Input
+                                    id="logo"
+                                    value={form.data.logo}
+                                    onChange={(e) =>
+                                        form.setData('logo', e.target.value)
+                                    }
+                                    placeholder="https://…"
+                                />
+                            </div>
+                            <ColorInput
+                                id="primary_color"
+                                label="Primary color"
+                                value={form.data.primary_color}
+                                onChange={(value) =>
+                                    form.setData('primary_color', value)
                                 }
-                                placeholder="https://…"
+                            />
+                            <ColorInput
+                                id="secondary_color"
+                                label="Secondary color"
+                                value={form.data.secondary_color}
+                                onChange={(value) =>
+                                    form.setData('secondary_color', value)
+                                }
                             />
                         </div>
                     </section>

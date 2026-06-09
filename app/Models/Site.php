@@ -21,6 +21,8 @@ class Site extends Model
         'phone',
         'email',
         'logo',
+        'primary_color',
+        'secondary_color',
     ];
 
     protected static function booted(): void

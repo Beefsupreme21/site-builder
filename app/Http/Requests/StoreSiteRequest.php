@@ -22,4 +22,9 @@ class StoreSiteRequest extends FormRequest
     {
         return $this->siteRules();
     }
+
+    protected function prepareForValidation(): void
+    {
+        $this->prepareSiteInput();
+    }
 }

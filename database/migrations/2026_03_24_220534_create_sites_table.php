@@ -15,6 +15,8 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->string('email')->nullable();
             $table->string('logo')->nullable();
+            $table->string('primary_color', 7);
+            $table->string('secondary_color', 7);
             $table->timestamps();
         });
     }

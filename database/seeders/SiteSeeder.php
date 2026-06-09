@@ -17,6 +17,8 @@ class SiteSeeder extends Seeder
                 'phone' => '(555) 123-4567',
                 'email' => 'hello@acmehardware.example',
                 'logo' => 'https://cdn.jsdelivr.net/npm/simple-icons@14.6.0/icons/ikea.svg',
+                'primary_color' => '#B45309',
+                'secondary_color' => '#44403C',
             ],
             [
                 'slug' => 'blue-ocean-dental',
@@ -24,6 +26,8 @@ class SiteSeeder extends Seeder
                 'phone' => '(555) 234-5678',
                 'email' => 'appointments@blueoceandental.example',
                 'logo' => 'https://cdn.simpleicons.org/abbott',
+                'primary_color' => '#0284C7',
+                'secondary_color' => '#0F766E',
             ],
             [
                 'slug' => 'northside-cafe',
@@ -31,6 +35,8 @@ class SiteSeeder extends Seeder
                 'phone' => '(555) 345-6789',
                 'email' => 'info@northsidecafe.example',
                 'logo' => 'https://cdn.jsdelivr.net/npm/simple-icons@14.6.0/icons/starbucks.svg',
+                'primary_color' => '#92400E',
+                'secondary_color' => '#CA8A04',
             ],
             [
                 'slug' => 'summit-fitness',
@@ -38,6 +44,8 @@ class SiteSeeder extends Seeder
                 'phone' => '(555) 456-7890',
                 'email' => 'train@summitfitness.example',
                 'logo' => 'https://cdn.jsdelivr.net/npm/simple-icons@14.6.0/icons/nike.svg',
+                'primary_color' => '#DC2626',
+                'secondary_color' => '#171717',
             ],
         ];
 

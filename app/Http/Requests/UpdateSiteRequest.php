@@ -26,4 +26,9 @@ class UpdateSiteRequest extends FormRequest
 
         return $this->siteRules($site->id);
     }
+
+    protected function prepareForValidation(): void
+    {
+        $this->prepareSiteInput();
+    }
 }

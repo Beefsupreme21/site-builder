@@ -21,6 +21,8 @@ class SiteFactory extends Factory
             'phone' => fake()->phoneNumber(),
             'email' => fake()->unique()->companyEmail(),
             'logo' => null,
+            'primary_color' => '#171717',
+            'secondary_color' => '#525252',
         ];
     }
 }

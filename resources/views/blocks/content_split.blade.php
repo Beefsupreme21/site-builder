@@ -12,7 +12,7 @@
             <p class="mt-4 text-base/7 text-neutral-600">
                 An image and a paragraph. Great for product overviews, team intros, or service highlights.
             </p>
-            <a href="#" class="mt-6 inline-block text-sm font-semibold text-neutral-900 hover:underline">
+            <a href="#" class="mt-6 inline-block text-sm font-semibold text-[var(--secondary)] hover:text-[var(--secondary-dark)] hover:underline">
                 Learn more <span aria-hidden="true">→</span>
             </a>
         </div>
