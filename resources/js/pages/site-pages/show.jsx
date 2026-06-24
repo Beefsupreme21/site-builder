@@ -4,11 +4,10 @@ import { sitePages, sitePreview, sites } from '@/lib/routes';
 import { btnSecondary } from '@/lib/ui';
 import { Head, Link } from '@inertiajs/react';
 
-export default function SitePagesShow({ site, page, brandStyles }) {
+export default function SitePagesShow({ site, page }) {
     return (
         <>
             <Head title={`${page.title} · ${site.company_name}`} />
-            <style dangerouslySetInnerHTML={{ __html: brandStyles }} />
             <PageHeader
                 backHref={sites.show(site)}
                 backLabel={`Back to ${site.company_name}`}

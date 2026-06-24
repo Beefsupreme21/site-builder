@@ -7,10 +7,10 @@
             A simple centered hero. Tell visitors what you do in one sentence.
         </p>
         <div class="mt-10 flex items-center justify-center gap-4">
-            <a href="#" class="rounded-md bg-[var(--primary)] px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-[var(--primary-dark)]">
+            <a href="#" class="rounded-md bg-neutral-900 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-neutral-800">
                 Get started
             </a>
-            <a href="#" class="text-sm font-semibold text-[var(--secondary)] hover:text-[var(--secondary-dark)] hover:underline">
+            <a href="#" class="text-sm font-semibold text-neutral-900 hover:underline">
                 Learn more <span aria-hidden="true">→</span>
             </a>
         </div>

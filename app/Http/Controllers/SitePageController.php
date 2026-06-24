@@ -40,7 +40,6 @@ class SitePageController extends Controller
         return Inertia::render('site-pages/show', [
             'site' => $site,
             'page' => $page->load('blockPages'),
-            'brandStyles' => view('preview.brand-styles', ['site' => $site])->render(),
         ]);
     }
 

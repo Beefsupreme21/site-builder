@@ -3,11 +3,10 @@ import { pageBlocks, sitePages } from '@/lib/routes';
 import { btnPrimary } from '@/lib/ui';
 import { Form, Head } from '@inertiajs/react';
 
-export default function PageBlocksCreate({ site, page, blocks, brandStyles }) {
+export default function PageBlocksCreate({ site, page, blocks }) {
     return (
         <>
             <Head title={`Add block · ${page.title}`} />
-            <style dangerouslySetInnerHTML={{ __html: brandStyles }} />
             <PageHeader
                 backHref={sitePages.show(site, page)}
                 backLabel={`Back to ${page.title}`}

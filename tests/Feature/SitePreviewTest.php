@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\Site;
-use App\Support\ColorPalette;
 use Database\Seeders\SiteSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -131,14 +130,7 @@ test('seeded sites include brand colors', function () {
     expect($site->secondary_color)->toBe('#0F766E');
 });
 
-test('brand styles fall back to defaults when no site is provided', function () {
-    $html = view('preview.brand-styles')->render();
-
-    expect($html)->toContain('--primary: '.ColorPalette::fromHex(ColorPalette::DEFAULT_PRIMARY)[500]);
-    expect($html)->toContain('--secondary: '.ColorPalette::fromHex(ColorPalette::DEFAULT_SECONDARY)[500]);
-});
-
-test('preview injects color theme variables when site has brand colors', function () {
+test('preview does not inject brand color styles', function () {
     $site = Site::factory()->create([
         'primary_color' => '#2563EB',
         'secondary_color' => '#64748B',
@@ -146,7 +138,6 @@ test('preview injects color theme variables when site has brand colors', functio
 
     $this->get(route('sites.preview', [$site, $site->homePage()]))
         ->assertOk()
-        ->assertSee('--primary: #2563EB', false)
-        ->assertSee('--secondary:', false)
-        ->assertSee('#2563EB', false);
+        ->assertDontSee('--primary:', false)
+        ->assertDontSee('brand-styles', false);
 });

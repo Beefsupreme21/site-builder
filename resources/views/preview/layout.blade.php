@@ -6,8 +6,6 @@
         <title>{{ $page->title }} · {{ $site->company_name }}</title>
 
         <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-
-        @include('preview.brand-styles')
     </head>
     <body class="min-h-screen bg-white font-sans text-neutral-900 antialiased">
         <header class="border-b border-neutral-200">

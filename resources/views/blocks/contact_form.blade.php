@@ -26,7 +26,7 @@
                 <textarea rows="4" class="mt-2 w-full rounded-md border border-neutral-300 px-3 py-2 text-sm shadow-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-400"></textarea>
             </div>
             <div class="sm:col-span-2">
-                <button type="submit" class="w-full rounded-md bg-[var(--primary)] px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-[var(--primary-dark)]">
+                <button type="submit" class="w-full rounded-md bg-neutral-900 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-neutral-800">
                     Send message
                 </button>
             </div>
