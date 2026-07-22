@@ -10,6 +10,8 @@ return new class extends Migration
     {
         Schema::create('blocks', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('category');
             $table->string('type')->unique();
             $table->longText('default_content');
             $table->timestamps();

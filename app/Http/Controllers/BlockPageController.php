@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Block;
 use App\Models\BlockPage;
-use App\Models\Site;
 use App\Models\SitePage;
+use App\Support\BlockCategories;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -14,25 +14,55 @@ use Inertia\Response;
 
 class BlockPageController extends Controller
 {
-    public function create(Site $site, SitePage $page): Response
+    public function create(Request $request, SitePage $page): Response
     {
+        $page->loadMissing('site');
+
+        $category = $request->string('category')->toString();
+
+        if ($category !== '' && ! BlockCategories::isValid($category)) {
+            $category = '';
+        }
+
+        $counts = Block::query()
+            ->selectRaw('category, count(*) as total')
+            ->groupBy('category')
+            ->pluck('total', 'category');
+
+        $categories = collect(BlockCategories::all())
+            ->map(fn (array $item) => [
+                'slug' => $item['slug'],
+                'name' => $item['name'],
+                'group' => $item['group'],
+                'count' => (int) ($counts[$item['slug']] ?? 0),
+            ])
+            ->values()
+            ->all();
+
+        $blocksQuery = Block::query()->orderBy('id');
+
+        if ($category !== '') {
+            $blocksQuery->where('category', $category);
+        }
+
         return Inertia::render('blocks/create', [
-            'site' => $site,
+            'site' => $page->site,
             'page' => $page,
-            'blocks' => Block::query()
-                ->orderBy('id')
-                ->get()
-                ->map(fn (Block $block) => [
-                    'id' => $block->id,
-                    'type' => $block->type,
-                    'name' => $block->displayName(),
-                    'default_content' => $block->default_content,
-                ]),
+            'category' => $category !== '' ? $category : null,
+            'activeCategory' => $category !== '' ? BlockCategories::find($category) : null,
+            'categories' => $categories,
+            'groups' => BlockCategories::groups(),
+            'blocks' => $category !== ''
+                ? $blocksQuery
+                    ->get(['id', 'type', 'name', 'category', 'default_content'])
+                    ->all()
+                : [],
         ]);
     }
 
-    public function store(Request $request, Site $site, SitePage $page): RedirectResponse
+    public function store(Request $request, SitePage $page): RedirectResponse
     {
+        $page->loadMissing('site');
         $data = $request->validate([
             'block_id' => ['required', 'integer', Rule::exists('blocks', 'id')],
         ]);
@@ -44,33 +74,12 @@ class BlockPageController extends Controller
             'sort_order' => (int) $page->blockPages()->max('sort_order') + 1,
         ]);
 
-        return redirect()->route('sites.pages.show', [$site, $page]);
+        return redirect()->route('sites.pages.show', [$page->site, $page]);
     }
 
-    public function destroy(Site $site, SitePage $page, BlockPage $blockPage): RedirectResponse
+    public function destroy(SitePage $page, BlockPage $block): RedirectResponse
     {
-        $blockPage->delete();
-
-        return redirect()->back();
-    }
-
-    public function move(Site $site, SitePage $page, BlockPage $blockPage, string $direction): RedirectResponse
-    {
-        $neighbor = $direction === 'up'
-            ? $page->blockPages()
-                ->where('sort_order', '<', $blockPage->sort_order)
-                ->orderByDesc('sort_order')
-                ->first()
-            : $page->blockPages()
-                ->where('sort_order', '>', $blockPage->sort_order)
-                ->orderBy('sort_order')
-                ->first();
-
-        if ($neighbor !== null) {
-            $currentOrder = $blockPage->sort_order;
-            $blockPage->update(['sort_order' => $neighbor->sort_order]);
-            $neighbor->update(['sort_order' => $currentOrder]);
-        }
+        $block->delete();
 
         return redirect()->back();
     }

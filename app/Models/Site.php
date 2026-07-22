@@ -37,13 +37,10 @@ class Site extends Model
         $page ??= $this->homePage();
 
         if ($page === null) {
-            return route('sites.preview.home', $this);
+            return route('preview.index', $this);
         }
 
-        return route('sites.preview', [
-            'site' => $this,
-            'page' => $page,
-        ]);
+        return route('preview.show', $page);
     }
 
     /**

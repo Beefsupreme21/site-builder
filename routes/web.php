@@ -1,17 +1,19 @@
 <?php
 
 use App\Http\Controllers\BlockPageController;
+use App\Http\Controllers\BlockPageMoveController;
+use App\Http\Controllers\PreviewController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\SitePageController;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/sites')->name('home');
 
-Route::get('/preview/{site:slug}', [SiteController::class, 'previewHome'])
-    ->name('sites.preview.home');
+Route::get('/preview/sites/{site:slug}', [PreviewController::class, 'index'])
+    ->name('preview.index');
 
-Route::get('/preview/{site:slug}/{page}', [SiteController::class, 'preview'])
-    ->name('sites.preview');
+Route::get('/preview/{page:id}', [PreviewController::class, 'show'])
+    ->name('preview.show');
 
 Route::resource('sites', SiteController::class);
 Route::resource('sites.pages', SitePageController::class)
@@ -19,13 +21,11 @@ Route::resource('sites.pages', SitePageController::class)
     ->scoped(['page' => 'slug']);
 
 Route::scopeBindings()->group(function () {
-    Route::get('/sites/{site}/pages/{page:slug}/blocks/create', [BlockPageController::class, 'create'])
-        ->name('sites.pages.blocks.create');
-    Route::post('/sites/{site}/pages/{page:slug}/blocks', [BlockPageController::class, 'store'])
-        ->name('sites.pages.blocks.store');
-    Route::delete('/sites/{site}/pages/{page:slug}/blocks/{block_page}', [BlockPageController::class, 'destroy'])
-        ->name('sites.pages.blocks.destroy');
-    Route::patch('/sites/{site}/pages/{page:slug}/blocks/{block_page}/move/{direction}', [BlockPageController::class, 'move'])
+    Route::patch('blocks/{block}/move/{direction}', [BlockPageMoveController::class, 'update'])
         ->whereIn('direction', ['up', 'down'])
-        ->name('sites.pages.blocks.move');
+        ->name('blocks.move');
+
+    Route::resource('pages.blocks', BlockPageController::class)
+        ->except(['index', 'show', 'edit', 'update'])
+        ->scoped(['page' => 'id']);
 });

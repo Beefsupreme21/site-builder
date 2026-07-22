@@ -44,11 +44,16 @@ class SitePage extends Model
         return $this->hasMany(BlockPage::class)->orderBy('sort_order');
     }
 
+    /**
+     * @return HasMany<BlockPage, $this>
+     */
+    public function blocks(): HasMany
+    {
+        return $this->blockPages();
+    }
+
     public function previewUrl(): string
     {
-        return route('sites.preview', [
-            'site' => $this->site,
-            'page' => $this,
-        ]);
+        return route('preview.show', $this);
     }
 }

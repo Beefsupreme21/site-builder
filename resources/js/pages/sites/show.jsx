@@ -31,7 +31,7 @@ export default function SitesShow({ site }) {
                             Preview
                         </a>
                         <Link href={sites.edit(site)} className={btnSecondary}>
-                            Edit
+                            Edit site
                         </Link>
                     </>
                 }
@@ -49,10 +49,7 @@ export default function SitesShow({ site }) {
             {pages.length === 0 ? (
                 <p className={emptyState}>
                     No pages yet.{' '}
-                    <Link
-                        href={sitePages.create(site)}
-                        className={linkTitle}
-                    >
+                    <Link href={sitePages.create(site)} className={linkTitle}>
                         Add one
                     </Link>
                     .

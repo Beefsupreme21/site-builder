@@ -35,7 +35,7 @@ export default function SitePagesEdit({ site, page }) {
                 subtitle="Slug, title, and nav order."
                 actions={
                     <a
-                        href={sitePreview.page(site, page)}
+                        href={sitePreview.page(page)}
                         target="_blank"
                         rel="noopener noreferrer"
                         className={btnSecondary}
@@ -72,9 +72,7 @@ export default function SitePagesEdit({ site, page }) {
                         />
                     </div>
                     <div>
-                        <Label htmlFor="page-edit-sort_order">
-                            Sort order
-                        </Label>
+                        <Label htmlFor="page-edit-sort_order">Sort order</Label>
                         <Input
                             id="page-edit-sort_order"
                             type="number"
@@ -110,6 +108,4 @@ export default function SitePagesEdit({ site, page }) {
     );
 }
 
-SitePagesEdit.layout = (page) => (
-    <AppLayout width="form">{page}</AppLayout>
-);
+SitePagesEdit.layout = (page) => <AppLayout width="form">{page}</AppLayout>;

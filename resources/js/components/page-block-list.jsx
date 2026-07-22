@@ -3,7 +3,7 @@ import { pageBlocks } from '@/lib/routes';
 import { btnPrimary, emptyState, linkTitle } from '@/lib/ui';
 import { Link } from '@inertiajs/react';
 
-export function PageBlockList({ site, page }) {
+export function PageBlockList({ page }) {
     const blocks = page.block_pages ?? [];
 
     return (
@@ -12,10 +12,7 @@ export function PageBlockList({ site, page }) {
                 <h2 className="text-lg font-semibold text-neutral-900">
                     Blocks
                 </h2>
-                <Link
-                    href={pageBlocks.create(site, page)}
-                    className={btnPrimary}
-                >
+                <Link href={pageBlocks.create(page)} className={btnPrimary}>
                     Add block
                 </Link>
             </div>
@@ -23,10 +20,7 @@ export function PageBlockList({ site, page }) {
             {blocks.length === 0 ? (
                 <p className={emptyState}>
                     No blocks yet.{' '}
-                    <Link
-                        href={pageBlocks.create(site, page)}
-                        className={linkTitle}
-                    >
+                    <Link href={pageBlocks.create(page)} className={linkTitle}>
                         Add one
                     </Link>
                     .
@@ -36,7 +30,6 @@ export function PageBlockList({ site, page }) {
                     {blocks.map((block, index) => (
                         <BlockPreview
                             key={block.id}
-                            site={site}
                             page={page}
                             blocks={blocks}
                             block={block}

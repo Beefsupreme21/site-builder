@@ -66,7 +66,7 @@ export default function SitesIndex({ sites: siteList }) {
                                                 href={sites.show(site)}
                                                 className={btnSecondary}
                                             >
-                                                Edit
+                                                View
                                             </Link>
                                             <Form
                                                 action={sites.destroy(site)}

@@ -16,7 +16,7 @@ export default function SitePagesShow({ site, page }) {
                 actions={
                     <>
                         <a
-                            href={sitePreview.page(site, page)}
+                            href={sitePreview.page(page)}
                             target="_blank"
                             rel="noopener noreferrer"
                             className={btnSecondary}
@@ -27,12 +27,12 @@ export default function SitePagesShow({ site, page }) {
                             href={sitePages.edit(site, page)}
                             className={btnSecondary}
                         >
-                            Edit
+                            Page settings
                         </Link>
                     </>
                 }
             />
-            <PageBlockList site={site} page={page} />
+            <PageBlockList page={page} />
         </>
     );
 }

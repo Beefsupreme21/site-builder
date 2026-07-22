@@ -37,9 +37,7 @@ export default function AppLayout({ children, width = 'wide' }) {
                 </div>
             </header>
 
-            <main
-                className={`mx-auto px-4 py-8 sm:px-6 ${contentWidth}`}
-            >
+            <main className={`mx-auto px-4 py-8 sm:px-6 ${contentWidth}`}>
                 {children}
             </main>
         </div>

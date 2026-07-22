@@ -6,7 +6,6 @@ use App\Http\Requests\StoreSiteRequest;
 use App\Http\Requests\UpdateSiteRequest;
 use App\Models\Site;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\View\View;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -35,29 +34,6 @@ class SiteController extends Controller
     {
         return Inertia::render('sites/show', [
             'site' => $site->load('pages'),
-        ]);
-    }
-
-    public function previewHome(Site $site): RedirectResponse
-    {
-        $page = $site->homePage();
-
-        if ($page === null) {
-            abort(404);
-        }
-
-        return redirect()->route('sites.preview', [$site, $page]);
-    }
-
-    public function preview(Site $site, string $page): View
-    {
-        $site->load('pages');
-
-        $sitePage = $site->pages()->where('slug', $page)->with('blockPages')->firstOrFail();
-
-        return view('preview.show', [
-            'site' => $site,
-            'page' => $sitePage,
         ]);
     }
 

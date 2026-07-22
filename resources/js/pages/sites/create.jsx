@@ -162,6 +162,4 @@ export default function SitesCreate() {
     );
 }
 
-SitesCreate.layout = (page) => (
-    <AppLayout width="form">{page}</AppLayout>
-);
+SitesCreate.layout = (page) => <AppLayout width="form">{page}</AppLayout>;

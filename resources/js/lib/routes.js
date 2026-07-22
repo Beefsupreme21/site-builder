@@ -27,16 +27,17 @@ export const sitePages = {
 };
 
 export const pageBlocks = {
-    create: (site, page) =>
-        `/sites/${idOf(site)}/pages/${slugOf(page)}/blocks/create`,
-    store: (site, page) => `/sites/${idOf(site)}/pages/${slugOf(page)}/blocks`,
-    destroy: (site, page, blockPage) =>
-        `/sites/${idOf(site)}/pages/${slugOf(page)}/blocks/${idOf(blockPage)}`,
-    move: (site, page, blockPage, direction) =>
-        `/sites/${idOf(site)}/pages/${slugOf(page)}/blocks/${idOf(blockPage)}/move/${direction}`,
+    create: (page, category) => {
+        const url = `/pages/${idOf(page)}/blocks/create`;
+
+        return category ? `${url}?category=${category}` : url;
+    },
+    store: (page) => `/pages/${idOf(page)}/blocks`,
+    destroy: (page, block) => `/pages/${idOf(page)}/blocks/${idOf(block)}`,
+    move: (block, direction) => `/blocks/${idOf(block)}/move/${direction}`,
 };
 
 export const sitePreview = {
-    home: (site) => `/preview/${slugOf(site)}`,
-    page: (site, page) => `/preview/${slugOf(site)}/${slugOf(page)}`,
+    home: (site) => `/preview/sites/${slugOf(site)}`,
+    page: (page) => `/preview/${idOf(page)}`,
 };

@@ -10,24 +10,29 @@ class BlockSeeder extends Seeder
 {
     /**
      * Seed the block library by rendering each Blade view in
-     * resources/views/sites/blocks/ and saving its HTML as
+     * resources/views/blocks/ and saving its HTML as
      * `default_content`. Editing the Blade file + re-seeding refreshes
      * the library; existing block_pages are unaffected.
      */
     public function run(): void
     {
-        $types = [
-            'hero_centered',
-            'hero_image',
-            'content_simple',
-            'content_split',
-            'contact_form',
+        $library = [
+            ['type' => 'hero_centered', 'category' => 'hero', 'name' => 'Hero Centered'],
+            ['type' => 'hero_image', 'category' => 'hero', 'name' => 'Hero Image'],
+            ['type' => 'split_screenshot', 'category' => 'hero', 'name' => 'Split Screenshot'],
+            ['type' => 'content_simple', 'category' => 'content', 'name' => 'Simple Content'],
+            ['type' => 'content_split', 'category' => 'content', 'name' => 'Split Content'],
+            ['type' => 'contact_form', 'category' => 'contact', 'name' => 'Contact Form'],
         ];
 
-        foreach ($types as $type) {
+        foreach ($library as $block) {
             Block::updateOrCreate(
-                ['type' => $type],
-                ['default_content' => View::make("blocks.{$type}")->render()],
+                ['type' => $block['type']],
+                [
+                    'name' => $block['name'],
+                    'category' => $block['category'],
+                    'default_content' => View::make("blocks.{$block['type']}")->render(),
+                ],
             );
         }
     }

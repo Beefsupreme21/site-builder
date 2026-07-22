@@ -2,9 +2,13 @@
 
 namespace App\Providers;
 
+use App\Models\BlockPage;
+use App\Models\SitePage;
 use Carbon\CarbonImmutable;
+use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Route as RouteFacade;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 
@@ -23,6 +27,20 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        RouteFacade::bind('block', function (string $value, Route $route): BlockPage {
+            $page = $route->parameter('page');
+
+            if ($page !== null) {
+                if (! $page instanceof SitePage) {
+                    $page = SitePage::query()->whereKey($page)->firstOrFail();
+                }
+
+                return $page->blocks()->whereKey($value)->firstOrFail();
+            }
+
+            return BlockPage::query()->whereKey($value)->firstOrFail();
+        });
+
         $this->configureDefaults();
     }
 

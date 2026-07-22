@@ -4,7 +4,7 @@ import { Link } from '@inertiajs/react';
 
 const btn = `${btnSecondary} px-2.5 py-1 text-xs disabled:cursor-not-allowed disabled:opacity-40`;
 
-export function BlockReorderButtons({ site, page, blocks, block }) {
+export function BlockReorderButtons({ blocks, block }) {
     const index = blocks.findIndex((b) => b.id === block.id);
 
     return (
@@ -29,7 +29,7 @@ export function BlockReorderButtons({ site, page, blocks, block }) {
                 ) : (
                     <Link
                         key={direction}
-                        href={pageBlocks.move(site, page, block, direction)}
+                        href={pageBlocks.move(block, direction)}
                         method="patch"
                         preserveScroll
                         className={btn}

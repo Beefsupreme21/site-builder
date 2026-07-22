@@ -17,7 +17,7 @@
                     <nav aria-label="Site" class="flex flex-wrap gap-x-6 gap-y-2 text-sm">
                         @foreach ($site->pages as $navPage)
                             <a
-                                href="{{ route('sites.preview', [$site, $navPage]) }}"
+                                href="{{ route('preview.show', $navPage) }}"
                                 @class([
                                     'font-medium text-neutral-900 underline decoration-neutral-300 underline-offset-4' => $page->is($navPage),
                                     'text-neutral-500 hover:text-neutral-800' => ! $page->is($navPage),

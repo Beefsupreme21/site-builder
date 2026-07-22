@@ -3,12 +3,7 @@ import { Input } from '@/components/input';
 import { Label } from '@/components/label';
 import { PageHeader } from '@/components/page-header';
 import { sitePages, sites } from '@/lib/routes';
-import {
-    btnCancel,
-    btnSubmit,
-    formActions,
-    formCard,
-} from '@/lib/ui';
+import { btnCancel, btnSubmit, formActions, formCard } from '@/lib/ui';
 import AppLayout from '@/layouts/app-layout';
 import { Head, Link, useForm } from '@inertiajs/react';
 
@@ -44,7 +39,7 @@ export default function SitePagesCreate({ site, nextSortOrder }) {
                             <code className="rounded bg-neutral-100 px-1 py-0.5">
                                 store
                             </code>{' '}
-                            → /preview/{site.slug}/store
+                            → /sites/{site.slug}/pages/store
                         </p>
                         <Input
                             id="page-slug"
@@ -101,6 +96,4 @@ export default function SitePagesCreate({ site, nextSortOrder }) {
     );
 }
 
-SitePagesCreate.layout = (page) => (
-    <AppLayout width="form">{page}</AppLayout>
-);
+SitePagesCreate.layout = (page) => <AppLayout width="form">{page}</AppLayout>;
