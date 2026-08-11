@@ -1,9 +1,6 @@
 <?php
 
 use App\Models\Site;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-
-uses(RefreshDatabase::class);
 
 test('a block can move down and swap sort order with the block below', function () {
     $site = Site::factory()->create();
@@ -18,8 +15,7 @@ test('a block can move down and swap sort order with the block below', function 
         'sort_order' => 2,
     ]);
 
-    $this->from(route('sites.pages.show', [$site, $page]))
-        ->patch(route('blocks.move', [$first, 'down']))
+    $this->patch(route('blocks.move', [$first, 'down']))
         ->assertRedirect(route('sites.pages.show', [$site, $page]));
 
     expect($first->fresh()->sort_order)->toBe(2);
@@ -39,8 +35,7 @@ test('a block can move up and swap sort order with the block above', function ()
         'sort_order' => 2,
     ]);
 
-    $this->from(route('sites.pages.show', [$site, $page]))
-        ->patch(route('blocks.move', [$second, 'up']))
+    $this->patch(route('blocks.move', [$second, 'up']))
         ->assertRedirect(route('sites.pages.show', [$site, $page]));
 
     expect($first->fresh()->sort_order)->toBe(2);
@@ -56,9 +51,18 @@ test('moving the first block up leaves sort order unchanged', function () {
         'sort_order' => 1,
     ]);
 
-    $this->from(route('sites.pages.show', [$site, $page]))
-        ->patch(route('blocks.move', [$block, 'up']))
+    $this->patch(route('blocks.move', [$block, 'up']))
         ->assertRedirect(route('sites.pages.show', [$site, $page]));
 
     expect($block->fresh()->sort_order)->toBe(1);
+});
+
+test('a direction outside the enum does not match the route', function () {
+    $page = Site::factory()->create()->homePage();
+    $block = $page->blockPages()->create([
+        'content' => '<p>Only</p>',
+        'sort_order' => 1,
+    ]);
+
+    $this->patch("/blocks/{$block->id}/move/sideways")->assertNotFound();
 });

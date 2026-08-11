@@ -3,34 +3,16 @@
 namespace App\Models;
 
 use Database\Factories\SiteFactory;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+#[Fillable(['slug', 'company_name', 'phone', 'email', 'logo', 'primary_color', 'secondary_color'])]
 class Site extends Model
 {
     /** @use HasFactory<SiteFactory> */
     use HasFactory;
-
-    /**
-     * @var list<string>
-     */
-    protected $fillable = [
-        'slug',
-        'company_name',
-        'phone',
-        'email',
-        'logo',
-        'primary_color',
-        'secondary_color',
-    ];
-
-    protected static function booted(): void
-    {
-        static::created(function (Site $site): void {
-            $site->createDefaultHomePage();
-        });
-    }
 
     public function previewUrl(?SitePage $page = null): string
     {

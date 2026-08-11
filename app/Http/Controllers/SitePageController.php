@@ -2,42 +2,34 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreSitePageRequest;
-use App\Http\Requests\UpdateSitePageRequest;
+use App\Actions\SitePage\CreateSitePage;
+use App\Actions\SitePage\DeleteSitePage;
+use App\Actions\SitePage\UpdateSitePage;
 use App\Models\Site;
 use App\Models\SitePage;
 use Illuminate\Http\RedirectResponse;
-use Inertia\Inertia;
 use Inertia\Response;
 
 class SitePageController extends Controller
 {
     public function create(Site $site): Response
     {
-        $nextSortOrder = (int) $site->pages()->max('sort_order') + 1;
-
-        return Inertia::render('site-pages/create', [
+        return inertia('site-pages/create', [
             'site' => $site,
-            'nextSortOrder' => $nextSortOrder,
+            'nextSortOrder' => (int) $site->pages()->max('sort_order') + 1,
         ]);
     }
 
-    public function store(StoreSitePageRequest $request, Site $site): RedirectResponse
+    public function store(Site $site): RedirectResponse
     {
-        $data = $request->validated();
+        (new CreateSitePage)->handle($site, request()->all());
 
-        if (! isset($data['sort_order'])) {
-            $data['sort_order'] = (int) $site->pages()->max('sort_order') + 1;
-        }
-
-        $site->pages()->create($data);
-
-        return redirect()->route('sites.show', $site);
+        return to_route('sites.show', $site);
     }
 
     public function show(Site $site, SitePage $page): Response
     {
-        return Inertia::render('site-pages/show', [
+        return inertia('site-pages/show', [
             'site' => $site,
             'page' => $page->load('blockPages'),
         ]);
@@ -45,23 +37,23 @@ class SitePageController extends Controller
 
     public function edit(Site $site, SitePage $page): Response
     {
-        return Inertia::render('site-pages/edit', [
+        return inertia('site-pages/edit', [
             'site' => $site,
             'page' => $page,
         ]);
     }
 
-    public function update(UpdateSitePageRequest $request, Site $site, SitePage $page): RedirectResponse
+    public function update(Site $site, SitePage $page): RedirectResponse
     {
-        $page->update($request->validated());
+        (new UpdateSitePage)->handle($page, request()->all());
 
-        return redirect()->route('sites.pages.show', [$site, $page]);
+        return to_route('sites.pages.show', [$site, $page]);
     }
 
     public function destroy(Site $site, SitePage $page): RedirectResponse
     {
-        $page->delete();
+        (new DeleteSitePage)->handle($page);
 
-        return redirect()->route('sites.show', $site);
+        return to_route('sites.show', $site);
     }
 }

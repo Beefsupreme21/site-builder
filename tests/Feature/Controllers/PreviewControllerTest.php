@@ -3,9 +3,6 @@
 use App\Models\Block;
 use App\Models\Site;
 use Database\Seeders\BlockSeeder;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-
-uses(RefreshDatabase::class);
 
 beforeEach(function (): void {
     $this->seed(BlockSeeder::class);

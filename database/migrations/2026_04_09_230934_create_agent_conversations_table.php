@@ -38,13 +38,4 @@ return new class extends AiMigration
             $table->index(['user_id']);
         });
     }
-
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
-    {
-        Schema::dropIfExists('agent_conversations');
-        Schema::dropIfExists('agent_conversation_messages');
-    }
 };

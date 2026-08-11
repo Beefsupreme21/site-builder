@@ -19,9 +19,4 @@ return new class extends Migration
             $table->unique(['site_id', 'slug']);
         });
     }
-
-    public function down(): void
-    {
-        Schema::dropIfExists('site_pages');
-    }
 };

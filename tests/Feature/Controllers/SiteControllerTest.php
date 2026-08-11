@@ -1,10 +1,9 @@
 <?php
 
+use App\Models\Block;
 use App\Models\Site;
+use Database\Seeders\BlockSeeder;
 use Database\Seeders\SiteSeeder;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-
-uses(RefreshDatabase::class);
 
 test('new sites receive a home page named after the company', function () {
     $site = Site::factory()->create(['company_name' => 'Acme Co']);
@@ -40,6 +39,15 @@ test('site stores primary and secondary colors', function () {
     expect($site->secondary_color)->toBe('#AABBCC');
 });
 
+test('validation failures from the action flash errors back to the form', function () {
+    $this->from(route('sites.create'))
+        ->post(route('sites.store'), ['slug' => '', 'company_name' => ''])
+        ->assertRedirect(route('sites.create'))
+        ->assertSessionHasErrors(['slug', 'company_name', 'primary_color', 'secondary_color']);
+
+    expect(Site::count())->toBe(0);
+});
+
 test('seeded sites include brand colors', function () {
     $this->seed(SiteSeeder::class);
 
@@ -47,4 +55,14 @@ test('seeded sites include brand colors', function () {
 
     expect($site->primary_color)->toBe('#0284C7');
     expect($site->secondary_color)->toBe('#0F766E');
+});
+
+test('seeded sites get a home page filled with the block library', function () {
+    $this->seed(BlockSeeder::class);
+    $this->seed(SiteSeeder::class);
+
+    $home = Site::query()->where('slug', 'blue-ocean-dental')->first()->homePage();
+
+    expect($home?->slug)->toBe('home');
+    expect($home->blockPages()->count())->toBe(Block::count());
 });

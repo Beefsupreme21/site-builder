@@ -2,31 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\BlockPage\MoveBlock;
 use App\Models\BlockPage;
 use Illuminate\Http\RedirectResponse;
 
 class BlockPageMoveController extends Controller
 {
-    public function update(BlockPage $block, string $direction): RedirectResponse
+    public function __invoke(BlockPage $block, string $direction): RedirectResponse
     {
-        $page = $block->sitePage;
+        (new MoveBlock)->handle($block, ['direction' => $direction]);
 
-        $neighbor = $direction === 'up'
-            ? $page->blockPages()
-                ->where('sort_order', '<', $block->sort_order)
-                ->orderByDesc('sort_order')
-                ->first()
-            : $page->blockPages()
-                ->where('sort_order', '>', $block->sort_order)
-                ->orderBy('sort_order')
-                ->first();
+        $page = $block->sitePage()->with('site')->first();
 
-        if ($neighbor !== null) {
-            $currentOrder = $block->sort_order;
-            $block->update(['sort_order' => $neighbor->sort_order]);
-            $neighbor->update(['sort_order' => $currentOrder]);
-        }
-
-        return redirect()->back();
+        return to_route('sites.pages.show', [$page->site, $page]);
     }
 }

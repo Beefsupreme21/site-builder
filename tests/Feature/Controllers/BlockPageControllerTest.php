@@ -3,9 +3,6 @@
 use App\Models\Block;
 use App\Models\Site;
 use Database\Seeders\BlockSeeder;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-
-uses(RefreshDatabase::class);
 
 beforeEach(function (): void {
     $this->seed(BlockSeeder::class);
@@ -58,8 +55,7 @@ test('a block can be removed from a page', function () {
         'sort_order' => 1,
     ]);
 
-    $this->from(route('sites.pages.show', [$site, $page]))
-        ->delete(route('pages.blocks.destroy', [$page, $blockPage]))
+    $this->delete(route('pages.blocks.destroy', [$page, $blockPage]))
         ->assertRedirect(route('sites.pages.show', [$site, $page]));
 
     expect($page->blockPages()->count())->toBe(0);

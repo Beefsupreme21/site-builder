@@ -17,7 +17,7 @@ class PreviewController extends Controller
             abort(404);
         }
 
-        return redirect()->route('preview.show', $page);
+        return to_route('preview.show', $page);
     }
 
     public function show(SitePage $page): View

@@ -25,4 +25,14 @@ class SiteFactory extends Factory
             'secondary_color' => '#525252',
         ];
     }
+
+    /**
+     * @return $this
+     */
+    public function configure(): self
+    {
+        return $this->afterCreating(function (Site $site): void {
+            $site->createDefaultHomePage();
+        });
+    }
 }

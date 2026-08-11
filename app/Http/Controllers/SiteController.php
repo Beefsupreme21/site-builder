@@ -2,59 +2,59 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreSiteRequest;
-use App\Http\Requests\UpdateSiteRequest;
+use App\Actions\Site\CreateSite;
+use App\Actions\Site\DeleteSite;
+use App\Actions\Site\UpdateSite;
 use App\Models\Site;
 use Illuminate\Http\RedirectResponse;
-use Inertia\Inertia;
 use Inertia\Response;
 
 class SiteController extends Controller
 {
     public function index(): Response
     {
-        return Inertia::render('sites/index', [
+        return inertia('sites/index', [
             'sites' => Site::query()->orderBy('company_name')->get(),
         ]);
     }
 
     public function create(): Response
     {
-        return Inertia::render('sites/create');
+        return inertia('sites/create');
     }
 
-    public function store(StoreSiteRequest $request): RedirectResponse
+    public function store(): RedirectResponse
     {
-        $site = Site::create($request->validated());
+        $site = (new CreateSite)->handle(request()->all());
 
-        return redirect()->route('sites.show', $site);
+        return to_route('sites.show', $site);
     }
 
     public function show(Site $site): Response
     {
-        return Inertia::render('sites/show', [
+        return inertia('sites/show', [
             'site' => $site->load('pages'),
         ]);
     }
 
     public function edit(Site $site): Response
     {
-        return Inertia::render('sites/edit', [
+        return inertia('sites/edit', [
             'site' => $site,
         ]);
     }
 
-    public function update(UpdateSiteRequest $request, Site $site): RedirectResponse
+    public function update(Site $site): RedirectResponse
     {
-        $site->update($request->validated());
+        (new UpdateSite)->handle($site, request()->all());
 
-        return redirect()->route('sites.show', $site);
+        return to_route('sites.show', $site);
     }
 
     public function destroy(Site $site): RedirectResponse
     {
-        $site->delete();
+        (new DeleteSite)->handle($site);
 
-        return redirect()->route('sites.index');
+        return to_route('sites.index');
     }
 }

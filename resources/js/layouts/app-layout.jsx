@@ -17,9 +17,13 @@ export default function AppLayout({ children, width = 'wide' }) {
                 <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
                     <Link
                         href={sites.index()}
-                        className="text-sm font-semibold tracking-tight text-neutral-900"
+                        className="flex shrink-0 items-center"
                     >
-                        Site Builder
+                        <img
+                            src="/images/logo.png"
+                            alt="SiteBuilder"
+                            className="h-9 w-auto"
+                        />
                     </Link>
 
                     {auth?.user ? (

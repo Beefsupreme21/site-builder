@@ -1,9 +1,6 @@
 <?php
 
 use App\Models\Site;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-
-uses(RefreshDatabase::class);
 
 test('page show lists blocks for a page', function () {
     $site = Site::factory()->create(['company_name' => 'Acme']);

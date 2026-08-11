@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\BlockPage\AddBlock;
+use App\Actions\BlockPage\RemoveBlock;
 use App\Models\Block;
 use App\Models\BlockPage;
 use App\Models\SitePage;
 use App\Support\BlockCategories;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
-use Inertia\Inertia;
 use Inertia\Response;
 
 class BlockPageController extends Controller
@@ -45,7 +45,7 @@ class BlockPageController extends Controller
             $blocksQuery->where('category', $category);
         }
 
-        return Inertia::render('blocks/create', [
+        return inertia('blocks/create', [
             'site' => $page->site,
             'page' => $page,
             'category' => $category !== '' ? $category : null,
@@ -60,27 +60,21 @@ class BlockPageController extends Controller
         ]);
     }
 
-    public function store(Request $request, SitePage $page): RedirectResponse
+    public function store(SitePage $page): RedirectResponse
     {
         $page->loadMissing('site');
-        $data = $request->validate([
-            'block_id' => ['required', 'integer', Rule::exists('blocks', 'id')],
-        ]);
 
-        $block = Block::findOrFail($data['block_id']);
+        (new AddBlock)->handle($page, request()->all());
 
-        $page->blockPages()->create([
-            'content' => $block->default_content,
-            'sort_order' => (int) $page->blockPages()->max('sort_order') + 1,
-        ]);
-
-        return redirect()->route('sites.pages.show', [$page->site, $page]);
+        return to_route('sites.pages.show', [$page->site, $page]);
     }
 
     public function destroy(SitePage $page, BlockPage $block): RedirectResponse
     {
-        $block->delete();
+        $page->loadMissing('site');
 
-        return redirect()->back();
+        (new RemoveBlock)->handle($block);
+
+        return to_route('sites.pages.show', [$page->site, $page]);
     }
 }

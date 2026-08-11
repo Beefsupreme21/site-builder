@@ -2,17 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 
-class Block extends Model
-{
-    /**
-     * @var list<string>
-     */
-    protected $fillable = [
-        'name',
-        'category',
-        'type',
-        'default_content',
-    ];
-}
+#[Fillable(['name', 'category', 'type', 'default_content'])]
+class Block extends Model {}

@@ -57,6 +57,8 @@ class SiteSeeder extends Seeder
                 $attributes,
             );
 
+            $site->createDefaultHomePage();
+
             $home = $site->homePage();
 
             if ($home === null || $home->blockPages()->exists()) {
