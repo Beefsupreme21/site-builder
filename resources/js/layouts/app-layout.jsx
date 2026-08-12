@@ -14,7 +14,7 @@ export default function AppLayout({ children, width = 'wide' }) {
     return (
         <div className="min-h-screen bg-neutral-50">
             <header className="border-b border-neutral-200 bg-white">
-                <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
+                <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
                     <Link
                         href={sites.index()}
                         className="flex shrink-0 items-center"
@@ -22,7 +22,7 @@ export default function AppLayout({ children, width = 'wide' }) {
                         <img
                             src="/images/logo.png"
                             alt="SiteBuilder"
-                            className="h-9 w-auto"
+                            className="h-18 w-auto"
                         />
                     </Link>
 

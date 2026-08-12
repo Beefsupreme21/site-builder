@@ -18,8 +18,8 @@ Route::get('preview/{page:id}', [PreviewController::class, 'show'])->name('previ
 Route::resource('sites', SiteController::class);
 Route::resource('sites.pages', SitePageController::class)->except(['index'])->scoped(['page' => 'slug']);
 Route::resource('sites.layouts', LayoutController::class)->only(['show'])->scoped(['layout' => 'id']);
-Route::resource('pages.blocks', BlockPageController::class)->only(['create', 'store', 'destroy'])->scoped(['page' => 'id']);
-Route::resource('layouts.blocks', LayoutBlockController::class)->only(['create', 'store', 'destroy'])->scoped(['layout' => 'id']);
+Route::resource('pages.blocks', BlockPageController::class)->only(['create', 'store', 'edit', 'update', 'destroy'])->scoped(['page' => 'id']);
+Route::resource('layouts.blocks', LayoutBlockController::class)->only(['create', 'store', 'edit', 'update', 'destroy'])->scoped(['layout' => 'id']);
 
 Route::patch('blocks/{block}/move/{direction}', BlockPageMoveController::class)
     ->whereIn('direction', BlockDirection::values())

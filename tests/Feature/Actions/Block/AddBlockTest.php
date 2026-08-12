@@ -49,6 +49,24 @@ test('rejects layout templates on pages', function () {
     (new AddBlock)->handle($page, ['template_id' => $template->id]);
 })->throws(ValidationException::class);
 
+test('rejects page templates on layouts', function () {
+    $layout = Site::factory()->create()->defaultLayout();
+    $template = Template::query()->where('type', 'hero_centered')->firstOrFail();
+
+    (new AddBlock)->handle($layout, ['template_id' => $template->id]);
+})->throws(ValidationException::class);
+
+test('adds a block to a layout using the library default content', function () {
+    $layout = Site::factory()->create()->defaultLayout();
+    $template = Template::query()->where('type', 'simple_footer')->firstOrFail();
+
+    $block = (new AddBlock)->handle($layout, ['template_id' => $template->id]);
+
+    expect($block->content)->toBe($template->default_content);
+    expect($block->blockable_id)->toBe($layout->id);
+    expect($block->template_id)->toBe($template->id);
+});
+
 test('requires a template id', function () {
     (new AddBlock)->handle(Site::factory()->create()->homePage(), []);
 })->throws(ValidationException::class);

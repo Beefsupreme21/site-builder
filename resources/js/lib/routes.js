@@ -37,6 +37,8 @@ export const pageBlocks = {
         return category ? `${url}?category=${category}` : url;
     },
     store: (page) => `/pages/${idOf(page)}/blocks`,
+    edit: (page, block) => `/pages/${idOf(page)}/blocks/${idOf(block)}/edit`,
+    update: (page, block) => `/pages/${idOf(page)}/blocks/${idOf(block)}`,
     destroy: (page, block) => `/pages/${idOf(page)}/blocks/${idOf(block)}`,
     move: (block, direction) => `/blocks/${idOf(block)}/move/${direction}`,
 };
@@ -44,6 +46,8 @@ export const pageBlocks = {
 export const layoutBlocks = {
     create: (layout) => `/layouts/${idOf(layout)}/blocks/create`,
     store: (layout) => `/layouts/${idOf(layout)}/blocks`,
+    edit: (layout, block) => `/layouts/${idOf(layout)}/blocks/${idOf(block)}/edit`,
+    update: (layout, block) => `/layouts/${idOf(layout)}/blocks/${idOf(block)}`,
     destroy: (layout, block) => `/layouts/${idOf(layout)}/blocks/${idOf(block)}`,
 };
 

@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Site;
+use App\Models\Template;
 
 test('a block can move down and swap sort order with the block below', function () {
     $site = Site::factory()->create();
@@ -65,4 +66,19 @@ test('a direction outside the enum does not match the route', function () {
     ]);
 
     $this->patch("/blocks/{$block->id}/move/sideways")->assertNotFound();
+});
+
+test('moving a layout block redirects back to the layout show page', function () {
+    $site = Site::factory()->create();
+    $layout = $site->defaultLayout();
+    $footer = Template::query()->where('type', 'simple_footer')->firstOrFail();
+
+    $block = $layout->blocks()->create([
+        'template_id' => $footer->id,
+        'content' => $footer->default_content,
+        'order' => 1,
+    ]);
+
+    $this->patch(route('blocks.move', [$block, 'up']))
+        ->assertRedirect(route('sites.layouts.show', [$site, $layout]));
 });

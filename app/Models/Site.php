@@ -60,4 +60,12 @@ class Site extends Model
         return $this->pages()->where('slug', 'home')->first()
             ?? $this->pages()->orderBy('order')->first();
     }
+
+    protected static function booted(): void
+    {
+        static::deleting(function (Site $site): void {
+            $site->pages()->each(fn (SitePage $page) => $page->delete());
+            $site->layouts()->each(fn (Layout $layout) => $layout->delete());
+        });
+    }
 }

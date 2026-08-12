@@ -89,3 +89,10 @@ test('preview does not inject brand color styles', function () {
         ->assertDontSee('--primary:', false)
         ->assertDontSee('brand-styles', false);
 });
+
+test('preview index returns 404 when the site has no home page', function () {
+    $site = Site::factory()->create();
+    $site->pages()->delete();
+
+    $this->get(route('preview.index', $site))->assertNotFound();
+});

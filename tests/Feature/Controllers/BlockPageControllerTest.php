@@ -83,6 +83,37 @@ test('removing a block scoped to the wrong page returns 404', function () {
     expect($pageA->blocks()->count())->toBe(1);
 });
 
+test('a block can be edited from the block editor', function () {
+    $site = Site::factory()->create();
+    $page = $site->homePage();
+    $block = $page->blocks()->create([
+        'content' => '<p>Before</p>',
+        'order' => 1,
+    ]);
+
+    $this->get(route('pages.blocks.edit', [$page, $block]))
+        ->assertOk()
+        ->assertInertia(fn ($response) => $response
+            ->component('blocks/edit')
+            ->where('target', 'page')
+            ->where('block.content', '<p>Before</p>'));
+
+    $this->put(route('pages.blocks.update', [$page, $block]), [
+        'content' => '<p>After</p>',
+    ])->assertRedirect(route('sites.pages.show', [$site, $page]));
+
+    expect($block->fresh()->content)->toBe('<p>After</p>');
+});
+
+test('the slot block cannot be opened in the editor', function () {
+    $layout = Site::factory()->create()->defaultLayout();
+    $slot = $layout->blocks()
+        ->whereHas('template', fn ($q) => $q->where('type', 'slot'))
+        ->firstOrFail();
+
+    $this->get(route('layouts.blocks.edit', [$layout, $slot]))->assertNotFound();
+});
+
 test('block library picker shows section categories by default', function () {
     $site = Site::factory()->create();
     $page = $site->homePage();
@@ -134,4 +165,31 @@ test('invalid block category shows the section index', function () {
         ->assertInertia(fn ($response) => $response
             ->where('category', null)
             ->has('templates', 0));
+});
+
+test('adding a layout template to a page flashes a validation error', function () {
+    $site = Site::factory()->create();
+    $page = $site->homePage();
+    $footer = Template::query()->where('type', 'simple_footer')->firstOrFail();
+
+    $this->from(route('pages.blocks.create', $page))
+        ->post(route('pages.blocks.store', $page), [
+            'template_id' => $footer->id,
+        ])
+        ->assertRedirect(route('pages.blocks.create', $page))
+        ->assertSessionHasErrors('template_id');
+
+    expect($page->blocks()->count())->toBe(0);
+});
+
+test('adding a block with an invalid template id flashes a validation error', function () {
+    $site = Site::factory()->create();
+    $page = $site->homePage();
+
+    $this->from(route('pages.blocks.create', $page))
+        ->post(route('pages.blocks.store', $page), [
+            'template_id' => 9999,
+        ])
+        ->assertRedirect(route('pages.blocks.create', $page))
+        ->assertSessionHasErrors('template_id');
 });

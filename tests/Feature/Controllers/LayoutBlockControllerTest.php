@@ -68,6 +68,31 @@ test('the slot block cannot be removed from a layout', function () {
     expect($layout->blocks()->count())->toBe(1);
 });
 
+test('a layout block can be edited from the block editor', function () {
+    $site = Site::factory()->create();
+    $layout = $site->defaultLayout();
+    $footer = Template::query()->where('type', 'simple_footer')->firstOrFail();
+
+    $block = $layout->blocks()->create([
+        'template_id' => $footer->id,
+        'content' => '<footer>Before</footer>',
+        'order' => 1,
+    ]);
+
+    $this->get(route('layouts.blocks.edit', [$layout, $block]))
+        ->assertOk()
+        ->assertInertia(fn ($response) => $response
+            ->component('blocks/edit')
+            ->where('target', 'layout')
+            ->where('block.content', '<footer>Before</footer>'));
+
+    $this->put(route('layouts.blocks.update', [$layout, $block]), [
+        'content' => '<footer>After</footer>',
+    ])->assertRedirect(route('sites.layouts.show', [$site, $layout]));
+
+    expect($block->fresh()->content)->toBe('<footer>After</footer>');
+});
+
 test('preview renders layout blocks around page content at the slot', function () {
     $site = Site::factory()->create();
     $page = $site->homePage();
@@ -100,4 +125,62 @@ test('page block picker excludes layout and system templates', function () {
         ->assertInertia(fn ($response) => $response
             ->has('templates', 3)
             ->where('templates.0.type', 'hero_centered'));
+});
+
+test('a footer block can be removed from a layout', function () {
+    $site = Site::factory()->create();
+    $layout = $site->defaultLayout();
+    $footer = Template::query()->where('type', 'simple_footer')->firstOrFail();
+
+    $block = $layout->blocks()->create([
+        'template_id' => $footer->id,
+        'content' => $footer->default_content,
+        'order' => 1,
+    ]);
+
+    $this->delete(route('layouts.blocks.destroy', [$layout, $block]))
+        ->assertRedirect(route('sites.layouts.show', [$site, $layout]));
+
+    expect($layout->blocks()->count())->toBe(1);
+});
+
+test('removing a block scoped to the wrong layout returns 404', function () {
+    $site = Site::factory()->create();
+    $layoutA = $site->defaultLayout();
+    $layoutB = $site->layouts()->create(['name' => 'Alternate']);
+    $footer = Template::query()->where('type', 'simple_footer')->firstOrFail();
+
+    $block = $layoutA->blocks()->create([
+        'template_id' => $footer->id,
+        'content' => $footer->default_content,
+        'order' => 1,
+    ]);
+
+    $this->delete(route('layouts.blocks.destroy', [$layoutB, $block]))
+        ->assertNotFound();
+
+    expect($layoutA->blocks()->count())->toBe(2);
+});
+
+test('a layout accessed under the wrong site returns 404', function () {
+    $site = Site::factory()->create();
+    $other = Site::factory()->create();
+    $layout = $site->defaultLayout();
+
+    $this->get(route('sites.layouts.show', [$other, $layout]))->assertNotFound();
+});
+
+test('adding a page template to a layout flashes a validation error', function () {
+    $site = Site::factory()->create();
+    $layout = $site->defaultLayout();
+    $hero = Template::query()->where('type', 'hero_centered')->firstOrFail();
+
+    $this->from(route('layouts.blocks.create', $layout))
+        ->post(route('layouts.blocks.store', $layout), [
+            'template_id' => $hero->id,
+        ])
+        ->assertRedirect(route('layouts.blocks.create', $layout))
+        ->assertSessionHasErrors('template_id');
+
+    expect($layout->blocks()->count())->toBe(1);
 });

@@ -1,9 +1,10 @@
 import { BlockReorderButtons } from '@/components/block-reorder-buttons';
 import { layoutBlocks, pageBlocks } from '@/lib/routes';
-import { btnDanger } from '@/lib/ui';
-import { Form } from '@inertiajs/react';
+import { btnDanger, btnSecondary } from '@/lib/ui';
+import { Form, Link } from '@inertiajs/react';
 
-const actionBtn = `${btnDanger} px-2.5 py-1 text-xs disabled:cursor-not-allowed disabled:opacity-40`;
+const actionBtn = `${btnSecondary} px-2.5 py-1 text-xs disabled:cursor-not-allowed disabled:opacity-40`;
+const deleteBtn = `${btnDanger} px-2.5 py-1 text-xs disabled:cursor-not-allowed disabled:opacity-40`;
 
 function SlotPlaceholder({ name }) {
     return (
@@ -24,15 +25,18 @@ export function BlockPreview({
     block,
     number,
 }) {
+    const label = block.template?.name ?? `Block ${number}`;
     const isSlot = block.template?.type === 'slot';
-    const label = isSlot
-        ? (block.template?.name ?? 'Content slot')
-        : `Block ${number}`;
 
     const destroyAction =
         target === 'layout'
             ? layoutBlocks.destroy(layout, block)
             : pageBlocks.destroy(page, block);
+
+    const editHref =
+        target === 'layout'
+            ? layoutBlocks.edit(layout, block)
+            : pageBlocks.edit(page, block);
 
     return (
         <li className="px-5 py-5">
@@ -43,32 +47,44 @@ export function BlockPreview({
                 <div className="flex flex-wrap items-center gap-2">
                     <BlockReorderButtons blocks={blocks} block={block} />
                     {isSlot ? (
-                        <button type="button" disabled className={actionBtn}>
-                            Delete
-                        </button>
+                        <>
+                            <button type="button" disabled className={actionBtn}>
+                                Edit
+                            </button>
+                            <button type="button" disabled className={deleteBtn}>
+                                Delete
+                            </button>
+                        </>
                     ) : (
-                        <Form
-                            action={destroyAction}
-                            method="delete"
-                            className="inline"
-                        >
-                            {({ processing }) => (
-                                <button
-                                    type="submit"
-                                    disabled={processing}
-                                    className={actionBtn}
-                                    onClick={(e) => {
-                                        if (
-                                            !confirm(`Delete block ${number}?`)
-                                        ) {
-                                            e.preventDefault();
-                                        }
-                                    }}
-                                >
-                                    Delete
-                                </button>
-                            )}
-                        </Form>
+                        <>
+                            <Link href={editHref} className={actionBtn}>
+                                Edit
+                            </Link>
+                            <Form
+                                action={destroyAction}
+                                method="delete"
+                                className="inline"
+                            >
+                                {({ processing }) => (
+                                    <button
+                                        type="submit"
+                                        disabled={processing}
+                                        className={deleteBtn}
+                                        onClick={(e) => {
+                                            if (
+                                                !confirm(
+                                                    `Delete “${label}”?`,
+                                                )
+                                            ) {
+                                                e.preventDefault();
+                                            }
+                                        }}
+                                    >
+                                        Delete
+                                    </button>
+                                )}
+                            </Form>
+                        </>
                     )}
                 </div>
             </div>

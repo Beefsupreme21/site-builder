@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Actions\Block\AddBlock;
 use App\Actions\Block\RemoveBlock;
+use App\Actions\Block\UpdateBlock;
 use App\Enums\TemplateContext;
 use App\Models\Block;
 use App\Models\Layout;
@@ -40,6 +41,30 @@ class LayoutBlockController extends Controller
         $layout->loadMissing('site');
 
         (new AddBlock)->handle($layout, request()->all());
+
+        return to_route('sites.layouts.show', [$layout->site, $layout]);
+    }
+
+    public function edit(Layout $layout, Block $block): Response
+    {
+        $layout->loadMissing('site');
+
+        abort_if($block->isSlot(), 404);
+
+        return inertia('blocks/edit', [
+            'site' => $layout->site,
+            'layout' => $layout,
+            'page' => null,
+            'block' => $block,
+            'target' => 'layout',
+        ]);
+    }
+
+    public function update(Layout $layout, Block $block): RedirectResponse
+    {
+        $layout->loadMissing('site');
+
+        (new UpdateBlock)->handle($block, request()->all());
 
         return to_route('sites.layouts.show', [$layout->site, $layout]);
     }

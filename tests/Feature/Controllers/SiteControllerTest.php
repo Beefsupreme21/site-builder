@@ -67,3 +67,69 @@ test('seeded sites get a home page filled with the block library', function () {
     expect($home?->slug)->toBe('home');
     expect($home->blocks()->count())->toBe(Template::query()->where('context', TemplateContext::Page)->count());
 });
+
+test('home redirects to the sites index', function () {
+    $this->get('/')->assertRedirect(route('sites.index'));
+});
+
+test('sites index lists sites ordered by company name', function () {
+    Site::factory()->create(['company_name' => 'Zulu Co', 'slug' => 'zulu']);
+    Site::factory()->create(['company_name' => 'Alpha Co', 'slug' => 'alpha']);
+
+    $this->get(route('sites.index'))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->component('sites/index')
+            ->where('sites.0.company_name', 'Alpha Co')
+            ->where('sites.1.company_name', 'Zulu Co'));
+});
+
+test('site show includes the default layout', function () {
+    $site = Site::factory()->create();
+
+    $this->get(route('sites.show', $site))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->has('defaultLayout')
+            ->where('defaultLayout.name', 'Default'));
+});
+
+test('site update persists changes and redirects to show', function () {
+    $site = Site::factory()->create(['slug' => 'before', 'company_name' => 'Before Co']);
+
+    $this->patch(route('sites.update', $site), [
+        'slug' => 'after',
+        'company_name' => 'After Co',
+        'phone' => '(555) 111-2222',
+        'email' => 'after@example.com',
+        'logo' => null,
+        'primary_color' => '#111111',
+        'secondary_color' => '#222222',
+    ])->assertRedirect(route('sites.show', $site));
+
+    expect($site->fresh()->slug)->toBe('after');
+    expect($site->fresh()->company_name)->toBe('After Co');
+});
+
+test('site update validation failures flash errors back to the edit form', function () {
+    $site = Site::factory()->create();
+
+    $this->from(route('sites.edit', $site))
+        ->patch(route('sites.update', $site), [
+            'slug' => '',
+            'company_name' => '',
+            'primary_color' => 'red',
+            'secondary_color' => 'blue',
+        ])
+        ->assertRedirect(route('sites.edit', $site))
+        ->assertSessionHasErrors(['slug', 'company_name', 'primary_color', 'secondary_color']);
+});
+
+test('site destroy deletes the site and redirects to the index', function () {
+    $site = Site::factory()->create();
+
+    $this->delete(route('sites.destroy', $site))
+        ->assertRedirect(route('sites.index'));
+
+    expect(Site::count())->toBe(0);
+});

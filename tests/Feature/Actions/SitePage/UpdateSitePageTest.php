@@ -63,3 +63,12 @@ test('rejects a slug that is not kebab case', function () {
 
     (new UpdateSitePage)->handle($page, ['slug' => 'About Us', 'title' => 'About']);
 })->throws(ValidationException::class);
+
+test('updates the page sort order', function () {
+    $site = Site::factory()->create();
+    $page = pageForUpdate($site);
+
+    (new UpdateSitePage)->handle($page, ['slug' => 'about', 'title' => 'About', 'order' => 5]);
+
+    expect($page->fresh()->order)->toBe(5);
+});

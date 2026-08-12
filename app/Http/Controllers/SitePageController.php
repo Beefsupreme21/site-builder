@@ -31,7 +31,7 @@ class SitePageController extends Controller
     {
         return inertia('site-pages/show', [
             'site' => $site,
-            'page' => $page->load('blocks'),
+            'page' => $page->load(['blocks.template']),
         ]);
     }
 
