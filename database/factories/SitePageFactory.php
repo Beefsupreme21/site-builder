@@ -23,7 +23,25 @@ class SitePageFactory extends Factory
             'site_id' => Site::factory(),
             'slug' => Str::slug($title),
             'title' => ucwords($title),
-            'sort_order' => fake()->numberBetween(0, 10),
+            'order' => fake()->numberBetween(0, 10),
         ];
+    }
+
+    /**
+     * @return $this
+     */
+    public function configure(): self
+    {
+        return $this->afterMaking(function (SitePage $page): void {
+            if ($page->layout_id !== null) {
+                return;
+            }
+
+            $site = $page->site_id
+                ? Site::query()->find($page->site_id)
+                : null;
+
+            $page->layout_id = $site?->defaultLayout()?->id;
+        });
     }
 }

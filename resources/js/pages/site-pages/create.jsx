@@ -7,11 +7,11 @@ import { btnCancel, btnSubmit, formActions, formCard } from '@/lib/ui';
 import AppLayout from '@/layouts/app-layout';
 import { Head, Link, useForm } from '@inertiajs/react';
 
-export default function SitePagesCreate({ site, nextSortOrder }) {
+export default function SitePagesCreate({ site, nextOrder }) {
     const form = useForm({
         slug: '',
         title: '',
-        sort_order: nextSortOrder,
+        order: nextOrder,
     });
 
     function submit(e) {
@@ -63,15 +63,15 @@ export default function SitePagesCreate({ site, nextSortOrder }) {
                         />
                     </div>
                     <div>
-                        <Label htmlFor="page-sort_order">Sort order</Label>
+                        <Label htmlFor="page-order">Order</Label>
                         <Input
-                            id="page-sort_order"
+                            id="page-order"
                             type="number"
                             min={0}
-                            value={form.data.sort_order}
+                            value={form.data.order}
                             onChange={(e) =>
                                 form.setData(
-                                    'sort_order',
+                                    'order',
                                     Number(e.target.value),
                                 )
                             }

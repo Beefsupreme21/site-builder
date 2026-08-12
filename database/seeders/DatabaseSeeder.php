@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call([
-            BlockSeeder::class,
+            TemplateSeeder::class,
             SiteSeeder::class,
         ]);
     }

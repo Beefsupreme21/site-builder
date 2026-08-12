@@ -1,6 +1,6 @@
-import { PageBlockList } from '@/components/page-block-list';
+import { BlockList } from '@/components/block-list';
 import { PageHeader } from '@/components/page-header';
-import { sitePages, sitePreview, sites } from '@/lib/routes';
+import { pageBlocks, sitePages, sitePreview, sites } from '@/lib/routes';
 import { btnSecondary } from '@/lib/ui';
 import { Head, Link } from '@inertiajs/react';
 
@@ -32,7 +32,12 @@ export default function SitePagesShow({ site, page }) {
                     </>
                 }
             />
-            <PageBlockList page={page} />
+            <BlockList
+                blocks={page.blocks ?? []}
+                createHref={pageBlocks.create(page)}
+                target="page"
+                page={page}
+            />
         </>
     );
 }

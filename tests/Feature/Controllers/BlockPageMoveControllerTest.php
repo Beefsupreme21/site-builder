@@ -6,62 +6,62 @@ test('a block can move down and swap sort order with the block below', function 
     $site = Site::factory()->create();
     $page = $site->homePage();
 
-    $first = $page->blockPages()->create([
+    $first = $page->blocks()->create([
         'content' => '<p>First</p>',
-        'sort_order' => 1,
+        'order' => 0,
     ]);
-    $second = $page->blockPages()->create([
+    $second = $page->blocks()->create([
         'content' => '<p>Second</p>',
-        'sort_order' => 2,
+        'order' => 1,
     ]);
 
     $this->patch(route('blocks.move', [$first, 'down']))
         ->assertRedirect(route('sites.pages.show', [$site, $page]));
 
-    expect($first->fresh()->sort_order)->toBe(2);
-    expect($second->fresh()->sort_order)->toBe(1);
+    expect($first->fresh()->order)->toBe(1);
+    expect($second->fresh()->order)->toBe(0);
 });
 
 test('a block can move up and swap sort order with the block above', function () {
     $site = Site::factory()->create();
     $page = $site->homePage();
 
-    $first = $page->blockPages()->create([
+    $first = $page->blocks()->create([
         'content' => '<p>First</p>',
-        'sort_order' => 1,
+        'order' => 0,
     ]);
-    $second = $page->blockPages()->create([
+    $second = $page->blocks()->create([
         'content' => '<p>Second</p>',
-        'sort_order' => 2,
+        'order' => 1,
     ]);
 
     $this->patch(route('blocks.move', [$second, 'up']))
         ->assertRedirect(route('sites.pages.show', [$site, $page]));
 
-    expect($first->fresh()->sort_order)->toBe(2);
-    expect($second->fresh()->sort_order)->toBe(1);
+    expect($first->fresh()->order)->toBe(1);
+    expect($second->fresh()->order)->toBe(0);
 });
 
 test('moving the first block up leaves sort order unchanged', function () {
     $site = Site::factory()->create();
     $page = $site->homePage();
 
-    $block = $page->blockPages()->create([
+    $block = $page->blocks()->create([
         'content' => '<p>Only</p>',
-        'sort_order' => 1,
+        'order' => 1,
     ]);
 
     $this->patch(route('blocks.move', [$block, 'up']))
         ->assertRedirect(route('sites.pages.show', [$site, $page]));
 
-    expect($block->fresh()->sort_order)->toBe(1);
+    expect($block->fresh()->order)->toBe(1);
 });
 
 test('a direction outside the enum does not match the route', function () {
     $page = Site::factory()->create()->homePage();
-    $block = $page->blockPages()->create([
+    $block = $page->blocks()->create([
         'content' => '<p>Only</p>',
-        'sort_order' => 1,
+        'order' => 1,
     ]);
 
     $this->patch("/blocks/{$block->id}/move/sideways")->assertNotFound();

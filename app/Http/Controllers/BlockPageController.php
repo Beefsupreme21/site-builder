@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\BlockPage\AddBlock;
-use App\Actions\BlockPage\RemoveBlock;
+use App\Actions\Block\AddBlock;
+use App\Actions\Block\RemoveBlock;
+use App\Enums\TemplateContext;
 use App\Models\Block;
-use App\Models\BlockPage;
 use App\Models\SitePage;
+use App\Models\Template;
 use App\Support\BlockCategories;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -24,7 +25,8 @@ class BlockPageController extends Controller
             $category = '';
         }
 
-        $counts = Block::query()
+        $counts = Template::query()
+            ->where('context', TemplateContext::Page)
             ->selectRaw('category, count(*) as total')
             ->groupBy('category')
             ->pluck('total', 'category');
@@ -39,21 +41,25 @@ class BlockPageController extends Controller
             ->values()
             ->all();
 
-        $blocksQuery = Block::query()->orderBy('id');
+        $templatesQuery = Template::query()
+            ->where('context', TemplateContext::Page)
+            ->orderBy('id');
 
         if ($category !== '') {
-            $blocksQuery->where('category', $category);
+            $templatesQuery->where('category', $category);
         }
 
         return inertia('blocks/create', [
             'site' => $page->site,
             'page' => $page,
+            'layout' => null,
+            'target' => 'page',
             'category' => $category !== '' ? $category : null,
             'activeCategory' => $category !== '' ? BlockCategories::find($category) : null,
             'categories' => $categories,
             'groups' => BlockCategories::groups(),
-            'blocks' => $category !== ''
-                ? $blocksQuery
+            'templates' => $category !== ''
+                ? $templatesQuery
                     ->get(['id', 'type', 'name', 'category', 'default_content'])
                     ->all()
                 : [],
@@ -69,7 +75,7 @@ class BlockPageController extends Controller
         return to_route('sites.pages.show', [$page->site, $page]);
     }
 
-    public function destroy(SitePage $page, BlockPage $block): RedirectResponse
+    public function destroy(SitePage $page, Block $block): RedirectResponse
     {
         $page->loadMissing('site');
 

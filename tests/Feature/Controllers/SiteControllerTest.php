@@ -1,9 +1,10 @@
 <?php
 
-use App\Models\Block;
+use App\Enums\TemplateContext;
 use App\Models\Site;
-use Database\Seeders\BlockSeeder;
+use App\Models\Template;
 use Database\Seeders\SiteSeeder;
+use Database\Seeders\TemplateSeeder;
 
 test('new sites receive a home page named after the company', function () {
     $site = Site::factory()->create(['company_name' => 'Acme Co']);
@@ -21,7 +22,7 @@ test('site show lists pages', function () {
         ->assertInertia(fn ($page) => $page
             ->component('sites/show')
             ->has('site.pages', 1)
-            ->missing('site.pages.0.block_pages'));
+            ->missing('site.pages.0.blocks'));
 });
 
 test('site stores primary and secondary colors', function () {
@@ -58,11 +59,11 @@ test('seeded sites include brand colors', function () {
 });
 
 test('seeded sites get a home page filled with the block library', function () {
-    $this->seed(BlockSeeder::class);
+    $this->seed(TemplateSeeder::class);
     $this->seed(SiteSeeder::class);
 
     $home = Site::query()->where('slug', 'blue-ocean-dental')->first()->homePage();
 
     expect($home?->slug)->toBe('home');
-    expect($home->blockPages()->count())->toBe(Block::count());
+    expect($home->blocks()->count())->toBe(Template::query()->where('context', TemplateContext::Page)->count());
 });

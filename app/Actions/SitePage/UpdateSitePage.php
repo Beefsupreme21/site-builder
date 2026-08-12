@@ -25,7 +25,7 @@ class UpdateSitePage
                     ->ignore($page->id),
             ],
             'title' => ['required', 'string', 'max:255'],
-            'sort_order' => ['nullable', 'integer', 'min:0', 'max:65535'],
+            'order' => ['nullable', 'integer', 'min:0', 'max:65535'],
         ])->validate();
 
         return DB::transaction(function () use ($page, $validated): SitePage {

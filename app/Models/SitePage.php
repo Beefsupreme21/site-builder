@@ -7,9 +7,9 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
-#[Fillable(['site_id', 'slug', 'title', 'sort_order'])]
+#[Fillable(['site_id', 'layout_id', 'slug', 'title', 'order'])]
 class SitePage extends Model
 {
     /** @use HasFactory<SitePageFactory> */
@@ -29,23 +29,30 @@ class SitePage extends Model
     }
 
     /**
-     * @return HasMany<BlockPage, $this>
+     * @return BelongsTo<Layout, $this>
      */
-    public function blockPages(): HasMany
+    public function layout(): BelongsTo
     {
-        return $this->hasMany(BlockPage::class)->orderBy('sort_order');
+        return $this->belongsTo(Layout::class);
     }
 
     /**
-     * @return HasMany<BlockPage, $this>
+     * @return MorphMany<Block, $this>
      */
-    public function blocks(): HasMany
+    public function blocks(): MorphMany
     {
-        return $this->blockPages();
+        return $this->morphMany(Block::class, 'blockable')->orderBy('order')->orderBy('id');
     }
 
     public function previewUrl(): string
     {
         return route('preview.show', $this);
+    }
+
+    protected static function booted(): void
+    {
+        static::deleting(function (SitePage $page): void {
+            $page->blocks()->delete();
+        });
     }
 }

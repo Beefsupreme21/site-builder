@@ -16,7 +16,7 @@ class SitePageController extends Controller
     {
         return inertia('site-pages/create', [
             'site' => $site,
-            'nextSortOrder' => (int) $site->pages()->max('sort_order') + 1,
+            'nextOrder' => (int) $site->pages()->max('order') + 1,
         ]);
     }
 
@@ -31,7 +31,7 @@ class SitePageController extends Controller
     {
         return inertia('site-pages/show', [
             'site' => $site,
-            'page' => $page->load('blockPages'),
+            'page' => $page->load('blocks'),
         ]);
     }
 

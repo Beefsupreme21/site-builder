@@ -22,7 +22,11 @@ class PreviewController extends Controller
 
     public function show(SitePage $page): View
     {
-        $page->load(['blockPages', 'site.pages']);
+        $page->load([
+            'blocks',
+            'layout.blocks.template',
+            'site',
+        ]);
 
         return view('preview.show', [
             'site' => $page->site,

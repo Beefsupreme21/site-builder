@@ -1,11 +1,11 @@
 <?php
 
-use App\Models\Block;
 use App\Models\Site;
-use Database\Seeders\BlockSeeder;
+use App\Models\Template;
+use Database\Seeders\TemplateSeeder;
 
 beforeEach(function (): void {
-    $this->seed(BlockSeeder::class);
+    $this->seed(TemplateSeeder::class);
 });
 
 test('preview renders the page', function () {
@@ -40,11 +40,11 @@ test('preview returns 404 for unknown page id', function () {
 test('preview renders the block content for a page', function () {
     $site = Site::factory()->create();
     $page = $site->homePage();
-    $block = Block::query()->where('type', 'hero_centered')->firstOrFail();
+    $template = Template::query()->where('type', 'hero_centered')->firstOrFail();
 
-    $page->blockPages()->create([
+    $page->blocks()->create([
         'content' => '<p data-test-block>Hello from the hero block</p>',
-        'sort_order' => 1,
+        'order' => 1,
     ]);
 
     $this->get(route('preview.show', $page))
@@ -53,14 +53,29 @@ test('preview renders the block content for a page', function () {
         ->assertSee('data-test-block', false)
         ->assertSee('@tailwindcss/browser@4', false);
 
-    $page->blockPages()->create([
-        'content' => $block->default_content,
-        'sort_order' => 2,
+    $page->blocks()->create([
+        'content' => $template->default_content,
+        'order' => 2,
     ]);
 
     $this->get(route('preview.show', $page))
         ->assertOk()
         ->assertSee('Welcome to your site', false);
+});
+
+test('preview does not render built-in site navigation or footer', function () {
+    $site = Site::factory()->create([
+        'slug' => 'nav-free',
+        'company_name' => 'Nav Free Co',
+    ]);
+
+    $page = $site->homePage();
+    $page->update(['title' => 'Home Page']);
+
+    $this->get(route('preview.show', $page))
+        ->assertOk()
+        ->assertDontSee('aria-label="Site"', false)
+        ->assertDontSee('&copy; '.now()->year, false);
 });
 
 test('preview does not inject brand color styles', function () {

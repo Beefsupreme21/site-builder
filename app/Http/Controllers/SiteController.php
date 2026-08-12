@@ -32,8 +32,11 @@ class SiteController extends Controller
 
     public function show(Site $site): Response
     {
+        $site->load('pages');
+
         return inertia('sites/show', [
-            'site' => $site->load('pages'),
+            'site' => $site,
+            'defaultLayout' => $site->defaultLayout(),
         ]);
     }
 

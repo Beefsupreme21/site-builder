@@ -1,5 +1,10 @@
 import { PageHeader } from '@/components/page-header';
-import { sitePages, sitePreview, sites } from '@/lib/routes';
+import {
+    layouts,
+    sitePages,
+    sitePreview,
+    sites,
+} from '@/lib/routes';
 import {
     btnDanger,
     btnPrimary,
@@ -9,7 +14,7 @@ import {
 } from '@/lib/ui';
 import { Form, Head, Link } from '@inertiajs/react';
 
-export default function SitesShow({ site }) {
+export default function SitesShow({ site, defaultLayout }) {
     const pages = site.pages ?? [];
 
     return (
@@ -30,6 +35,14 @@ export default function SitesShow({ site }) {
                         >
                             Preview
                         </a>
+                        {defaultLayout && (
+                            <Link
+                                href={layouts.show(site, defaultLayout)}
+                                className={btnSecondary}
+                            >
+                                Edit layout
+                            </Link>
+                        )}
                         <Link href={sites.edit(site)} className={btnSecondary}>
                             Edit site
                         </Link>

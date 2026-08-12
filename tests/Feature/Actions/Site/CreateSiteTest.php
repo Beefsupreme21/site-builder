@@ -1,6 +1,8 @@
 <?php
 
 use App\Actions\Site\CreateSite;
+use App\Models\Block;
+use App\Models\Layout;
 use App\Models\Site;
 use Illuminate\Validation\ValidationException;
 
@@ -17,13 +19,17 @@ function createSiteInput(array $overrides = []): array
     ], $overrides);
 }
 
-test('creates a site and its default home page', function () {
+test('creates a site with a default layout, slot block, and home page', function () {
     $site = (new CreateSite)->handle(createSiteInput());
 
     expect($site->slug)->toBe('acme-hardware');
-    expect($site->company_name)->toBe('Acme Hardware Co.');
+    expect($site->layouts)->toHaveCount(1);
+    expect($site->defaultLayout()?->name)->toBe('Default');
     expect($site->homePage()?->slug)->toBe('home');
-    expect($site->homePage()?->title)->toBe('Acme Hardware Co.');
+    expect($site->homePage()?->layout_id)->toBe($site->defaultLayout()?->id);
+
+    $slot = $site->defaultLayout()->blocks()->whereHas('template', fn ($q) => $q->where('type', 'slot'))->first();
+    expect($slot)->not->toBeNull();
 });
 
 test('expands and upper-cases shorthand brand colors', function () {
@@ -66,4 +72,6 @@ test('does not create a site when validation fails', function () {
     }
 
     expect(Site::count())->toBe(0);
+    expect(Layout::count())->toBe(0);
+    expect(Block::count())->toBe(0);
 });

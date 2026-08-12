@@ -8,21 +8,18 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('site_pages', function (Blueprint $table) {
+        Schema::create('blocks', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('site_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('layout_id')->constrained();
-            $table->string('slug');
-            $table->string('title');
+            $table->morphs('blockable');
+            $table->foreignId('template_id')->nullable()->constrained()->nullOnDelete();
+            $table->longText('content');
             $table->unsignedSmallInteger('order')->default(0);
             $table->timestamps();
-
-            $table->unique(['site_id', 'slug']);
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('site_pages');
+        Schema::dropIfExists('blocks');
     }
 };

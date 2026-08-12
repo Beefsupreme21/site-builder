@@ -8,13 +8,19 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('blocks', function (Blueprint $table) {
+        Schema::create('templates', function (Blueprint $table) {
             $table->id();
+            $table->string('context');
             $table->string('name');
             $table->string('category');
             $table->string('type')->unique();
             $table->longText('default_content');
             $table->timestamps();
         });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('templates');
     }
 };

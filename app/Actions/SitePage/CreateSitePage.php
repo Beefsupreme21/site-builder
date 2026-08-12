@@ -24,11 +24,13 @@ class CreateSitePage
                 Rule::unique('site_pages', 'slug')->where('site_id', $site->id),
             ],
             'title' => ['required', 'string', 'max:255'],
-            'sort_order' => ['nullable', 'integer', 'min:0', 'max:65535'],
+            'order' => ['nullable', 'integer', 'min:0', 'max:65535'],
         ])->validate();
 
         return DB::transaction(function () use ($site, $validated): SitePage {
-            $validated['sort_order'] ??= (int) $site->pages()->max('sort_order') + 1;
+            $validated['order'] ??= (int) $site->pages()->max('order') + 1;
+            $validated['layout_id'] = $site->defaultLayout()?->id
+                ?? throw new \RuntimeException('Site has no default layout.');
 
             return $site->pages()->create($validated);
         });

@@ -2,6 +2,7 @@
 
 namespace App\Actions\Site;
 
+use App\Actions\Layout\CreateDefaultLayout;
 use App\Models\Site;
 use App\Support\ColorPalette;
 use Illuminate\Support\Facades\DB;
@@ -28,7 +29,14 @@ class CreateSite
         return DB::transaction(function () use ($validated): Site {
             $site = Site::create($validated);
 
-            $site->createDefaultHomePage();
+            $layout = (new CreateDefaultLayout)->handle($site);
+
+            $site->pages()->create([
+                'slug' => 'home',
+                'title' => $site->company_name,
+                'order' => 0,
+                'layout_id' => $layout->id,
+            ]);
 
             return $site;
         });

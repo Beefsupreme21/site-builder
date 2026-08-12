@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Actions\Layout\CreateDefaultLayout;
 use App\Models\Site;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -32,7 +33,14 @@ class SiteFactory extends Factory
     public function configure(): self
     {
         return $this->afterCreating(function (Site $site): void {
-            $site->createDefaultHomePage();
+            $layout = (new CreateDefaultLayout)->handle($site);
+
+            $site->pages()->create([
+                'slug' => 'home',
+                'title' => $site->company_name,
+                'order' => 0,
+                'layout_id' => $layout->id,
+            ]);
         });
     }
 }

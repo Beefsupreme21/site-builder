@@ -17,6 +17,10 @@ export const sites = {
     destroy: (site) => `/sites/${idOf(site)}`,
 };
 
+export const layouts = {
+    show: (site, layout) => `/sites/${idOf(site)}/layouts/${idOf(layout)}`,
+};
+
 export const sitePages = {
     create: (site) => `/sites/${idOf(site)}/pages/create`,
     store: (site) => `/sites/${idOf(site)}/pages`,
@@ -35,6 +39,12 @@ export const pageBlocks = {
     store: (page) => `/pages/${idOf(page)}/blocks`,
     destroy: (page, block) => `/pages/${idOf(page)}/blocks/${idOf(block)}`,
     move: (block, direction) => `/blocks/${idOf(block)}/move/${direction}`,
+};
+
+export const layoutBlocks = {
+    create: (layout) => `/layouts/${idOf(layout)}/blocks/create`,
+    store: (layout) => `/layouts/${idOf(layout)}/blocks`,
+    destroy: (layout, block) => `/layouts/${idOf(layout)}/blocks/${idOf(block)}`,
 };
 
 export const sitePreview = {

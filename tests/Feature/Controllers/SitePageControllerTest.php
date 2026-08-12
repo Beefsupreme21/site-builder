@@ -5,16 +5,16 @@ use App\Models\Site;
 test('page show lists blocks for a page', function () {
     $site = Site::factory()->create(['company_name' => 'Acme']);
     $page = $site->homePage();
-    $page->blockPages()->create([
+    $page->blocks()->create([
         'content' => '<p>Hello</p>',
-        'sort_order' => 1,
+        'order' => 1,
     ]);
 
     $this->get(route('sites.pages.show', [$site, $page]))
         ->assertOk()
         ->assertInertia(fn ($response) => $response
             ->component('site-pages/show')
-            ->has('page.block_pages', 1));
+            ->has('page.blocks', 1));
 });
 
 test('pages can be added and removed', function () {
@@ -23,7 +23,7 @@ test('pages can be added and removed', function () {
     $this->post(route('sites.pages.store', $site), [
         'slug' => 'store',
         'title' => 'Store',
-        'sort_order' => 3,
+        'order' => 3,
     ])->assertRedirect(route('sites.show', $site));
 
     $storePage = $site->pages()->where('slug', 'store')->first();
@@ -46,7 +46,7 @@ test('page update persists changes', function () {
     $this->patch(route('sites.pages.update', [$site, $page]), [
         'slug' => 'home',
         'title' => 'Welcome',
-        'sort_order' => 0,
+        'order' => 0,
     ])->assertRedirect(route('sites.pages.show', [$site, $page]));
 
     expect($page->fresh()->title)->toBe('Welcome');

@@ -17,7 +17,7 @@ export default function SitePagesEdit({ site, page }) {
     const form = useForm({
         slug: page.slug,
         title: page.title,
-        sort_order: page.sort_order,
+        order: page.order,
     });
 
     function submit(e) {
@@ -72,15 +72,15 @@ export default function SitePagesEdit({ site, page }) {
                         />
                     </div>
                     <div>
-                        <Label htmlFor="page-edit-sort_order">Sort order</Label>
+                        <Label htmlFor="page-edit-order">Order</Label>
                         <Input
-                            id="page-edit-sort_order"
+                            id="page-edit-order"
                             type="number"
                             min={0}
-                            value={form.data.sort_order}
+                            value={form.data.order}
                             onChange={(e) =>
                                 form.setData(
-                                    'sort_order',
+                                    'order',
                                     Number(e.target.value),
                                 )
                             }

@@ -5,6 +5,17 @@ use App\Models\Site;
 use App\Models\SitePage;
 use Illuminate\Validation\ValidationException;
 
+test('assigns the site default layout to new pages', function () {
+    $site = Site::factory()->create();
+
+    $page = (new CreateSitePage)->handle($site, [
+        'slug' => 'about',
+        'title' => 'About Us',
+    ]);
+
+    expect($page->layout_id)->toBe($site->defaultLayout()?->id);
+});
+
 test('creates a page on the site', function () {
     $site = Site::factory()->create();
 
@@ -20,14 +31,19 @@ test('creates a page on the site', function () {
 
 test('defaults sort order to one past the current highest', function () {
     $site = Site::factory()->create();
-    $site->pages()->create(['slug' => 'services', 'title' => 'Services', 'sort_order' => 4]);
+    $site->pages()->create([
+        'slug' => 'services',
+        'title' => 'Services',
+        'order' => 4,
+        'layout_id' => $site->defaultLayout()->id,
+    ]);
 
     $page = (new CreateSitePage)->handle($site, [
         'slug' => 'about',
         'title' => 'About Us',
     ]);
 
-    expect($page->sort_order)->toBe(5);
+    expect($page->order)->toBe(5);
 });
 
 test('honors an explicit sort order', function () {
@@ -36,15 +52,20 @@ test('honors an explicit sort order', function () {
     $page = (new CreateSitePage)->handle($site, [
         'slug' => 'about',
         'title' => 'About Us',
-        'sort_order' => 2,
+        'order' => 2,
     ]);
 
-    expect($page->sort_order)->toBe(2);
+    expect($page->order)->toBe(2);
 });
 
 test('allows the same slug on a different site', function () {
     $site = Site::factory()->create();
-    $site->pages()->create(['slug' => 'about', 'title' => 'About', 'sort_order' => 1]);
+    $site->pages()->create([
+        'slug' => 'about',
+        'title' => 'About',
+        'order' => 1,
+        'layout_id' => $site->defaultLayout()->id,
+    ]);
     $other = Site::factory()->create();
 
     $page = (new CreateSitePage)->handle($other, [
@@ -81,7 +102,7 @@ test('rejects a negative sort order', function () {
     (new CreateSitePage)->handle(Site::factory()->create(), [
         'slug' => 'about',
         'title' => 'About Us',
-        'sort_order' => -1,
+        'order' => -1,
     ]);
 })->throws(ValidationException::class);
 

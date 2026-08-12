@@ -1,16 +1,18 @@
 <?php
 
-use App\Models\Block;
 use App\Models\Site;
-use Database\Seeders\BlockSeeder;
+use App\Models\Template;
+use Database\Seeders\TemplateSeeder;
 
 beforeEach(function (): void {
-    $this->seed(BlockSeeder::class);
+    $this->seed(TemplateSeeder::class);
 });
 
 test('block library is seeded with the starter blocks', function () {
-    expect(Block::query()->orderBy('id')->pluck('type')->all())
+    expect(Template::query()->orderBy('id')->pluck('type')->all())
         ->toBe([
+            'slot',
+            'simple_footer',
             'hero_centered',
             'hero_image',
             'split_screenshot',
@@ -23,42 +25,42 @@ test('block library is seeded with the starter blocks', function () {
 test('a block can be added to a page from the library', function () {
     $site = Site::factory()->create();
     $page = $site->homePage();
-    $block = Block::query()->where('type', 'hero_centered')->firstOrFail();
+    $template = Template::query()->where('type', 'hero_centered')->firstOrFail();
 
     $this->post(route('pages.blocks.store', $page), [
-        'block_id' => $block->id,
+        'template_id' => $template->id,
     ])->assertRedirect(route('sites.pages.show', [$site, $page]));
 
-    expect($page->blockPages()->count())->toBe(1);
-    expect($page->blockPages()->first()->content)
-        ->toBe($block->default_content);
+    expect($page->blocks()->count())->toBe(1);
+    expect($page->blocks()->first()->content)
+        ->toBe($template->default_content);
 });
 
-test('block_pages sort_order increments per add', function () {
+test('blocks order increments per add', function () {
     $site = Site::factory()->create();
     $page = $site->homePage();
-    $hero = Block::query()->where('type', 'hero_centered')->firstOrFail();
-    $content = Block::query()->where('type', 'content_simple')->firstOrFail();
+    $hero = Template::query()->where('type', 'hero_centered')->firstOrFail();
+    $content = Template::query()->where('type', 'content_simple')->firstOrFail();
 
-    $this->post(route('pages.blocks.store', $page), ['block_id' => $hero->id]);
-    $this->post(route('pages.blocks.store', $page), ['block_id' => $content->id]);
+    $this->post(route('pages.blocks.store', $page), ['template_id' => $hero->id]);
+    $this->post(route('pages.blocks.store', $page), ['template_id' => $content->id]);
 
-    expect($page->blockPages()->orderBy('sort_order')->pluck('sort_order')->all())
+    expect($page->blocks()->orderBy('order')->pluck('order')->all())
         ->toBe([1, 2]);
 });
 
 test('a block can be removed from a page', function () {
     $site = Site::factory()->create();
     $page = $site->homePage();
-    $blockPage = $page->blockPages()->create([
+    $block = $page->blocks()->create([
         'content' => '<p>Removable</p>',
-        'sort_order' => 1,
+        'order' => 1,
     ]);
 
-    $this->delete(route('pages.blocks.destroy', [$page, $blockPage]))
+    $this->delete(route('pages.blocks.destroy', [$page, $block]))
         ->assertRedirect(route('sites.pages.show', [$site, $page]));
 
-    expect($page->blockPages()->count())->toBe(0);
+    expect($page->blocks()->count())->toBe(0);
 });
 
 test('removing a block scoped to the wrong page returns 404', function () {
@@ -67,17 +69,18 @@ test('removing a block scoped to the wrong page returns 404', function () {
     $pageB = $site->pages()->create([
         'slug' => 'other',
         'title' => 'Other',
-        'sort_order' => 1,
+        'order' => 1,
+        'layout_id' => $site->defaultLayout()->id,
     ]);
-    $blockPage = $pageA->blockPages()->create([
+    $block = $pageA->blocks()->create([
         'content' => '<p>Belongs to pageA</p>',
-        'sort_order' => 1,
+        'order' => 1,
     ]);
 
-    $this->delete(route('pages.blocks.destroy', [$pageB, $blockPage]))
+    $this->delete(route('pages.blocks.destroy', [$pageB, $block]))
         ->assertNotFound();
 
-    expect($pageA->blockPages()->count())->toBe(1);
+    expect($pageA->blocks()->count())->toBe(1);
 });
 
 test('block library picker shows section categories by default', function () {
@@ -93,7 +96,7 @@ test('block library picker shows section categories by default', function () {
             ->has('groups', 2)
             ->where('categories.0.slug', 'hero')
             ->where('categories.0.count', 3)
-            ->has('blocks', 0));
+            ->has('templates', 0));
 });
 
 test('block library picker filters blocks by category', function () {
@@ -106,20 +109,20 @@ test('block library picker filters blocks by category', function () {
             ->component('blocks/create')
             ->where('category', 'hero')
             ->where('activeCategory.name', 'Hero Sections')
-            ->has('blocks', 3)
-            ->where('blocks.0.type', 'hero_centered')
-            ->where('blocks.0.name', 'Hero Centered'));
+            ->has('templates', 3)
+            ->where('templates.0.type', 'hero_centered')
+            ->where('templates.0.name', 'Hero Centered'));
 
     $this->get(route('pages.blocks.create', [$page, 'category' => 'content']))
         ->assertOk()
         ->assertInertia(fn ($response) => $response
-            ->has('blocks', 2)
-            ->where('blocks.0.type', 'content_simple'));
+            ->has('templates', 2)
+            ->where('templates.0.type', 'content_simple'));
 
     $this->get(route('pages.blocks.create', [$page, 'category' => 'feature']))
         ->assertOk()
         ->assertInertia(fn ($response) => $response
-            ->has('blocks', 0));
+            ->has('templates', 0));
 });
 
 test('invalid block category shows the section index', function () {
@@ -130,5 +133,5 @@ test('invalid block category shows the section index', function () {
         ->assertOk()
         ->assertInertia(fn ($response) => $response
             ->where('category', null)
-            ->has('blocks', 0));
+            ->has('templates', 0));
 });

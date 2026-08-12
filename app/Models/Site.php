@@ -26,32 +26,38 @@ class Site extends Model
     }
 
     /**
+     * @return HasMany<Layout, $this>
+     */
+    public function layouts(): HasMany
+    {
+        return $this->hasMany(Layout::class);
+    }
+
+    /**
      * @return HasMany<SitePage, $this>
      */
     public function pages(): HasMany
     {
-        return $this->hasMany(SitePage::class)->orderBy('sort_order');
+        return $this->hasMany(SitePage::class)->orderBy('order');
+    }
+
+    public function defaultLayout(): ?Layout
+    {
+        if ($this->relationLoaded('layouts')) {
+            return $this->layouts->sortBy('id')->first();
+        }
+
+        return $this->layouts()->oldest('id')->first();
     }
 
     public function homePage(): ?SitePage
     {
         if ($this->relationLoaded('pages')) {
             return $this->pages->firstWhere('slug', 'home')
-                ?? $this->pages->sortBy('sort_order')->first();
+                ?? $this->pages->sortBy('order')->first();
         }
 
         return $this->pages()->where('slug', 'home')->first()
-            ?? $this->pages()->orderBy('sort_order')->first();
-    }
-
-    public function createDefaultHomePage(): void
-    {
-        $this->pages()->firstOrCreate(
-            ['slug' => 'home'],
-            [
-                'title' => $this->company_name,
-                'sort_order' => 0,
-            ],
-        );
+            ?? $this->pages()->orderBy('order')->first();
     }
 }

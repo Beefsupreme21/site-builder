@@ -2,11 +2,22 @@
 
 use App\Actions\SitePage\UpdateSitePage;
 use App\Models\Site;
+use App\Models\SitePage;
 use Illuminate\Validation\ValidationException;
+
+function pageForUpdate(Site $site, array $attributes = []): SitePage
+{
+    return $site->pages()->create(array_merge([
+        'slug' => 'about',
+        'title' => 'About',
+        'order' => 1,
+        'layout_id' => $site->defaultLayout()->id,
+    ], $attributes));
+}
 
 test('updates the page', function () {
     $site = Site::factory()->create();
-    $page = $site->pages()->create(['slug' => 'about', 'title' => 'About', 'sort_order' => 1]);
+    $page = pageForUpdate($site);
 
     (new UpdateSitePage)->handle($page, ['slug' => 'about-us', 'title' => 'About Us']);
 
@@ -16,7 +27,7 @@ test('updates the page', function () {
 
 test('allows a page to keep its own slug', function () {
     $site = Site::factory()->create();
-    $page = $site->pages()->create(['slug' => 'about', 'title' => 'About', 'sort_order' => 1]);
+    $page = pageForUpdate($site);
 
     (new UpdateSitePage)->handle($page, ['slug' => 'about', 'title' => 'Renamed']);
 
@@ -25,7 +36,7 @@ test('allows a page to keep its own slug', function () {
 
 test('allows a slug used by a page on another site', function () {
     $other = Site::factory()->create();
-    $page = $other->pages()->create(['slug' => 'about', 'title' => 'About', 'sort_order' => 1]);
+    $page = pageForUpdate($other);
 
     (new UpdateSitePage)->handle($page, ['slug' => 'about-us', 'title' => 'About Us']);
 
@@ -34,21 +45,21 @@ test('allows a slug used by a page on another site', function () {
 
 test('rejects a slug taken by another page on the same site', function () {
     $site = Site::factory()->create();
-    $page = $site->pages()->create(['slug' => 'about', 'title' => 'About', 'sort_order' => 1]);
+    $page = pageForUpdate($site);
 
     (new UpdateSitePage)->handle($page, ['slug' => 'home', 'title' => 'About']);
 })->throws(ValidationException::class);
 
 test('requires a title', function () {
     $site = Site::factory()->create();
-    $page = $site->pages()->create(['slug' => 'about', 'title' => 'About', 'sort_order' => 1]);
+    $page = pageForUpdate($site);
 
     (new UpdateSitePage)->handle($page, ['slug' => 'about', 'title' => '']);
 })->throws(ValidationException::class);
 
 test('rejects a slug that is not kebab case', function () {
     $site = Site::factory()->create();
-    $page = $site->pages()->create(['slug' => 'about', 'title' => 'About', 'sort_order' => 1]);
+    $page = pageForUpdate($site);
 
     (new UpdateSitePage)->handle($page, ['slug' => 'About Us', 'title' => 'About']);
 })->throws(ValidationException::class);

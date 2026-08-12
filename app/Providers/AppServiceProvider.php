@@ -2,7 +2,8 @@
 
 namespace App\Providers;
 
-use App\Models\BlockPage;
+use App\Models\Block;
+use App\Models\Layout;
 use App\Models\SitePage;
 use Carbon\CarbonImmutable;
 use Illuminate\Routing\Route;
@@ -27,8 +28,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        RouteFacade::bind('block', function (string $value, Route $route): BlockPage {
+        RouteFacade::bind('block', function (string $value, Route $route): Block {
             $page = $route->parameter('page');
+            $layout = $route->parameter('layout');
 
             if ($page !== null) {
                 if (! $page instanceof SitePage) {
@@ -38,7 +40,15 @@ class AppServiceProvider extends ServiceProvider
                 return $page->blocks()->whereKey($value)->firstOrFail();
             }
 
-            return BlockPage::query()->whereKey($value)->firstOrFail();
+            if ($layout !== null) {
+                if (! $layout instanceof Layout) {
+                    $layout = Layout::query()->whereKey($layout)->firstOrFail();
+                }
+
+                return $layout->blocks()->whereKey($value)->firstOrFail();
+            }
+
+            return Block::query()->whereKey($value)->firstOrFail();
         });
 
         $this->configureDefaults();

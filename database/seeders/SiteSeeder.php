@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\Block;
+use App\Actions\Layout\CreateDefaultLayout;
+use App\Enums\TemplateContext;
 use App\Models\Site;
+use App\Models\Template;
 use Illuminate\Database\Seeder;
 
 class SiteSeeder extends Seeder
@@ -49,7 +51,10 @@ class SiteSeeder extends Seeder
             ],
         ];
 
-        $libraryBlocks = Block::query()->orderBy('id')->get();
+        $pageTemplates = Template::query()
+            ->where('context', TemplateContext::Page)
+            ->orderBy('id')
+            ->get();
 
         foreach ($sites as $attributes) {
             $site = Site::updateOrCreate(
@@ -57,18 +62,24 @@ class SiteSeeder extends Seeder
                 $attributes,
             );
 
-            $site->createDefaultHomePage();
+            $layout = $site->defaultLayout() ?? (new CreateDefaultLayout)->handle($site);
 
-            $home = $site->homePage();
+            $home = $site->homePage() ?? $site->pages()->create([
+                'slug' => 'home',
+                'title' => $site->company_name,
+                'order' => 0,
+                'layout_id' => $layout->id,
+            ]);
 
-            if ($home === null || $home->blockPages()->exists()) {
+            if ($home->blocks()->exists()) {
                 continue;
             }
 
-            foreach ($libraryBlocks as $i => $block) {
-                $home->blockPages()->create([
-                    'content' => $block->default_content,
-                    'sort_order' => $i + 1,
+            foreach ($pageTemplates as $i => $template) {
+                $home->blocks()->create([
+                    'template_id' => $template->id,
+                    'content' => $template->default_content,
+                    'order' => $i + 1,
                 ]);
             }
         }
