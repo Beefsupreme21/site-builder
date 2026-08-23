@@ -16,7 +16,7 @@ export default function SitePagesShow({ site, page }) {
                 actions={
                     <>
                         <a
-                            href={sitePreview.page(page)}
+                            href={sitePreview.page(site, page)}
                             target="_blank"
                             rel="noopener noreferrer"
                             className={btnSecondary}

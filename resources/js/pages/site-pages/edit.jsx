@@ -35,7 +35,7 @@ export default function SitePagesEdit({ site, page }) {
                 subtitle="Slug, title, and nav order."
                 actions={
                     <a
-                        href={sitePreview.page(page)}
+                        href={sitePreview.page(site, page)}
                         target="_blank"
                         rel="noopener noreferrer"
                         className={btnSecondary}

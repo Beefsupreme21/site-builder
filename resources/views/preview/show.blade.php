@@ -1,10 +1,12 @@
 @extends('preview.layout')
 
+@php($preview = \App\Support\PreviewContent::for($site))
+
 @section('content')
     @foreach ($page->layout->blocks as $block)
         @if ($block->isSlot())
             @forelse ($page->blocks as $pageBlock)
-                {!! $pageBlock->content !!}
+                {!! $preview->render($pageBlock->content) !!}
             @empty
                 <section class="mx-auto max-w-3xl px-6 py-20 text-center">
                     <h1 class="text-4xl font-semibold tracking-tight text-neutral-900">
@@ -16,7 +18,7 @@
                 </section>
             @endforelse
         @else
-            {!! $block->content !!}
+            {!! $preview->render($block->content) !!}
         @endif
     @endforeach
 @endsection

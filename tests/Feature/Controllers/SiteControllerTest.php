@@ -1,8 +1,6 @@
 <?php
 
-use App\Enums\TemplateContext;
 use App\Models\Site;
-use App\Models\Template;
 use Database\Seeders\SiteSeeder;
 use Database\Seeders\TemplateSeeder;
 
@@ -52,20 +50,37 @@ test('validation failures from the action flash errors back to the form', functi
 test('seeded sites include brand colors', function () {
     $this->seed(SiteSeeder::class);
 
-    $site = Site::query()->where('slug', 'blue-ocean-dental')->first();
+    $site = Site::query()->where('slug', 'acme')->first();
 
-    expect($site->primary_color)->toBe('#0284C7');
-    expect($site->secondary_color)->toBe('#0F766E');
+    expect($site->primary_color)->toBe('#4F46E5');
+    expect($site->secondary_color)->toBe('#1E293B');
 });
 
-test('seeded sites get a home page filled with the block library', function () {
+test('seeded multipage starter includes curated pages and layout blocks', function () {
     $this->seed(TemplateSeeder::class);
     $this->seed(SiteSeeder::class);
 
-    $home = Site::query()->where('slug', 'blue-ocean-dental')->first()->homePage();
+    $site = Site::query()->where('slug', 'acme')->first();
 
-    expect($home?->slug)->toBe('home');
-    expect($home->blocks()->count())->toBe(Template::query()->where('context', TemplateContext::Page)->count());
+    expect($site->pages()->orderBy('order')->pluck('slug')->all())
+        ->toBe(['home', 'about', 'contact']);
+
+    expect($site->defaultLayout()?->blocks()->with('template')->orderBy('order')->get()->pluck('template.type')->all())
+        ->toBe(['nav_top', 'slot', 'footer_social']);
+
+    expect($site->homePage()?->blocks()->count())->toBe(2);
+});
+
+test('seeded landing starter is a single page with slot-only layout', function () {
+    $this->seed(TemplateSeeder::class);
+    $this->seed(SiteSeeder::class);
+
+    $site = Site::query()->where('slug', 'northwind')->first();
+
+    expect($site->pages()->count())->toBe(1);
+    expect($site->defaultLayout()?->blocks()->with('template')->orderBy('order')->get()->pluck('template.type')->all())
+        ->toBe(['slot']);
+    expect($site->homePage()?->blocks()->count())->toBe(3);
 });
 
 test('home redirects to the sites index', function () {

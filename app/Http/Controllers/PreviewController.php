@@ -17,15 +17,15 @@ class PreviewController extends Controller
             abort(404);
         }
 
-        return to_route('preview.show', $page);
+        return to_route('preview.show', [$site, $page]);
     }
 
-    public function show(SitePage $page): View
+    public function show(Site $site, SitePage $page): View
     {
         $page->load([
             'blocks',
             'layout.blocks.template',
-            'site',
+            'site.pages',
         ]);
 
         return view('preview.show', [

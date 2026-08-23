@@ -8,12 +8,20 @@ use App\Http\Controllers\LayoutController;
 use App\Http\Controllers\PreviewController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\SitePageController;
+use App\Http\Controllers\SummarizeTestController;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/sites')->name('home');
 
-Route::get('preview/sites/{site:slug}', [PreviewController::class, 'index'])->name('preview.index');
-Route::get('preview/{page:id}', [PreviewController::class, 'show'])->name('preview.show');
+if (app()->environment(['local', 'testing'])) {
+    Route::get('test/summarize', [SummarizeTestController::class, 'index'])->name('test.summarize');
+    Route::post('test/summarize', [SummarizeTestController::class, 'store'])->name('test.summarize.store');
+}
+
+Route::get('preview/{site:slug}', [PreviewController::class, 'index'])->name('preview.index');
+Route::get('preview/{site:slug}/{page:slug}', [PreviewController::class, 'show'])
+    ->scopeBindings()
+    ->name('preview.show');
 
 Route::resource('sites', SiteController::class);
 Route::resource('sites.pages', SitePageController::class)->except(['index'])->scoped(['page' => 'slug']);

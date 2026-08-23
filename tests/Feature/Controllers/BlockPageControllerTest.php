@@ -12,13 +12,18 @@ test('block library is seeded with the starter blocks', function () {
     expect(Template::query()->orderBy('id')->pluck('type')->all())
         ->toBe([
             'slot',
+            'nav_top',
             'simple_footer',
+            'footer_social',
             'hero_centered',
             'hero_image',
             'split_screenshot',
             'content_simple',
             'content_split',
             'contact_form',
+            'newsletter_side_by_side',
+            'newsletter_side_by_side_brand',
+            'newsletter_centered_card',
         ]);
 });
 

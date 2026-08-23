@@ -46,7 +46,9 @@ class SitePage extends Model
 
     public function previewUrl(): string
     {
-        return route('preview.show', $this);
+        $this->loadMissing('site');
+
+        return route('preview.show', [$this->site, $this]);
     }
 
     protected static function booted(): void

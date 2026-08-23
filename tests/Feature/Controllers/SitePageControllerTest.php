@@ -34,7 +34,7 @@ test('pages can be added and removed', function () {
     $storePage = $site->pages()->where('slug', 'store')->first();
     expect($storePage)->not->toBeNull();
 
-    $this->get(route('preview.show', $storePage))
+    $this->get(route('preview.show', [$site, $storePage]))
         ->assertOk()
         ->assertSee('Store', false);
 

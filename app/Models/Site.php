@@ -22,7 +22,7 @@ class Site extends Model
             return route('preview.index', $this);
         }
 
-        return route('preview.show', $page);
+        return route('preview.show', [$this, $page]);
     }
 
     /**

@@ -13,11 +13,11 @@ return [
     |
     */
 
-    'default' => 'openai',
+    'default' => env('AI_DEFAULT_PROVIDER', 'openrouter'),
     'default_for_images' => 'gemini',
     'default_for_audio' => 'openai',
     'default_for_transcription' => 'openai',
-    'default_for_embeddings' => 'openai',
+    'default_for_embeddings' => env('AI_EMBEDDINGS_PROVIDER', 'openrouter'),
     'default_for_reranking' => 'cohere',
 
     /*
@@ -124,6 +124,19 @@ return [
         'openrouter' => [
             'driver' => 'openrouter',
             'key' => env('OPENROUTER_API_KEY'),
+            'http_referer' => env('OPENROUTER_HTTP_REFERER', env('APP_URL')),
+            'x_title' => env('OPENROUTER_APP_NAME', env('APP_NAME')),
+            'models' => [
+                'text' => [
+                    'default' => env('OPENROUTER_TEXT_MODEL', 'openrouter/free'),
+                    'cheapest' => env('OPENROUTER_TEXT_MODEL_CHEAPEST', 'openrouter/free'),
+                    'smartest' => env('OPENROUTER_TEXT_MODEL_SMARTEST', 'openrouter/free'),
+                ],
+                'embeddings' => [
+                    'default' => env('OPENROUTER_EMBEDDINGS_MODEL', 'liquid/lfm-2.5-embedding-350m:free'),
+                    'dimensions' => (int) env('OPENROUTER_EMBEDDINGS_DIMENSIONS', 1024),
+                ],
+            ],
         ],
 
         'voyageai' => [

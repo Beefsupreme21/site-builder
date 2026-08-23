@@ -52,6 +52,11 @@ export const layoutBlocks = {
 };
 
 export const sitePreview = {
-    home: (site) => `/preview/sites/${slugOf(site)}`,
-    page: (page) => `/preview/${idOf(page)}`,
+    home: (site) => `/preview/${slugOf(site)}`,
+    page: (site, page) => `/preview/${slugOf(site)}/${slugOf(page)}`,
+};
+
+export const testSummarize = {
+    index: () => '/test/summarize',
+    store: () => '/test/summarize',
 };

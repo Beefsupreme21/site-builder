@@ -24,8 +24,8 @@ test('layout block picker shows layout templates only', function () {
         ->assertInertia(fn ($response) => $response
             ->component('blocks/create')
             ->where('target', 'layout')
-            ->has('templates', 1)
-            ->where('templates.0.type', 'simple_footer'));
+            ->has('templates', 3)
+            ->where('templates.0.type', 'nav_top'));
 });
 
 test('a footer can be added to a layout', function () {
@@ -110,7 +110,7 @@ test('preview renders layout blocks around page content at the slot', function (
         'order' => 1,
     ]);
 
-    $this->get(route('preview.show', $page))
+    $this->get(route('preview.show', [$site, $page]))
         ->assertOk()
         ->assertSee('Your site. All rights reserved.', false)
         ->assertSee('data-test-page-block', false);

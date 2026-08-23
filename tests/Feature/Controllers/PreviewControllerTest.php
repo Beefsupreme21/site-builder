@@ -2,6 +2,7 @@
 
 use App\Models\Site;
 use App\Models\Template;
+use Database\Seeders\SiteSeeder;
 use Database\Seeders\TemplateSeeder;
 
 beforeEach(function (): void {
@@ -16,7 +17,7 @@ test('preview renders the page', function () {
 
     $home = $site->homePage();
 
-    $this->get(route('preview.show', $home))
+    $this->get(route('preview.show', [$site, $home]))
         ->assertOk()
         ->assertViewIs('preview.show')
         ->assertSee('Demo Dental', false);
@@ -26,15 +27,30 @@ test('preview index redirects to the home page', function () {
     $site = Site::factory()->create(['slug' => 'demo-home']);
 
     $this->get(route('preview.index', $site))
-        ->assertRedirect(route('preview.show', $site->homePage()));
+        ->assertRedirect(route('preview.show', [$site, $site->homePage()]));
 });
 
 test('preview returns 404 for unknown site slug', function () {
-    $this->get('/preview/sites/unknown-slug-xyz')->assertNotFound();
+    $this->get('/preview/unknown-slug-xyz')->assertNotFound();
 });
 
-test('preview returns 404 for unknown page id', function () {
-    $this->get('/preview/999999')->assertNotFound();
+test('preview returns 404 for unknown page slug', function () {
+    $site = Site::factory()->create(['slug' => 'demo-site']);
+
+    $this->get('/preview/demo-site/missing-page')->assertNotFound();
+});
+
+test('preview returns 404 when page belongs to another site', function () {
+    Site::factory()->create(['slug' => 'demo-site']);
+    $other = Site::factory()->create(['slug' => 'other-site']);
+    $other->pages()->create([
+        'slug' => 'team',
+        'title' => 'Team',
+        'order' => 1,
+        'layout_id' => $other->defaultLayout()->id,
+    ]);
+
+    $this->get('/preview/demo-site/team')->assertNotFound();
 });
 
 test('preview renders the block content for a page', function () {
@@ -47,7 +63,7 @@ test('preview renders the block content for a page', function () {
         'order' => 1,
     ]);
 
-    $this->get(route('preview.show', $page))
+    $this->get(route('preview.show', [$site, $page]))
         ->assertOk()
         ->assertSee('Hello from the hero block', false)
         ->assertSee('data-test-block', false)
@@ -58,7 +74,7 @@ test('preview renders the block content for a page', function () {
         'order' => 2,
     ]);
 
-    $this->get(route('preview.show', $page))
+    $this->get(route('preview.show', [$site, $page]))
         ->assertOk()
         ->assertSee('Welcome to your site', false);
 });
@@ -72,7 +88,7 @@ test('preview does not render built-in site navigation or footer', function () {
     $page = $site->homePage();
     $page->update(['title' => 'Home Page']);
 
-    $this->get(route('preview.show', $page))
+    $this->get(route('preview.show', [$site, $page]))
         ->assertOk()
         ->assertDontSee('aria-label="Site"', false)
         ->assertDontSee('&copy; '.now()->year, false);
@@ -84,10 +100,25 @@ test('preview does not inject brand color styles', function () {
         'secondary_color' => '#64748B',
     ]);
 
-    $this->get(route('preview.show', $site->homePage()))
+    $this->get(route('preview.show', [$site, $site->homePage()]))
         ->assertOk()
         ->assertDontSee('--primary:', false)
         ->assertDontSee('brand-styles', false);
+});
+
+test('preview renders any page by site and page slug', function () {
+    $this->seed(SiteSeeder::class);
+
+    $site = Site::query()->where('slug', 'acme')->firstOrFail();
+    $about = $site->pages()->where('slug', 'about')->firstOrFail();
+
+    $this->get('/preview/acme/about')
+        ->assertOk()
+        ->assertSee('A simple centered hero', false);
+
+    $this->get('/preview/acme/contact')
+        ->assertOk()
+        ->assertSee('Get in touch', false);
 });
 
 test('preview index returns 404 when the site has no home page', function () {

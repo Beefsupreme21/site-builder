@@ -6,6 +6,7 @@
         <title>{{ $page->title }} · {{ $site->company_name }}</title>
 
         <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1" type="module"></script>
     </head>
     <body class="min-h-screen bg-white font-sans text-neutral-900 antialiased">
         @yield('content')
