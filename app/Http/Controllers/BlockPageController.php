@@ -82,12 +82,16 @@ class BlockPageController extends Controller
 
         abort_if($block->isSlot(), 404);
 
+        $block->load('template');
+
         return inertia('blocks/edit', [
             'site' => $page->site,
             'page' => $page,
             'layout' => null,
             'block' => $block,
             'target' => 'page',
+            'provider' => config('ai.default'),
+            'model' => config('ai.providers.'.config('ai.default').'.models.text.default'),
         ]);
     }
 

@@ -22,6 +22,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | PHP Execution Time Limit
+    |--------------------------------------------------------------------------
+    |
+    | AI requests (especially 4-variant prototypes) can exceed PHP's default
+    | 30 second max_execution_time. This value is passed to set_time_limit().
+    |
+    */
+
+    'execution_time_limit' => (int) env('AI_EXECUTION_TIME_LIMIT', 180),
+
+    /*
+    |--------------------------------------------------------------------------
     | Caching
     |--------------------------------------------------------------------------
     |

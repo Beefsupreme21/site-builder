@@ -101,7 +101,10 @@ test('a block can be edited from the block editor', function () {
         ->assertInertia(fn ($response) => $response
             ->component('blocks/edit')
             ->where('target', 'page')
-            ->where('block.content', '<p>Before</p>'));
+            ->where('block.content', '<p>Before</p>')
+            ->has('block.template')
+            ->has('provider')
+            ->has('model'));
 
     $this->put(route('pages.blocks.update', [$page, $block]), [
         'content' => '<p>After</p>',

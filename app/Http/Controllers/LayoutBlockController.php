@@ -51,12 +51,16 @@ class LayoutBlockController extends Controller
 
         abort_if($block->isSlot(), 404);
 
+        $block->load('template');
+
         return inertia('blocks/edit', [
             'site' => $layout->site,
             'layout' => $layout,
             'page' => null,
             'block' => $block,
             'target' => 'layout',
+            'provider' => config('ai.default'),
+            'model' => config('ai.providers.'.config('ai.default').'.models.text.default'),
         ]);
     }
 

@@ -39,6 +39,7 @@ export const pageBlocks = {
     store: (page) => `/pages/${idOf(page)}/blocks`,
     edit: (page, block) => `/pages/${idOf(page)}/blocks/${idOf(block)}/edit`,
     update: (page, block) => `/pages/${idOf(page)}/blocks/${idOf(block)}`,
+    prototype: (page, block) => `/pages/${idOf(page)}/blocks/${idOf(block)}/prototype`,
     destroy: (page, block) => `/pages/${idOf(page)}/blocks/${idOf(block)}`,
     move: (block, direction) => `/blocks/${idOf(block)}/move/${direction}`,
 };
@@ -48,15 +49,11 @@ export const layoutBlocks = {
     store: (layout) => `/layouts/${idOf(layout)}/blocks`,
     edit: (layout, block) => `/layouts/${idOf(layout)}/blocks/${idOf(block)}/edit`,
     update: (layout, block) => `/layouts/${idOf(layout)}/blocks/${idOf(block)}`,
+    prototype: (layout, block) => `/layouts/${idOf(layout)}/blocks/${idOf(block)}/prototype`,
     destroy: (layout, block) => `/layouts/${idOf(layout)}/blocks/${idOf(block)}`,
 };
 
 export const sitePreview = {
     home: (site) => `/preview/${slugOf(site)}`,
     page: (site, page) => `/preview/${slugOf(site)}/${slugOf(page)}`,
-};
-
-export const testSummarize = {
-    index: () => '/test/summarize',
-    store: () => '/test/summarize',
 };
