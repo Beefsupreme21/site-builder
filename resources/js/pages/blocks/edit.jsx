@@ -3,14 +3,9 @@ import { BlockLivePreview } from '@/components/block-live-preview';
 import { FormErrors } from '@/components/form-errors';
 import { HtmlEditor } from '@/components/html-editor';
 import { PageHeader } from '@/components/page-header';
-import {
-    PrototypePicker,
-    initialVariantIndexFromUrl,
-} from '@/components/prototype-picker';
 import { layoutBlocks, layouts, pageBlocks, sitePages } from '@/lib/routes';
 import {
     btnCancel,
-    btnPrimary,
     btnSubmit,
     formActions,
     formCard,
@@ -27,6 +22,8 @@ export default function BlocksEdit({
     target = 'page',
     provider,
     model,
+    blockSkills = [],
+    blockModels = [],
 }) {
     const isLayout = target === 'layout';
     const backHref = isLayout
@@ -38,48 +35,30 @@ export default function BlocksEdit({
     const updateAction = isLayout
         ? layoutBlocks.update(layout, block)
         : pageBlocks.update(page, block);
-    const prototypeUrl = isLayout
-        ? layoutBlocks.prototype(layout, block)
-        : pageBlocks.prototype(page, block);
+    const variantUrlBuilder = isLayout
+        ? layoutBlocks.variant
+        : pageBlocks.variant;
     const blockLabel = block.template?.name ?? 'Block';
 
     const form = useForm({
         content: block.content ?? '',
     });
-    const [variants, setVariants] = useState([]);
-    const [activeVariantIndex, setActiveVariantIndex] = useState(0);
+    const [generatedLabel, setGeneratedLabel] = useState(null);
     const [previewMountKey, setPreviewMountKey] = useState(0);
-    const [runMeta, setRunMeta] = useState({ provider, model });
 
-    const handleVariantsGenerated = useCallback((nextVariants) => {
-        setVariants(nextVariants);
-        setActiveVariantIndex(initialVariantIndexFromUrl(nextVariants.length));
-        setPreviewMountKey((key) => key + 1);
-    }, []);
+    const variantUrl = useCallback(
+        (skill) => variantUrlBuilder(isLayout ? layout : page, block, skill),
+        [block, isLayout, layout, page, variantUrlBuilder],
+    );
 
-    const handleVariantChange = useCallback((index) => {
-        setActiveVariantIndex(index);
-    }, []);
-
-    const handleReplay = useCallback(() => {
-        setPreviewMountKey((key) => key + 1);
-    }, []);
-
-    function applyActiveVariant() {
-        const html = variants[activeVariantIndex]?.html;
-
-        if (!html) {
-            return;
-        }
-
-        form.setData('content', html);
-        setVariants([]);
-        setActiveVariantIndex(0);
-
-        const url = new URL(window.location.href);
-        url.searchParams.delete('v');
-        window.history.replaceState(null, '', url);
-    }
+    const handleGenerated = useCallback(
+        (variant) => {
+            form.setData('content', variant.html);
+            setGeneratedLabel(`${variant.name} (${variant.skill})`);
+            setPreviewMountKey((key) => key + 1);
+        },
+        [form],
+    );
 
     function submit(e) {
         e.preventDefault();
@@ -98,57 +77,23 @@ export default function BlocksEdit({
 
             <div className="space-y-6">
                 <BlockAiChat
-                    prototypeUrl={prototypeUrl}
+                    skills={blockSkills}
+                    models={blockModels}
+                    defaultModel={model}
+                    variantUrl={variantUrl}
                     content={form.data.content}
-                    onVariantsGenerated={handleVariantsGenerated}
-                    onMeta={setRunMeta}
-                    provider={runMeta.provider ?? provider}
-                    model={runMeta.model ?? model}
+                    onGenerated={handleGenerated}
+                    provider={provider}
+                    model={model}
                 />
 
                 <div className={formCard}>
                     <BlockLivePreview
                         content={form.data.content}
-                        variants={variants.length > 0 ? variants : undefined}
-                        activeIndex={activeVariantIndex}
-                        onSelectVariant={handleVariantChange}
-                        mountKey={
-                            variants.length > 0
-                                ? `variants-${previewMountKey}`
-                                : 'editor'
-                        }
+                        generatedLabel={generatedLabel}
+                        mountKey={previewMountKey}
                     />
-
-                    {variants.length > 0 && (
-                        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-neutral-100 pt-4">
-                            <p className="text-sm text-neutral-600">
-                                Compare all four above.{' '}
-                                <span className="font-medium text-neutral-900">
-                                    {variants[activeVariantIndex]?.name}
-                                </span>
-                                {' is selected — '}
-                                <span className="text-neutral-500">
-                                    picker or keys 1–4
-                                </span>
-                            </p>
-                            <button
-                                type="button"
-                                onClick={applyActiveVariant}
-                                className={btnPrimary}
-                            >
-                                Use this design
-                            </button>
-                        </div>
-                    )}
                 </div>
-
-                <PrototypePicker
-                    variants={variants}
-                    activeIndex={activeVariantIndex}
-                    onChange={handleVariantChange}
-                    onReplay={handleReplay}
-                    showReplay={false}
-                />
 
                 <form onSubmit={submit} className={formCard}>
                     <FormErrors errors={form.errors} />
@@ -156,8 +101,8 @@ export default function BlocksEdit({
                     <div>
                         <h2 className={formSectionTitle}>HTML</h2>
                         <p className="mt-2 text-sm text-neutral-600">
-                            Fine-tune the markup manually after applying a
-                            prototype, or edit directly.
+                            AI results and manual edits stay in sync with the
+                            preview above.
                         </p>
                         <div className="mt-4">
                             <HtmlEditor

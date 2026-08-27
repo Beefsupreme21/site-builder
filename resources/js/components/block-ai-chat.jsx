@@ -5,37 +5,45 @@ import { usePage } from '@inertiajs/react';
 import { useCallback, useState } from 'react';
 
 export function BlockAiChat({
-    prototypeUrl,
+    skills,
+    models,
+    defaultModel,
+    variantUrl,
     content,
-    onVariantsGenerated,
+    onGenerated,
     provider,
     model,
-    onMeta,
 }) {
     const { props } = usePage();
     const csrfToken = props.csrf_token;
+    const [skill, setSkill] = useState(skills[0]?.skill ?? '');
+    const [selectedModel, setSelectedModel] = useState(
+        models.some((entry) => entry.model === defaultModel)
+            ? defaultModel
+            : (models[0]?.model ?? defaultModel ?? ''),
+    );
     const [prompt, setPrompt] = useState('');
-    const [messages, setMessages] = useState([]);
     const [isGenerating, setIsGenerating] = useState(false);
     const [error, setError] = useState(null);
+    const [lastMeta, setLastMeta] = useState(null);
 
-    const send = useCallback(async () => {
+    const selectedSkill = skills.find((entry) => entry.skill === skill);
+    const selectedModelEntry = models.find(
+        (entry) => entry.model === selectedModel,
+    );
+
+    const generate = useCallback(async () => {
         const trimmed = prompt.trim();
 
-        if (!trimmed || isGenerating) {
+        if (!trimmed || !skill || !selectedModel || isGenerating) {
             return;
         }
 
         setError(null);
         setIsGenerating(true);
-        setMessages((current) => [
-            ...current,
-            { role: 'user', content: trimmed },
-        ]);
-        setPrompt('');
 
         try {
-            const response = await fetch(prototypeUrl, {
+            const response = await fetch(variantUrl(skill), {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
@@ -45,36 +53,22 @@ export function BlockAiChat({
                 body: JSON.stringify({
                     prompt: trimmed,
                     content,
+                    model: selectedModel,
                 }),
             });
 
             const data = await parseJsonResponse(response);
 
             if (!response.ok) {
-                const message =
+                throw new Error(
                     data?.message ??
-                    data?.errors?.prompt?.[0] ??
-                    data?.error ??
-                    'Could not generate variants.';
-                throw new Error(message);
+                        data?.error ??
+                        'Could not generate block HTML.',
+                );
             }
 
-            onVariantsGenerated(data.variants ?? []);
-
-            if (data.meta && onMeta) {
-                onMeta(data.meta);
-            }
-
-            const usedModel = data.meta?.model ?? model;
-            const usedProvider = data.meta?.provider ?? provider;
-
-            setMessages((current) => [
-                ...current,
-                {
-                    role: 'assistant',
-                    content: `Generated ${data.variants?.length ?? 0} directions (${usedProvider} · ${usedModel}). Flip through with the picker, then apply your favorite.`,
-                },
-            ]);
+            setLastMeta(data.meta ?? null);
+            onGenerated(data.variant, data.meta);
         } catch (generationError) {
             setError(generationError.message ?? 'Something went wrong.');
         } finally {
@@ -84,67 +78,75 @@ export function BlockAiChat({
         content,
         csrfToken,
         isGenerating,
-        model,
-        onMeta,
-        onVariantsGenerated,
+        onGenerated,
         prompt,
-        provider,
-        prototypeUrl,
+        selectedModel,
+        skill,
+        variantUrl,
     ]);
 
     function handleSubmit(event) {
         event.preventDefault();
-        send();
+        generate();
     }
+
+    const usedModel = lastMeta?.model ?? selectedModel ?? model;
+    const usedProvider = lastMeta?.provider ?? provider;
 
     return (
         <div className={formCard}>
             <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
-                    <h2 className={formSectionTitle}>AI prototype</h2>
+                    <h2 className={formSectionTitle}>AI block</h2>
                     <p className="mt-2 text-sm text-neutral-600">
-                        Four directions via{' '}
-                        <a
-                            href="https://github.com/emilkowalski/skills/tree/main/skills/prototype"
-                            className="font-medium text-neutral-800 underline-offset-2 hover:underline"
-                            target="_blank"
-                            rel="noreferrer"
-                        >
-                            Emil Kowalski&apos;s prototype skill
-                        </a>
-                        . Picker spec is vendored locally in{' '}
-                        <code className="rounded bg-neutral-100 px-1 text-xs">
-                            resources/ai/skills/emilkowalski/prototype/
-                        </code>
-                        .
+                        Pick a skill and model, prompt once, preview the
+                        result. Compare combinations to find what works best.
                     </p>
                 </div>
                 <p className="text-xs text-neutral-500">
-                    Config: {provider} · {model}
+                    Last run: {usedProvider} · {usedModel}
                 </p>
             </div>
 
-            {messages.length > 0 && (
-                <ul className="mt-4 max-h-48 space-y-2 overflow-y-auto rounded-lg border border-neutral-100 bg-neutral-50 p-3 text-sm">
-                    {messages.map((message, index) => (
-                        <li
-                            key={`${message.role}-${index}`}
-                            className={
-                                message.role === 'user'
-                                    ? 'text-neutral-900'
-                                    : 'text-neutral-600'
-                            }
-                        >
-                            <span className="font-medium capitalize">
-                                {message.role}:
-                            </span>{' '}
-                            {message.content}
-                        </li>
-                    ))}
-                </ul>
-            )}
-
             <form onSubmit={handleSubmit} className="mt-4 space-y-3">
+                <div className="grid gap-3 sm:grid-cols-2">
+                    <div>
+                        <Label htmlFor="ai-skill">Skill</Label>
+                        <select
+                            id="ai-skill"
+                            value={skill}
+                            onChange={(event) => setSkill(event.target.value)}
+                            disabled={isGenerating}
+                            className="mt-1 block w-full rounded-lg border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 shadow-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+                        >
+                            {skills.map((entry) => (
+                                <option key={entry.skill} value={entry.skill}>
+                                    {entry.name} — {entry.description}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div>
+                        <Label htmlFor="ai-model">Model</Label>
+                        <select
+                            id="ai-model"
+                            value={selectedModel}
+                            onChange={(event) =>
+                                setSelectedModel(event.target.value)
+                            }
+                            disabled={isGenerating}
+                            className="mt-1 block w-full rounded-lg border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 shadow-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+                        >
+                            {models.map((entry) => (
+                                <option key={entry.model} value={entry.model}>
+                                    {entry.name} — {entry.description}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+
                 <div>
                     <Label htmlFor="ai-prompt">Prompt</Label>
                     <textarea
@@ -156,6 +158,27 @@ export function BlockAiChat({
                         className="mt-1 block w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm text-neutral-900 shadow-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
                         disabled={isGenerating}
                     />
+                    {(selectedSkill || selectedModelEntry) && (
+                        <p className="mt-1 text-xs text-neutral-500">
+                            {selectedSkill && (
+                                <>
+                                    Skill{' '}
+                                    <code className="rounded bg-neutral-100 px-1">
+                                        {selectedSkill.skill}
+                                    </code>
+                                </>
+                            )}
+                            {selectedSkill && selectedModelEntry && ' · '}
+                            {selectedModelEntry && (
+                                <>
+                                    model{' '}
+                                    <code className="rounded bg-neutral-100 px-1">
+                                        {selectedModelEntry.model}
+                                    </code>
+                                </>
+                            )}
+                        </p>
+                    )}
                 </div>
 
                 {error && (
@@ -166,12 +189,12 @@ export function BlockAiChat({
 
                 <button
                     type="submit"
-                    disabled={isGenerating || !prompt.trim()}
+                    disabled={
+                        isGenerating || !prompt.trim() || !skill || !selectedModel
+                    }
                     className={btnSubmit}
                 >
-                    {isGenerating
-                        ? 'Generating 4 directions… (can take 1–3 min on free models)'
-                        : 'Generate 4 variants'}
+                    {isGenerating ? 'Generating…' : 'Generate'}
                 </button>
             </form>
         </div>

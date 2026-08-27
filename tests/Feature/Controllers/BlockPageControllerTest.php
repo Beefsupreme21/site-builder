@@ -104,7 +104,8 @@ test('a block can be edited from the block editor', function () {
             ->where('block.content', '<p>Before</p>')
             ->has('block.template')
             ->has('provider')
-            ->has('model'));
+            ->has('model')
+            ->has('blockModels'));
 
     $this->put(route('pages.blocks.update', [$page, $block]), [
         'content' => '<p>After</p>',
