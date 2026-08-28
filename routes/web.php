@@ -1,17 +1,15 @@
 <?php
 
 use App\Enums\BlockDirection;
+use App\Http\Controllers\BlockAiController;
 use App\Http\Controllers\BlockPageController;
 use App\Http\Controllers\BlockPageMoveController;
-use App\Http\Controllers\BlockVariantAiController;
 use App\Http\Controllers\LayoutBlockController;
 use App\Http\Controllers\LayoutController;
 use App\Http\Controllers\PreviewController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\SitePageController;
 use Illuminate\Support\Facades\Route;
-
-$blockSkillPattern = implode('|', array_column(config('ai.skills.block_skills', []), 'skill'));
 
 Route::redirect('/', '/sites')->name('home');
 
@@ -24,14 +22,12 @@ Route::resource('sites', SiteController::class);
 Route::resource('sites.pages', SitePageController::class)->except(['index'])->scoped(['page' => 'slug']);
 Route::resource('sites.layouts', LayoutController::class)->only(['show'])->scoped(['layout' => 'id']);
 Route::resource('pages.blocks', BlockPageController::class)->only(['create', 'store', 'edit', 'update', 'destroy'])->scoped(['page' => 'id']);
-Route::post('pages/{page:id}/blocks/{block}/variants/{skill}', [BlockVariantAiController::class, 'storePage'])
-    ->where('skill', $blockSkillPattern)
-    ->name('pages.blocks.variants.store')
+Route::post('pages/{page:id}/blocks/{block}/ai', [BlockAiController::class, 'storePage'])
+    ->name('pages.blocks.ai.store')
     ->scopeBindings();
 Route::resource('layouts.blocks', LayoutBlockController::class)->only(['create', 'store', 'edit', 'update', 'destroy'])->scoped(['layout' => 'id']);
-Route::post('layouts/{layout:id}/blocks/{block}/variants/{skill}', [BlockVariantAiController::class, 'storeLayout'])
-    ->where('skill', $blockSkillPattern)
-    ->name('layouts.blocks.variants.store')
+Route::post('layouts/{layout:id}/blocks/{block}/ai', [BlockAiController::class, 'storeLayout'])
+    ->name('layouts.blocks.ai.store')
     ->scopeBindings();
 
 Route::patch('blocks/{block}/move/{direction}', BlockPageMoveController::class)

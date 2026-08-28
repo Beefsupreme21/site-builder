@@ -20,10 +20,6 @@ export default function BlocksEdit({
     layout,
     block,
     target = 'page',
-    provider,
-    model,
-    blockSkills = [],
-    blockModels = [],
 }) {
     const isLayout = target === 'layout';
     const backHref = isLayout
@@ -35,26 +31,19 @@ export default function BlocksEdit({
     const updateAction = isLayout
         ? layoutBlocks.update(layout, block)
         : pageBlocks.update(page, block);
-    const variantUrlBuilder = isLayout
-        ? layoutBlocks.variant
-        : pageBlocks.variant;
+    const generateUrl = isLayout
+        ? layoutBlocks.ai(layout, block)
+        : pageBlocks.ai(page, block);
     const blockLabel = block.template?.name ?? 'Block';
 
     const form = useForm({
         content: block.content ?? '',
     });
-    const [generatedLabel, setGeneratedLabel] = useState(null);
     const [previewMountKey, setPreviewMountKey] = useState(0);
 
-    const variantUrl = useCallback(
-        (skill) => variantUrlBuilder(isLayout ? layout : page, block, skill),
-        [block, isLayout, layout, page, variantUrlBuilder],
-    );
-
     const handleGenerated = useCallback(
-        (variant) => {
-            form.setData('content', variant.html);
-            setGeneratedLabel(`${variant.name} (${variant.skill})`);
+        (html) => {
+            form.setData('content', html);
             setPreviewMountKey((key) => key + 1);
         },
         [form],
@@ -77,20 +66,14 @@ export default function BlocksEdit({
 
             <div className="space-y-6">
                 <BlockAiChat
-                    skills={blockSkills}
-                    models={blockModels}
-                    defaultModel={model}
-                    variantUrl={variantUrl}
+                    generateUrl={generateUrl}
                     content={form.data.content}
                     onGenerated={handleGenerated}
-                    provider={provider}
-                    model={model}
                 />
 
                 <div className={formCard}>
                     <BlockLivePreview
                         content={form.data.content}
-                        generatedLabel={generatedLabel}
                         mountKey={previewMountKey}
                     />
                 </div>

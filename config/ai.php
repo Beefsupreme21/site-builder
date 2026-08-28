@@ -34,146 +34,21 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Vendored AI Skills
+    | Block Editor Skill
     |--------------------------------------------------------------------------
     |
-    | Runtime skills loaded from resources/ai/skills/. The prototype palette
-    | assigns one skill per variant slot (4 separate agent calls).
+    | Single vendored skill loaded from resources/ai/skills/. Reference files
+    | listed in includes are appended to the agent instructions at runtime.
     |
     */
 
-    'skills' => [
-        'registry' => [
-            'refactoring-ui' => [
-                'path' => 'refactoring-ui',
-            ],
-            'apple-design' => [
-                'vendor' => 'emilkowalski',
-                'skill' => 'apple-design',
-            ],
-            'animate' => [
-                'vendor' => 'emilkowalski',
-                'skill' => 'animate',
-                'bundle' => ['animation-vocabulary'],
-            ],
-            'animation-vocabulary' => [
-                'vendor' => 'emilkowalski',
-                'skill' => 'animation-vocabulary',
-            ],
-            'emil-design-eng' => [
-                'vendor' => 'emilkowalski',
-                'skill' => 'emil-design-eng',
-            ],
-            'prototype' => [
-                'vendor' => 'emilkowalski',
-                'skill' => 'prototype',
-            ],
-            'review-animations' => [
-                'vendor' => 'emilkowalski',
-                'skill' => 'review-animations',
-            ],
-        ],
-
-        'prototype_palette' => [
-            [
-                'skill' => 'refactoring-ui',
-                'name' => 'Refactoring UI',
-                'axis' => 'Typography, spacing, hierarchy',
-            ],
-            [
-                'skill' => 'apple-design',
-                'name' => 'Apple',
-                'axis' => 'Restrained, fluid, minimal',
-            ],
-            [
-                'skill' => 'animate',
-                'name' => 'Motion',
-                'axis' => 'Entrance, easing, micro-interactions',
-            ],
-            [
-                'skill' => 'emil-design-eng',
-                'name' => 'Design Eng',
-                'axis' => 'Balanced polish + motion craft',
-            ],
-        ],
-
-        /*
-        | Skills available in the block editor dropdown (one skill per generation).
-        */
-        'block_skills' => [
-            [
-                'skill' => 'refactoring-ui',
-                'name' => 'Refactoring UI',
-                'description' => 'Adam Wathan — typography, spacing, hierarchy',
-            ],
-            [
-                'skill' => 'apple-design',
-                'name' => 'Apple Design',
-                'description' => 'Restrained, fluid, minimal',
-            ],
-            [
-                'skill' => 'animate',
-                'name' => 'Animate',
-                'description' => 'Motion, easing, micro-interactions',
-            ],
-            [
-                'skill' => 'emil-design-eng',
-                'name' => 'Design Eng',
-                'description' => 'Balanced polish + motion craft',
-            ],
-            [
-                'skill' => 'prototype',
-                'name' => 'Prototype',
-                'description' => 'Emil — divergent exploration mindset',
-            ],
-            [
-                'skill' => 'review-animations',
-                'name' => 'Review Animations',
-                'description' => 'Audit motion (returns HTML improvements)',
-            ],
-        ],
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Block Editor Models
-    |--------------------------------------------------------------------------
-    |
-    | Models available in the block editor dropdown. Must be valid OpenRouter
-    | model IDs. The default selection comes from OPENROUTER_TEXT_MODEL.
-    |
-    */
-
-    'block_models' => [
-        [
-            'model' => 'openrouter/free',
-            'name' => 'OpenRouter Free',
-            'description' => 'Auto-picks a free model (can be slow)',
-        ],
-        [
-            'model' => 'nvidia/nemotron-3.5-lightning:free',
-            'name' => 'Nemotron 3.5 Lightning',
-            'description' => 'Fast — good default for HTML blocks',
-        ],
-        [
-            'model' => 'nvidia/nemotron-3-super-120b-a12b:free',
-            'name' => 'Nemotron Super 120B',
-            'description' => 'Stronger output, slower',
-        ],
-        [
-            'model' => 'nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free',
-            'name' => 'Nemotron Nano Reasoning',
-            'description' => 'Reasoning model — often slow',
-        ],
-        [
-            'model' => 'nvidia/nemotron-3-ultra-550b-a55b:free',
-            'name' => 'Nemotron Ultra 550B',
-            'description' => 'Largest free Nemotron',
-        ],
-        [
-            'model' => 'poolside/laguna-xs-2.1:free',
-            'name' => 'Laguna XS',
-            'description' => 'Compact free model',
+    'block_skill' => [
+        'path' => 'refactoring-ui',
+        'includes' => [
+            'references/systems.md',
+            'references/diagnose.md',
+            'references/techniques.md',
+            'assets/tokens.css',
         ],
     ],
 

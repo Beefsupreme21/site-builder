@@ -3,75 +3,59 @@
 namespace App\Actions\Block;
 
 use App\Actions\Ai\LogAiRequest;
-use App\Ai\Agents\BlockVariantAgent;
+use App\Ai\Agents\BlockHtmlAgent;
 use App\Models\Block;
 use App\Models\Site;
 use App\Support\Ai\AiExecutionTime;
 use App\Support\Ai\ResolvedAiConfig;
-use App\Support\Ai\SkillRegistry;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
-use Illuminate\Validation\ValidationException;
 use Laravel\Ai\Responses\StructuredAgentResponse;
 use RuntimeException;
 use Throwable;
 
-class GenerateBlockVariantWithAi
+class GenerateBlockHtmlWithAi
 {
     /**
      * @param  array<string, mixed>  $input
-     * @return array{variant: array{name: string, axis: string, skill: string, html: string}, meta: array{provider: string, model: string|null}}
+     * @return array{html: string, meta: array{provider: string, model: string|null}}
      */
-    public function handle(Site $site, Block $block, string $skillKey, array $input): array
+    public function handle(Site $site, Block $block, array $input): array
     {
         AiExecutionTime::extend();
 
         $validated = Validator::make($input, [
             'prompt' => ['required', 'string', 'min:3', 'max:5000'],
             'content' => ['required', 'string'],
-            'model' => ['nullable', 'string', Rule::in(ResolvedAiConfig::blockModelIds())],
         ])->validate();
 
-        if (! SkillRegistry::isBlockSkill($skillKey)) {
-            throw ValidationException::withMessages([
-                'skill' => ["Skill [{$skillKey}] is not available."],
-            ]);
-        }
+        $configured = ResolvedAiConfig::defaultText();
 
-        $skill = SkillRegistry::blockSkill($skillKey);
-        $configured = ResolvedAiConfig::resolveText($validated['model'] ?? null);
-
-        $agent = BlockVariantAgent::make(
+        $agent = BlockHtmlAgent::make(
             site: $site,
             block: $block,
             currentContent: $validated['content'],
-            skillKey: $skillKey,
-            variantName: $skill['name'],
-            variantAxis: $skill['description'],
-            variantIndex: 0,
-            variantCount: 1,
         );
 
         try {
-            $result = $this->promptWithRetry($agent, $validated['prompt'], $skill, $configured);
+            $result = $this->promptWithRetry($agent, $validated['prompt'], $configured);
 
             (new LogAiRequest)->handle([
                 'site_id' => $site->id,
                 'block_id' => $block->id,
-                'agent' => BlockVariantAgent::class,
+                'agent' => BlockHtmlAgent::class,
                 'provider' => $result['provider'] ?? $configured['provider'],
                 'model' => $result['model'] ?? $configured['model'],
                 'prompt' => $validated['prompt'],
-                'reply' => json_encode($result['variant'], JSON_THROW_ON_ERROR),
+                'reply' => json_encode(['html' => $result['html']], JSON_THROW_ON_ERROR),
                 'prompt_tokens' => $result['prompt_tokens'],
                 'completion_tokens' => $result['completion_tokens'],
                 'reasoning_tokens' => $result['reasoning_tokens'],
-                'skills' => $agent->skillNames(),
+                'skills' => [$agent->skillIdentifier()],
                 'status' => 'succeeded',
             ]);
 
             return [
-                'variant' => $result['variant'],
+                'html' => $result['html'],
                 'meta' => [
                     'provider' => $result['provider'] ?? $configured['provider'],
                     'model' => $result['model'] ?? $configured['model'],
@@ -81,12 +65,12 @@ class GenerateBlockVariantWithAi
             (new LogAiRequest)->handle([
                 'site_id' => $site->id,
                 'block_id' => $block->id,
-                'agent' => BlockVariantAgent::class,
+                'agent' => BlockHtmlAgent::class,
                 'provider' => $configured['provider'],
                 'model' => $configured['model'],
                 'prompt' => $validated['prompt'],
                 'reply' => null,
-                'skills' => $agent->skillNames(),
+                'skills' => [$agent->skillIdentifier()],
                 'status' => 'failed',
                 'error_message' => $exception->getMessage(),
             ]);
@@ -96,10 +80,9 @@ class GenerateBlockVariantWithAi
     }
 
     /**
-     * @param  array{skill: string, name: string, description: string}  $skill
      * @param  array{provider: string, model: string|null}  $configured
      * @return array{
-     *     variant: array{name: string, axis: string, skill: string, html: string},
+     *     html: string,
      *     provider: string|null,
      *     model: string|null,
      *     prompt_tokens: int,
@@ -107,7 +90,7 @@ class GenerateBlockVariantWithAi
      *     reasoning_tokens: int,
      * }
      */
-    private function promptWithRetry(BlockVariantAgent $agent, string $prompt, array $skill, array $configured): array
+    private function promptWithRetry(BlockHtmlAgent $agent, string $prompt, array $configured): array
     {
         $lastException = null;
 
@@ -124,16 +107,11 @@ class GenerateBlockVariantWithAi
                 $html = trim($response['html'] ?? '');
 
                 if ($html === '') {
-                    throw new RuntimeException("Skill [{$skill['skill']}] returned empty HTML.");
+                    throw new RuntimeException('Model returned empty HTML.');
                 }
 
                 return [
-                    'variant' => [
-                        'name' => $skill['name'],
-                        'axis' => $skill['description'],
-                        'skill' => $skill['skill'],
-                        'html' => $html,
-                    ],
+                    'html' => $html,
                     'provider' => $response->meta->provider ?? null,
                     'model' => $response->meta->model ?? null,
                     'prompt_tokens' => $response->usage->promptTokens,
@@ -146,7 +124,7 @@ class GenerateBlockVariantWithAi
         }
 
         throw new RuntimeException(
-            "Failed using skill [{$skill['skill']}]: {$lastException?->getMessage()}",
+            "Block HTML generation failed: {$lastException?->getMessage()}",
             0,
             $lastException,
         );

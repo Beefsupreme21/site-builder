@@ -9,8 +9,6 @@ use App\Enums\TemplateContext;
 use App\Models\Block;
 use App\Models\SitePage;
 use App\Models\Template;
-use App\Support\Ai\ResolvedAiConfig;
-use App\Support\Ai\SkillRegistry;
 use App\Support\BlockCategories;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -92,10 +90,6 @@ class BlockPageController extends Controller
             'layout' => null,
             'block' => $block,
             'target' => 'page',
-            'provider' => config('ai.default'),
-            'model' => config('ai.providers.'.config('ai.default').'.models.text.default'),
-            'blockSkills' => SkillRegistry::blockSkills(),
-            'blockModels' => ResolvedAiConfig::blockModels(),
         ]);
     }
 

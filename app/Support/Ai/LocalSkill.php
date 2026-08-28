@@ -7,70 +7,54 @@ use RuntimeException;
 class LocalSkill
 {
     /**
-     * @return array{instructions: string, picker: string, identifier: string}
+     * @return array{instructions: string, identifier: string}
      */
-    public static function load(string $vendor, string $skill): array
+    public static function forBlockEditor(): array
     {
-        return self::loadFromPath("{$vendor}/{$skill}", "{$vendor}/{$skill}");
-    }
+        /** @var array{path: string, includes?: list<string>} $config */
+        $config = config('ai.block_skill');
 
-    /**
-     * @return array{instructions: string, picker: string, identifier: string}
-     */
-    public static function loadByKey(string $key): array
-    {
-        $entry = SkillRegistry::entry($key);
-
-        if (isset($entry['path'])) {
-            return self::loadFromPath($entry['path'], $key);
-        }
-
-        return self::loadFromPath("{$entry['vendor']}/{$entry['skill']}", SkillRegistry::identifier($key));
-    }
-
-    /**
-     * Load a skill and any bundled reference skills (e.g. animation-vocabulary with animate).
-     *
-     * @return array{instructions: string, picker: string, identifier: string, bundled_identifiers: list<string>}
-     */
-    public static function loadWithBundles(string $key): array
-    {
-        $primary = self::loadByKey($key);
-        $instructions = [$primary['instructions']];
-        $bundledIdentifiers = [];
-
-        foreach (SkillRegistry::bundledSkillKeys($key) as $bundledKey) {
-            $bundled = self::loadByKey($bundledKey);
-            $bundledIdentifiers[] = $bundled['identifier'];
-            $instructions[] = "--- Reference: {$bundled['identifier']} ---\n\n{$bundled['instructions']}";
-        }
+        $loaded = self::loadFromPath(
+            $config['path'],
+            $config['path'],
+            $config['includes'] ?? [],
+        );
 
         return [
-            'identifier' => $primary['identifier'],
-            'instructions' => implode("\n\n", $instructions),
-            'picker' => $primary['picker'],
-            'bundled_identifiers' => $bundledIdentifiers,
+            'identifier' => $loaded['identifier'],
+            'instructions' => $loaded['instructions'],
         ];
     }
 
     /**
-     * @return array{instructions: string, picker: string, identifier: string}
+     * @param  list<string>  $includes
+     * @return array{instructions: string, identifier: string}
      */
-    private static function loadFromPath(string $relativePath, string $identifier): array
+    private static function loadFromPath(string $relativePath, string $identifier, array $includes = []): array
     {
         $basePath = resource_path("ai/skills/{$relativePath}");
 
         $instructionsPath = "{$basePath}/SKILL.md";
-        $pickerPath = "{$basePath}/PICKER.md";
 
         if (! is_file($instructionsPath)) {
             throw new RuntimeException("Skill instructions not found at [{$instructionsPath}].");
         }
 
+        $instructions = [(string) file_get_contents($instructionsPath)];
+
+        foreach ($includes as $include) {
+            $includePath = "{$basePath}/{$include}";
+
+            if (! is_file($includePath)) {
+                throw new RuntimeException("Skill include not found at [{$includePath}].");
+            }
+
+            $instructions[] = "--- Include: {$include} ---\n\n".(string) file_get_contents($includePath);
+        }
+
         return [
             'identifier' => $identifier,
-            'instructions' => (string) file_get_contents($instructionsPath),
-            'picker' => is_file($pickerPath) ? (string) file_get_contents($pickerPath) : '',
+            'instructions' => implode("\n\n", $instructions),
         ];
     }
 }

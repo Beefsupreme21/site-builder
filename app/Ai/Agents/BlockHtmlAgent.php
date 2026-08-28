@@ -5,7 +5,6 @@ namespace App\Ai\Agents;
 use App\Models\Block;
 use App\Models\Site;
 use App\Support\Ai\LocalSkill;
-use App\Support\Ai\SkillRegistry;
 use Illuminate\Contracts\JsonSchema\JsonSchema;
 use Laravel\Ai\Attributes\MaxTokens;
 use Laravel\Ai\Attributes\Timeout;
@@ -16,33 +15,25 @@ use Stringable;
 
 #[MaxTokens(8192)]
 #[Timeout(120)]
-class BlockVariantAgent implements Agent, HasStructuredOutput
+class BlockHtmlAgent implements Agent, HasStructuredOutput
 {
     use Promptable;
 
-    /** @var array{instructions: string, picker: string, identifier: string, bundled_identifiers: list<string>} */
+    /** @var array{instructions: string, identifier: string} */
     private array $loadedSkill;
 
     public function __construct(
         public Site $site,
         public Block $block,
         public string $currentContent,
-        public string $skillKey,
-        public string $variantName,
-        public string $variantAxis,
-        public int $variantIndex,
-        public int $variantCount,
     ) {
         $this->block->loadMissing('template');
-        $this->loadedSkill = LocalSkill::loadWithBundles($this->skillKey);
+        $this->loadedSkill = LocalSkill::forBlockEditor();
     }
 
-    /**
-     * @return list<string>
-     */
-    public function skillNames(): array
+    public function skillIdentifier(): string
     {
-        return SkillRegistry::skillIdentifiersFor($this->skillKey);
+        return $this->loadedSkill['identifier'];
     }
 
     public function instructions(): Stringable|string
@@ -52,9 +43,6 @@ class BlockVariantAgent implements Agent, HasStructuredOutput
         $templateContext = $template !== null
             ? "Block template: {$template->name} (category: {$template->category}, type: {$template->type})."
             : 'Block template: custom HTML block.';
-
-        $n = $this->variantIndex + 1;
-        $total = $this->variantCount;
 
         $recon = <<<TEXT
             Site builder recon:
@@ -69,20 +57,10 @@ class BlockVariantAgent implements Agent, HasStructuredOutput
             {$this->currentContent}
             TEXT;
 
-        $adaptation = $total === 1
-            ? <<<'TEXT'
-            Adaptation for this product — single block generation:
+        $adaptation = <<<'TEXT'
+            Adaptation for this product:
             - Follow the design skill instructions below strictly.
             - Return a complete HTML fragment ready to embed in a page preview.
-            - Do not include picker markup — the app renders UI separately.
-            - Use Tailwind CSS v4 utility classes. Real copy, no lorem ipsum.
-            TEXT
-            : <<<TEXT
-            Adaptation for this product — build ONE variant only:
-            - You are generating variant {$n} of {$total}: "{$this->variantName}" (axis: {$this->variantAxis}).
-            - Follow the design skill instructions below strictly — this variant must reflect that skill's philosophy.
-            - Return a complete HTML fragment ready to embed in a page preview.
-            - Do not include picker markup — the app renders the picker separately.
             - Use Tailwind CSS v4 utility classes. Real copy, no lorem ipsum.
             TEXT;
 

@@ -39,8 +39,7 @@ export const pageBlocks = {
     store: (page) => `/pages/${idOf(page)}/blocks`,
     edit: (page, block) => `/pages/${idOf(page)}/blocks/${idOf(block)}/edit`,
     update: (page, block) => `/pages/${idOf(page)}/blocks/${idOf(block)}`,
-    variant: (page, block, skill) =>
-        `/pages/${idOf(page)}/blocks/${idOf(block)}/variants/${skill}`,
+    ai: (page, block) => `/pages/${idOf(page)}/blocks/${idOf(block)}/ai`,
     destroy: (page, block) => `/pages/${idOf(page)}/blocks/${idOf(block)}`,
     move: (block, direction) => `/blocks/${idOf(block)}/move/${direction}`,
 };
@@ -50,8 +49,7 @@ export const layoutBlocks = {
     store: (layout) => `/layouts/${idOf(layout)}/blocks`,
     edit: (layout, block) => `/layouts/${idOf(layout)}/blocks/${idOf(block)}/edit`,
     update: (layout, block) => `/layouts/${idOf(layout)}/blocks/${idOf(block)}`,
-    variant: (layout, block, skill) =>
-        `/layouts/${idOf(layout)}/blocks/${idOf(block)}/variants/${skill}`,
+    ai: (layout, block) => `/layouts/${idOf(layout)}/blocks/${idOf(block)}/ai`,
     destroy: (layout, block) => `/layouts/${idOf(layout)}/blocks/${idOf(block)}`,
 };
 

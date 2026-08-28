@@ -9,8 +9,6 @@ use App\Enums\TemplateContext;
 use App\Models\Block;
 use App\Models\Layout;
 use App\Models\Template;
-use App\Support\Ai\ResolvedAiConfig;
-use App\Support\Ai\SkillRegistry;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Response;
 
@@ -61,10 +59,6 @@ class LayoutBlockController extends Controller
             'page' => null,
             'block' => $block,
             'target' => 'layout',
-            'provider' => config('ai.default'),
-            'model' => config('ai.providers.'.config('ai.default').'.models.text.default'),
-            'blockSkills' => SkillRegistry::blockSkills(),
-            'blockModels' => ResolvedAiConfig::blockModels(),
         ]);
     }
 
