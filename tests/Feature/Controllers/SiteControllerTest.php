@@ -71,6 +71,83 @@ test('seeded multipage starter includes curated pages and layout blocks', functi
     expect($site->homePage()?->blocks()->count())->toBe(2);
 });
 
+test('seeded single page starter has chrome and five stacked sections', function () {
+    $this->seed(TemplateSeeder::class);
+    $this->seed(SiteSeeder::class);
+
+    $site = Site::query()->where('slug', 'ridgeline')->firstOrFail();
+
+    expect($site->pages()->count())->toBe(1);
+    expect($site->homePage()?->slug)->toBe('home');
+
+    expect($site->defaultLayout()?->blocks()->with('template')->orderBy('order')->get()->pluck('template.type')->all())
+        ->toBe(['header_anchor', 'slot', 'footer_local']);
+
+    expect($site->homePage()?->blocks()->with('template')->orderBy('order')->get()->pluck('template.type')->all())
+        ->toBe(['hero_local', 'services_cards', 'story_split', 'hours_location', 'cta_banner']);
+});
+
+test('single page starter renders its sections in the preview', function () {
+    $this->seed(TemplateSeeder::class);
+    $this->seed(SiteSeeder::class);
+
+    $this->get('/preview/ridgeline/home')
+        ->assertOk()
+        ->assertSee('Coffee worth walking up the hill for', false)
+        ->assertSee('What we pour', false)
+        ->assertSee('A roastery first', false)
+        ->assertSee('Opening hours', false)
+        ->assertSee('Beans on your doorstep every other Friday', false);
+});
+
+test('seeded practice starter has three pages sharing one layout', function () {
+    $this->seed(TemplateSeeder::class);
+    $this->seed(SiteSeeder::class);
+
+    $site = Site::query()->where('slug', 'fernwood')->firstOrFail();
+
+    expect($site->pages()->orderBy('order')->pluck('slug')->all())
+        ->toBe(['home', 'about', 'contact']);
+
+    expect($site->defaultLayout()?->blocks()->with('template')->orderBy('order')->get()->pluck('template.type')->all())
+        ->toBe(['header_practice', 'slot', 'footer_columns']);
+
+    expect($site->pages()->pluck('layout_id')->unique())->toHaveCount(1);
+});
+
+test('seeded services starter has three pages and reuses its cta across two', function () {
+    $this->seed(TemplateSeeder::class);
+    $this->seed(SiteSeeder::class);
+
+    $site = Site::query()->where('slug', 'alder-and-vine')->firstOrFail();
+
+    expect($site->pages()->orderBy('order')->pluck('slug')->all())
+        ->toBe(['home', 'services', 'contact']);
+
+    expect($site->defaultLayout()?->blocks()->with('template')->orderBy('order')->get()->pluck('template.type')->all())
+        ->toBe(['header_studio', 'slot', 'footer_studio']);
+
+    expect($site->pages()->where('slug', 'services')->first()?->blocks()->with('template')->orderBy('order')->get()->pluck('template.type')->all())
+        ->toBe(['services_detail', 'cta_quote']);
+});
+
+test('multipage starters rewrite their nav links to preview urls', function (string $slug, string $navLink) {
+    $this->seed(TemplateSeeder::class);
+    $this->seed(SiteSeeder::class);
+
+    $site = Site::query()->where('slug', $slug)->firstOrFail();
+    $contact = $site->pages()->where('slug', 'contact')->firstOrFail();
+
+    $this->get("/preview/{$slug}/home")
+        ->assertOk()
+        ->assertSee(route('preview.show', [$site, $contact]), false)
+        ->assertSee($navLink, false)
+        ->assertDontSee('href="/contact"', false);
+})->with([
+    'practice' => ['fernwood', 'Book a visit'],
+    'services' => ['alder-and-vine', 'Request a consultation'],
+]);
+
 test('seeded landing starter is a single page with slot-only layout', function () {
     $this->seed(TemplateSeeder::class);
     $this->seed(SiteSeeder::class);

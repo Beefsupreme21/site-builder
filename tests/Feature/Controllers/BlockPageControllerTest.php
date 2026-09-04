@@ -24,6 +24,30 @@ test('block library is seeded with the starter blocks', function () {
             'newsletter_side_by_side',
             'newsletter_side_by_side_brand',
             'newsletter_centered_card',
+            'header_anchor',
+            'footer_local',
+            'hero_local',
+            'services_cards',
+            'story_split',
+            'hours_location',
+            'cta_banner',
+            'header_practice',
+            'footer_columns',
+            'hero_practice',
+            'feature_reasons',
+            'testimonial_quote',
+            'cta_book',
+            'content_mission',
+            'team_grid',
+            'contact_split',
+            'header_studio',
+            'footer_studio',
+            'hero_studio',
+            'services_list',
+            'services_detail',
+            'stats_band',
+            'cta_quote',
+            'contact_studio',
         ]);
 });
 
@@ -132,7 +156,7 @@ test('block library picker shows section categories by default', function () {
             ->has('categories', 19)
             ->has('groups', 2)
             ->where('categories.0.slug', 'hero')
-            ->where('categories.0.count', 3)
+            ->where('categories.0.count', 6)
             ->has('templates', 0));
 });
 
@@ -146,20 +170,21 @@ test('block library picker filters blocks by category', function () {
             ->component('blocks/create')
             ->where('category', 'hero')
             ->where('activeCategory.name', 'Hero Sections')
-            ->has('templates', 3)
+            ->has('templates', 6)
             ->where('templates.0.type', 'hero_centered')
             ->where('templates.0.name', 'Hero Centered'));
 
     $this->get(route('pages.blocks.create', [$page, 'category' => 'content']))
         ->assertOk()
         ->assertInertia(fn ($response) => $response
-            ->has('templates', 2)
+            ->has('templates', 4)
             ->where('templates.0.type', 'content_simple'));
 
     $this->get(route('pages.blocks.create', [$page, 'category' => 'feature']))
         ->assertOk()
         ->assertInertia(fn ($response) => $response
-            ->has('templates', 0));
+            ->has('templates', 4)
+            ->where('templates.0.type', 'services_cards'));
 });
 
 test('invalid block category shows the section index', function () {

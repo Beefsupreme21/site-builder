@@ -24,7 +24,7 @@ test('layout block picker shows layout templates only', function () {
         ->assertInertia(fn ($response) => $response
             ->component('blocks/create')
             ->where('target', 'layout')
-            ->has('templates', 3)
+            ->has('templates', 9)
             ->where('templates.0.type', 'nav_top'));
 });
 
@@ -123,7 +123,7 @@ test('page block picker excludes layout and system templates', function () {
     $this->get(route('pages.blocks.create', [$page, 'category' => 'hero']))
         ->assertOk()
         ->assertInertia(fn ($response) => $response
-            ->has('templates', 3)
+            ->has('templates', 6)
             ->where('templates.0.type', 'hero_centered'));
 });
 

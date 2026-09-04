@@ -58,6 +58,86 @@ class SiteSeeder extends Seeder
                 ],
             ],
             [
+                'slug' => 'ridgeline',
+                'company_name' => 'Ridgeline Coffee',
+                'phone' => '(503) 555-0148',
+                'email' => 'hello@ridgelinecoffee.example',
+                'logo' => '',
+                'primary_color' => '#92400E',
+                'secondary_color' => '#1C1917',
+                'layout' => ['header_anchor', 'slot', 'footer_local'],
+                'pages' => [
+                    'home' => [
+                        'title' => 'Ridgeline Coffee',
+                        'blocks' => [
+                            'hero_local',
+                            'services_cards',
+                            'story_split',
+                            'hours_location',
+                            'cta_banner',
+                        ],
+                    ],
+                ],
+            ],
+            [
+                'slug' => 'fernwood',
+                'company_name' => 'Fernwood Dental',
+                'phone' => '(612) 555-0119',
+                'email' => 'front.desk@fernwooddental.example',
+                'logo' => '',
+                'primary_color' => '#0F766E',
+                'secondary_color' => '#0F172A',
+                'layout' => ['header_practice', 'slot', 'footer_columns'],
+                'pages' => [
+                    'home' => [
+                        'title' => 'Fernwood Dental',
+                        'blocks' => [
+                            'hero_practice',
+                            'feature_reasons',
+                            'testimonial_quote',
+                            'cta_book',
+                        ],
+                    ],
+                    'about' => [
+                        'title' => 'About',
+                        'blocks' => ['content_mission', 'team_grid', 'cta_book'],
+                    ],
+                    'contact' => [
+                        'title' => 'Contact',
+                        'blocks' => ['contact_split'],
+                    ],
+                ],
+            ],
+            [
+                'slug' => 'alder-and-vine',
+                'company_name' => 'Alder & Vine',
+                'phone' => '(207) 555-0132',
+                'email' => 'studio@alderandvine.example',
+                'logo' => '',
+                'primary_color' => '#065F46',
+                'secondary_color' => '#18181B',
+                'layout' => ['header_studio', 'slot', 'footer_studio'],
+                'pages' => [
+                    'home' => [
+                        'title' => 'Alder & Vine',
+                        'blocks' => [
+                            'hero_studio',
+                            'services_list',
+                            'stats_band',
+                            'cta_quote',
+                        ],
+                    ],
+                    'services' => [
+                        'title' => 'Services',
+                        'blocks' => ['services_detail', 'cta_quote'],
+                    ],
+                    'contact' => [
+                        'title' => 'Contact',
+                        'blocks' => ['contact_studio'],
+                    ],
+                ],
+            ],
+            [
                 'slug' => 'northwind',
                 'company_name' => 'Northwind Studio',
                 'phone' => '(555) 987-6543',
