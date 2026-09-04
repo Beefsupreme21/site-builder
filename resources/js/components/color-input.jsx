@@ -18,6 +18,7 @@ export function ColorInput({ id, label, value, onChange }) {
                     type="color"
                     id={`${id}-picker`}
                     value={hex}
+                    aria-label={`${label} picker`}
                     onChange={(e) => updateFromPicker(e.target.value)}
                     className="h-10 w-14 cursor-pointer rounded border border-neutral-300 bg-white p-1"
                 />

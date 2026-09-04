@@ -2,8 +2,10 @@ import { BlockPreview } from '@/components/block-preview';
 import { btnPrimary, emptyState, linkTitle } from '@/lib/ui';
 import { Link } from '@inertiajs/react';
 
+const EMPTY_BLOCKS = [];
+
 export function BlockList({
-    blocks = [],
+    blocks = EMPTY_BLOCKS,
     createHref,
     target = 'page',
     page = null,
