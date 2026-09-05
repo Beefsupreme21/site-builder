@@ -94,16 +94,21 @@ test('preview does not render built-in site navigation or footer', function () {
         ->assertDontSee('&copy; '.now()->year, false);
 });
 
-test('preview does not inject brand color styles', function () {
+test('preview exposes a nine step ramp for each brand color', function () {
     $site = Site::factory()->create([
         'primary_color' => '#2563EB',
         'secondary_color' => '#64748B',
     ]);
 
-    $this->get(route('preview.show', [$site, $site->homePage()]))
-        ->assertOk()
-        ->assertDontSee('--primary:', false)
-        ->assertDontSee('brand-styles', false);
+    $response = $this->get(route('preview.show', [$site, $site->homePage()]))->assertOk();
+
+    $response->assertSee('--primary-500: #2563EB;', false)
+        ->assertSee('--secondary-500: #64748B;', false);
+
+    foreach ([100, 200, 300, 400, 600, 700, 800, 900] as $step) {
+        $response->assertSee("--primary-{$step}: color-mix(", false)
+            ->assertSee("--secondary-{$step}: color-mix(", false);
+    }
 });
 
 test('preview renders any page by site and page slug', function () {
