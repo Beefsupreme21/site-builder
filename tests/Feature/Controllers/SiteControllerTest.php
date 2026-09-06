@@ -50,25 +50,41 @@ test('validation failures from the action flash errors back to the form', functi
 test('seeded sites include brand colors', function () {
     $this->seed(SiteSeeder::class);
 
-    $site = Site::query()->where('slug', 'acme')->first();
+    $site = Site::query()->where('slug', 'ridgeline')->first();
 
-    expect($site->primary_color)->toBe('#4F46E5');
-    expect($site->secondary_color)->toBe('#1E293B');
+    expect($site->primary_color)->toBe('#92400E');
+    expect($site->secondary_color)->toBe('#1C1917');
 });
 
-test('seeded multipage starter includes curated pages and layout blocks', function () {
+test('seeded starters use matching company names', function () {
     $this->seed(TemplateSeeder::class);
     $this->seed(SiteSeeder::class);
 
-    $site = Site::query()->where('slug', 'acme')->first();
+    expect(Site::query()->where('slug', 'ridgeline')->value('company_name'))->toBe('Ridgeline Coffee');
+    expect(Site::query()->where('slug', 'fernwood')->value('company_name'))->toBe('Fernwood Dental');
+    expect(Site::query()->where('slug', 'willow')->value('company_name'))->toBe('Willow');
+});
 
-    expect($site->pages()->orderBy('order')->pluck('slug')->all())
-        ->toBe(['home', 'about', 'contact']);
+test('preview starter blocks use the site primary color css variables', function () {
+    $this->seed(TemplateSeeder::class);
+    $this->seed(SiteSeeder::class);
 
-    expect($site->defaultLayout()?->blocks()->with('template')->orderBy('order')->get()->pluck('template.type')->all())
-        ->toBe(['nav_top', 'slot', 'footer_social']);
+    $site = Site::query()->where('slug', 'willow')->firstOrFail();
+    $site->update(['primary_color' => '#7C3AED']);
 
-    expect($site->homePage()?->blocks()->count())->toBe(2);
+    $this->get('/preview/willow/home')
+        ->assertOk()
+        ->assertSee('--primary-500: #7C3AED;', false)
+        ->assertSee('bg-[var(--primary-700)]', false)
+        ->assertDontSee('bg-emerald-800', false);
+});
+
+test('seeded starters are ridgeline fernwood and willow only', function () {
+    $this->seed(TemplateSeeder::class);
+    $this->seed(SiteSeeder::class);
+
+    expect(Site::query()->orderBy('slug')->pluck('slug')->all())
+        ->toBe(['fernwood', 'ridgeline', 'willow']);
 });
 
 test('seeded single page starter has chrome and five stacked sections', function () {
@@ -119,7 +135,7 @@ test('seeded services starter has three pages and reuses its cta across two', fu
     $this->seed(TemplateSeeder::class);
     $this->seed(SiteSeeder::class);
 
-    $site = Site::query()->where('slug', 'alder-and-vine')->firstOrFail();
+    $site = Site::query()->where('slug', 'willow')->firstOrFail();
 
     expect($site->pages()->orderBy('order')->pluck('slug')->all())
         ->toBe(['home', 'services', 'contact']);
@@ -145,35 +161,35 @@ test('multipage starters rewrite their nav links to preview urls', function (str
         ->assertDontSee('href="/contact"', false);
 })->with([
     'practice' => ['fernwood', 'Book a visit'],
-    'services' => ['alder-and-vine', 'Request a consultation'],
+    'services' => ['willow', 'Request a consultation'],
 ]);
-
-test('seeded landing starter is a single page with slot-only layout', function () {
-    $this->seed(TemplateSeeder::class);
-    $this->seed(SiteSeeder::class);
-
-    $site = Site::query()->where('slug', 'northwind')->first();
-
-    expect($site->pages()->count())->toBe(1);
-    expect($site->defaultLayout()?->blocks()->with('template')->orderBy('order')->get()->pluck('template.type')->all())
-        ->toBe(['slot']);
-    expect($site->homePage()?->blocks()->count())->toBe(3);
-});
 
 test('home redirects to the sites index', function () {
     $this->get('/')->assertRedirect(route('sites.index'));
 });
 
+test('inertia shares a cache busted app logo url', function () {
+    $logoPath = public_path('images/logo.png');
+
+    $this->get(route('sites.index'))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->where('logo', asset('images/logo.png').'?v='.filemtime($logoPath))
+            ->where('name', config('app.name')));
+});
+
 test('sites index lists sites ordered by company name', function () {
-    Site::factory()->create(['company_name' => 'Zulu Co', 'slug' => 'zulu']);
     Site::factory()->create(['company_name' => 'Alpha Co', 'slug' => 'alpha']);
+    Site::factory()->create(['company_name' => 'Zulu Co', 'slug' => 'zulu']);
 
     $this->get(route('sites.index'))
         ->assertOk()
         ->assertInertia(fn ($page) => $page
             ->component('sites/index')
             ->where('sites.0.company_name', 'Alpha Co')
-            ->where('sites.1.company_name', 'Zulu Co'));
+            ->where('sites.0.slug', 'alpha')
+            ->where('sites.1.company_name', 'Zulu Co')
+            ->where('sites.1.slug', 'zulu'));
 });
 
 test('site show includes the default layout', function () {

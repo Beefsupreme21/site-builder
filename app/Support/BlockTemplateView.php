@@ -2,6 +2,7 @@
 
 namespace App\Support;
 
+use App\Models\Site;
 use Illuminate\Support\Facades\View;
 
 class BlockTemplateView
@@ -16,8 +17,10 @@ class BlockTemplateView
         return View::exists(self::name($category, $type));
     }
 
-    public static function render(string $category, string $type): string
+    public static function render(string $category, string $type, ?Site $site = null): string
     {
-        return View::make(self::name($category, $type))->render();
+        return View::make(self::name($category, $type), [
+            'site' => $site,
+        ])->render();
     }
 }

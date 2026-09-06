@@ -19,7 +19,7 @@
                 <h3 class="mt-6 text-lg font-semibold text-slate-900">
                     Dr. Amara Okafor
                 </h3>
-                <p class="mt-1 text-sm font-medium text-teal-700">
+                <p class="mt-1 text-sm font-medium text-[var(--primary-700)]">
                     Principal dentist
                 </p>
                 <p class="mt-4 text-base/7 text-slate-600">
@@ -38,7 +38,7 @@
                 <h3 class="mt-6 text-lg font-semibold text-slate-900">
                     Dr. Luis Reyes
                 </h3>
-                <p class="mt-1 text-sm font-medium text-teal-700">
+                <p class="mt-1 text-sm font-medium text-[var(--primary-700)]">
                     Dentist
                 </p>
                 <p class="mt-4 text-base/7 text-slate-600">
@@ -57,7 +57,7 @@
                 <h3 class="mt-6 text-lg font-semibold text-slate-900">
                     Bea Lindqvist
                 </h3>
-                <p class="mt-1 text-sm font-medium text-teal-700">
+                <p class="mt-1 text-sm font-medium text-[var(--primary-700)]">
                     Hygienist
                 </p>
                 <p class="mt-4 text-base/7 text-slate-600">

@@ -21,7 +21,7 @@
                             id="studio-name"
                             name="name"
                             autocomplete="name"
-                            class="mt-2 block w-full border border-zinc-500 bg-white px-4 py-3 text-base text-zinc-900 shadow-[inset_0_2px_2px_rgba(0,0,0,0.06)] focus:border-emerald-800 focus:outline-none focus:ring-2 focus:ring-emerald-800/30"
+                            class="mt-2 block w-full border border-zinc-500 bg-white px-4 py-3 text-base text-zinc-900 shadow-[inset_0_2px_2px_rgba(0,0,0,0.06)] focus:border-[var(--primary-700)] focus:outline-none focus:ring-2 focus:ring-[var(--primary-700)]/30"
                         />
                     </div>
 
@@ -34,7 +34,7 @@
                             id="studio-email"
                             name="email"
                             autocomplete="email"
-                            class="mt-2 block w-full border border-zinc-500 bg-white px-4 py-3 text-base text-zinc-900 shadow-[inset_0_2px_2px_rgba(0,0,0,0.06)] focus:border-emerald-800 focus:outline-none focus:ring-2 focus:ring-emerald-800/30"
+                            class="mt-2 block w-full border border-zinc-500 bg-white px-4 py-3 text-base text-zinc-900 shadow-[inset_0_2px_2px_rgba(0,0,0,0.06)] focus:border-[var(--primary-700)] focus:outline-none focus:ring-2 focus:ring-[var(--primary-700)]/30"
                         />
                     </div>
 
@@ -46,7 +46,7 @@
                             type="text"
                             id="studio-town"
                             name="town"
-                            class="mt-2 block w-full border border-zinc-500 bg-white px-4 py-3 text-base text-zinc-900 shadow-[inset_0_2px_2px_rgba(0,0,0,0.06)] focus:border-emerald-800 focus:outline-none focus:ring-2 focus:ring-emerald-800/30"
+                            class="mt-2 block w-full border border-zinc-500 bg-white px-4 py-3 text-base text-zinc-900 shadow-[inset_0_2px_2px_rgba(0,0,0,0.06)] focus:border-[var(--primary-700)] focus:outline-none focus:ring-2 focus:ring-[var(--primary-700)]/30"
                         />
                         <p class="mt-2 text-sm text-zinc-500">
                             We work within about ninety minutes of Portland.
@@ -61,12 +61,12 @@
                             id="studio-brief"
                             name="brief"
                             rows="5"
-                            class="mt-2 block w-full border border-zinc-500 bg-white px-4 py-3 text-base text-zinc-900 shadow-[inset_0_2px_2px_rgba(0,0,0,0.06)] focus:border-emerald-800 focus:outline-none focus:ring-2 focus:ring-emerald-800/30"
+                            class="mt-2 block w-full border border-zinc-500 bg-white px-4 py-3 text-base text-zinc-900 shadow-[inset_0_2px_2px_rgba(0,0,0,0.06)] focus:border-[var(--primary-700)] focus:outline-none focus:ring-2 focus:ring-[var(--primary-700)]/30"
                         ></textarea>
                     </div>
 
                     <div class="sm:col-span-2">
-                        <button type="submit" class="w-full bg-emerald-800 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-900 sm:w-auto">
+                        <button type="submit" class="w-full bg-[var(--primary-700)] px-5 py-3 text-sm font-semibold text-white hover:bg-[var(--primary-800)] sm:w-auto">
                             Send enquiry
                         </button>
                     </div>
@@ -74,7 +74,7 @@
             </div>
 
             <div class="lg:col-span-2">
-                <div class="border-t-2 border-emerald-800 bg-zinc-50 p-8">
+                <div class="border-t-2 border-[var(--primary-700)] bg-zinc-50 p-8">
                     <h2 class="font-serif text-2xl text-zinc-900">
                         The studio
                     </h2>
@@ -86,8 +86,8 @@
                         <a href="tel:+12075550132" class="font-semibold text-zinc-900 hover:underline">
                             (207) 555-0132
                         </a>
-                        <a href="mailto:studio@alderandvine.example" class="font-medium text-emerald-800 hover:underline">
-                            studio@alderandvine.example
+                        <a href="mailto:studio@willow.example" class="font-medium text-[var(--primary-700)] hover:underline">
+                            studio@willow.example
                         </a>
                     </address>
 
@@ -102,7 +102,7 @@
                         </div>
                         <div class="flex items-baseline justify-between gap-6 py-3">
                             <dt class="text-sm text-zinc-600">Booking out to</dt>
-                            <dd class="text-sm font-medium text-emerald-800">Spring next year</dd>
+                            <dd class="text-sm font-medium text-[var(--primary-700)]">Spring next year</dd>
                         </div>
                     </dl>
                 </div>

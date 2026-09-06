@@ -3,7 +3,7 @@
         <div class="flex flex-col gap-10 sm:flex-row sm:items-start sm:justify-between">
             <div>
                 <div class="flex items-center gap-3">
-                    <span class="flex size-8 shrink-0 items-center justify-center rounded-lg bg-amber-800 text-xs font-semibold tracking-wider text-white">
+                    <span class="flex size-8 shrink-0 items-center justify-center rounded-lg bg-[var(--primary-700)] text-xs font-semibold tracking-wider text-white">
                         RC
                     </span>
                     <span class="text-base font-semibold tracking-tight text-stone-900">

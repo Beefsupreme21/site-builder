@@ -8,7 +8,7 @@
 
     <div class="mx-auto max-w-6xl px-6 py-32 sm:py-40">
         <div class="max-w-2xl">
-            <p class="text-xs font-semibold uppercase tracking-wider text-emerald-300">
+            <p class="text-xs font-semibold uppercase tracking-wider text-[var(--primary-300)]">
                 Landscape &amp; garden design
             </p>
 

@@ -48,6 +48,9 @@ test('block library is seeded with the starter blocks', function () {
             'stats_band',
             'cta_quote',
             'contact_studio',
+            'faqs_divided',
+            'faqs_split',
+            'faqs_accordion',
         ]);
 });
 
@@ -185,6 +188,14 @@ test('block library picker filters blocks by category', function () {
         ->assertInertia(fn ($response) => $response
             ->has('templates', 4)
             ->where('templates.0.type', 'services_cards'));
+
+    $this->get(route('pages.blocks.create', [$page, 'category' => 'faqs']))
+        ->assertOk()
+        ->assertInertia(fn ($response) => $response
+            ->where('category', 'faqs')
+            ->where('activeCategory.name', 'FAQs')
+            ->has('templates', 3)
+            ->where('templates.0.type', 'faqs_divided'));
 });
 
 test('invalid block category shows the section index', function () {

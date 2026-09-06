@@ -12,11 +12,11 @@
         <div class="mt-12 grid grid-cols-1 gap-8 lg:grid-cols-3">
             <figure class="flex flex-col rounded-xl bg-white p-8 shadow-sm">
                 <div class="flex gap-1" aria-label="Rated 5 out of 5">
-                    <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="size-5 text-teal-600"><path d="M10 1.5l2.6 5.6 6.1.8-4.5 4.2 1.1 6-5.3-3-5.3 3 1.1-6L1.3 7.9l6.1-.8L10 1.5Z" /></svg>
-                    <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="size-5 text-teal-600"><path d="M10 1.5l2.6 5.6 6.1.8-4.5 4.2 1.1 6-5.3-3-5.3 3 1.1-6L1.3 7.9l6.1-.8L10 1.5Z" /></svg>
-                    <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="size-5 text-teal-600"><path d="M10 1.5l2.6 5.6 6.1.8-4.5 4.2 1.1 6-5.3-3-5.3 3 1.1-6L1.3 7.9l6.1-.8L10 1.5Z" /></svg>
-                    <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="size-5 text-teal-600"><path d="M10 1.5l2.6 5.6 6.1.8-4.5 4.2 1.1 6-5.3-3-5.3 3 1.1-6L1.3 7.9l6.1-.8L10 1.5Z" /></svg>
-                    <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="size-5 text-teal-600"><path d="M10 1.5l2.6 5.6 6.1.8-4.5 4.2 1.1 6-5.3-3-5.3 3 1.1-6L1.3 7.9l6.1-.8L10 1.5Z" /></svg>
+                    <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="size-5 text-[var(--primary-600)]"><path d="M10 1.5l2.6 5.6 6.1.8-4.5 4.2 1.1 6-5.3-3-5.3 3 1.1-6L1.3 7.9l6.1-.8L10 1.5Z" /></svg>
+                    <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="size-5 text-[var(--primary-600)]"><path d="M10 1.5l2.6 5.6 6.1.8-4.5 4.2 1.1 6-5.3-3-5.3 3 1.1-6L1.3 7.9l6.1-.8L10 1.5Z" /></svg>
+                    <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="size-5 text-[var(--primary-600)]"><path d="M10 1.5l2.6 5.6 6.1.8-4.5 4.2 1.1 6-5.3-3-5.3 3 1.1-6L1.3 7.9l6.1-.8L10 1.5Z" /></svg>
+                    <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="size-5 text-[var(--primary-600)]"><path d="M10 1.5l2.6 5.6 6.1.8-4.5 4.2 1.1 6-5.3-3-5.3 3 1.1-6L1.3 7.9l6.1-.8L10 1.5Z" /></svg>
+                    <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="size-5 text-[var(--primary-600)]"><path d="M10 1.5l2.6 5.6 6.1.8-4.5 4.2 1.1 6-5.3-3-5.3 3 1.1-6L1.3 7.9l6.1-.8L10 1.5Z" /></svg>
                 </div>
                 <blockquote class="mt-6 flex-1 text-base/7 text-slate-600">
                     I had put off going to a dentist for nine years. Dr. Reyes
@@ -38,11 +38,11 @@
 
             <figure class="flex flex-col rounded-xl bg-white p-8 shadow-sm">
                 <div class="flex gap-1" aria-label="Rated 5 out of 5">
-                    <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="size-5 text-teal-600"><path d="M10 1.5l2.6 5.6 6.1.8-4.5 4.2 1.1 6-5.3-3-5.3 3 1.1-6L1.3 7.9l6.1-.8L10 1.5Z" /></svg>
-                    <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="size-5 text-teal-600"><path d="M10 1.5l2.6 5.6 6.1.8-4.5 4.2 1.1 6-5.3-3-5.3 3 1.1-6L1.3 7.9l6.1-.8L10 1.5Z" /></svg>
-                    <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="size-5 text-teal-600"><path d="M10 1.5l2.6 5.6 6.1.8-4.5 4.2 1.1 6-5.3-3-5.3 3 1.1-6L1.3 7.9l6.1-.8L10 1.5Z" /></svg>
-                    <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="size-5 text-teal-600"><path d="M10 1.5l2.6 5.6 6.1.8-4.5 4.2 1.1 6-5.3-3-5.3 3 1.1-6L1.3 7.9l6.1-.8L10 1.5Z" /></svg>
-                    <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="size-5 text-teal-600"><path d="M10 1.5l2.6 5.6 6.1.8-4.5 4.2 1.1 6-5.3-3-5.3 3 1.1-6L1.3 7.9l6.1-.8L10 1.5Z" /></svg>
+                    <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="size-5 text-[var(--primary-600)]"><path d="M10 1.5l2.6 5.6 6.1.8-4.5 4.2 1.1 6-5.3-3-5.3 3 1.1-6L1.3 7.9l6.1-.8L10 1.5Z" /></svg>
+                    <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="size-5 text-[var(--primary-600)]"><path d="M10 1.5l2.6 5.6 6.1.8-4.5 4.2 1.1 6-5.3-3-5.3 3 1.1-6L1.3 7.9l6.1-.8L10 1.5Z" /></svg>
+                    <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="size-5 text-[var(--primary-600)]"><path d="M10 1.5l2.6 5.6 6.1.8-4.5 4.2 1.1 6-5.3-3-5.3 3 1.1-6L1.3 7.9l6.1-.8L10 1.5Z" /></svg>
+                    <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="size-5 text-[var(--primary-600)]"><path d="M10 1.5l2.6 5.6 6.1.8-4.5 4.2 1.1 6-5.3-3-5.3 3 1.1-6L1.3 7.9l6.1-.8L10 1.5Z" /></svg>
+                    <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="size-5 text-[var(--primary-600)]"><path d="M10 1.5l2.6 5.6 6.1.8-4.5 4.2 1.1 6-5.3-3-5.3 3 1.1-6L1.3 7.9l6.1-.8L10 1.5Z" /></svg>
                 </div>
                 <blockquote class="mt-6 flex-1 text-base/7 text-slate-600">
                     They quoted me $1,180 for a crown and the bill was $1,180.
@@ -63,11 +63,11 @@
 
             <figure class="flex flex-col rounded-xl bg-white p-8 shadow-sm">
                 <div class="flex gap-1" aria-label="Rated 5 out of 5">
-                    <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="size-5 text-teal-600"><path d="M10 1.5l2.6 5.6 6.1.8-4.5 4.2 1.1 6-5.3-3-5.3 3 1.1-6L1.3 7.9l6.1-.8L10 1.5Z" /></svg>
-                    <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="size-5 text-teal-600"><path d="M10 1.5l2.6 5.6 6.1.8-4.5 4.2 1.1 6-5.3-3-5.3 3 1.1-6L1.3 7.9l6.1-.8L10 1.5Z" /></svg>
-                    <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="size-5 text-teal-600"><path d="M10 1.5l2.6 5.6 6.1.8-4.5 4.2 1.1 6-5.3-3-5.3 3 1.1-6L1.3 7.9l6.1-.8L10 1.5Z" /></svg>
-                    <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="size-5 text-teal-600"><path d="M10 1.5l2.6 5.6 6.1.8-4.5 4.2 1.1 6-5.3-3-5.3 3 1.1-6L1.3 7.9l6.1-.8L10 1.5Z" /></svg>
-                    <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="size-5 text-teal-600"><path d="M10 1.5l2.6 5.6 6.1.8-4.5 4.2 1.1 6-5.3-3-5.3 3 1.1-6L1.3 7.9l6.1-.8L10 1.5Z" /></svg>
+                    <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="size-5 text-[var(--primary-600)]"><path d="M10 1.5l2.6 5.6 6.1.8-4.5 4.2 1.1 6-5.3-3-5.3 3 1.1-6L1.3 7.9l6.1-.8L10 1.5Z" /></svg>
+                    <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="size-5 text-[var(--primary-600)]"><path d="M10 1.5l2.6 5.6 6.1.8-4.5 4.2 1.1 6-5.3-3-5.3 3 1.1-6L1.3 7.9l6.1-.8L10 1.5Z" /></svg>
+                    <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="size-5 text-[var(--primary-600)]"><path d="M10 1.5l2.6 5.6 6.1.8-4.5 4.2 1.1 6-5.3-3-5.3 3 1.1-6L1.3 7.9l6.1-.8L10 1.5Z" /></svg>
+                    <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="size-5 text-[var(--primary-600)]"><path d="M10 1.5l2.6 5.6 6.1.8-4.5 4.2 1.1 6-5.3-3-5.3 3 1.1-6L1.3 7.9l6.1-.8L10 1.5Z" /></svg>
+                    <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="size-5 text-[var(--primary-600)]"><path d="M10 1.5l2.6 5.6 6.1.8-4.5 4.2 1.1 6-5.3-3-5.3 3 1.1-6L1.3 7.9l6.1-.8L10 1.5Z" /></svg>
                 </div>
                 <blockquote class="mt-6 flex-1 text-base/7 text-slate-600">
                     My six-year-old asks when she gets to go back. I have no idea

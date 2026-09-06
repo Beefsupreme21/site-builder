@@ -8,7 +8,7 @@
             notes whether or not you go on to hire us.
         </p>
         <div class="mt-10 flex flex-wrap items-center justify-center gap-6">
-            <a href="/contact" class="bg-emerald-800 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-900">
+            <a href="/contact" class="bg-[var(--primary-700)] px-5 py-3 text-sm font-semibold text-white hover:bg-[var(--primary-800)]">
                 Request a consultation
             </a>
             <a href="tel:+12075550132" class="text-sm font-semibold text-zinc-900 hover:underline">

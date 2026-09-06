@@ -12,7 +12,7 @@
 
         <dl class="mt-12 border-t border-zinc-200">
             <div class="grid grid-cols-1 gap-x-8 gap-y-3 border-b border-zinc-200 py-8 sm:grid-cols-12">
-                <span aria-hidden="true" class="font-serif text-2xl text-emerald-800 sm:col-span-1">
+                <span aria-hidden="true" class="font-serif text-2xl text-[var(--primary-700)] sm:col-span-1">
                     01
                 </span>
                 <dt class="text-lg font-semibold text-zinc-900 sm:col-span-4">
@@ -26,7 +26,7 @@
             </div>
 
             <div class="grid grid-cols-1 gap-x-8 gap-y-3 border-b border-zinc-200 py-8 sm:grid-cols-12">
-                <span aria-hidden="true" class="font-serif text-2xl text-emerald-800 sm:col-span-1">
+                <span aria-hidden="true" class="font-serif text-2xl text-[var(--primary-700)] sm:col-span-1">
                     02
                 </span>
                 <dt class="text-lg font-semibold text-zinc-900 sm:col-span-4">
@@ -40,7 +40,7 @@
             </div>
 
             <div class="grid grid-cols-1 gap-x-8 gap-y-3 border-b border-zinc-200 py-8 sm:grid-cols-12">
-                <span aria-hidden="true" class="font-serif text-2xl text-emerald-800 sm:col-span-1">
+                <span aria-hidden="true" class="font-serif text-2xl text-[var(--primary-700)] sm:col-span-1">
                     03
                 </span>
                 <dt class="text-lg font-semibold text-zinc-900 sm:col-span-4">
@@ -54,7 +54,7 @@
             </div>
 
             <div class="grid grid-cols-1 gap-x-8 gap-y-3 border-b border-zinc-200 py-8 sm:grid-cols-12">
-                <span aria-hidden="true" class="font-serif text-2xl text-emerald-800 sm:col-span-1">
+                <span aria-hidden="true" class="font-serif text-2xl text-[var(--primary-700)] sm:col-span-1">
                     04
                 </span>
                 <dt class="text-lg font-semibold text-zinc-900 sm:col-span-4">

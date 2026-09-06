@@ -6,7 +6,7 @@
     @foreach ($page->layout->blocks as $block)
         @if ($block->isSlot())
             @forelse ($page->blocks as $pageBlock)
-                {!! $preview->render($pageBlock->content) !!}
+                {!! $preview->renderBlock($pageBlock) !!}
             @empty
                 <section class="mx-auto max-w-3xl px-6 py-20 text-center">
                     <h1 class="text-4xl font-semibold tracking-tight text-neutral-900">
@@ -18,7 +18,7 @@
                 </section>
             @endforelse
         @else
-            {!! $preview->render($block->content) !!}
+            {!! $preview->renderBlock($block) !!}
         @endif
     @endforeach
 @endsection

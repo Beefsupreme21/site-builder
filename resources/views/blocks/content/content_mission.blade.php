@@ -2,7 +2,7 @@
     <div class="mx-auto max-w-6xl px-6 py-16 sm:py-24">
         <div class="grid grid-cols-1 items-start gap-12 lg:grid-cols-2 lg:gap-16">
             <div>
-                <p class="text-xs font-semibold uppercase tracking-wider text-teal-700">
+                <p class="text-xs font-semibold uppercase tracking-wider text-[var(--primary-700)]">
                     About the practice
                 </p>
                 <h1 class="mt-3 text-balance text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl">
@@ -26,8 +26,8 @@
                     the day because they cannot get time off work.
                 </p>
 
-                <div class="mt-10 rounded-xl border-l-2 border-teal-700 bg-teal-50 p-6">
-                    <p class="text-base/7 font-medium text-teal-900">
+                <div class="mt-10 rounded-xl border-l-2 border-[var(--primary-600)] bg-[var(--primary-100)] p-6">
+                    <p class="text-base/7 font-medium text-[var(--primary-800)]">
                         We reserve two slots every morning for emergencies. If you
                         crack a tooth before noon, you will be seen that day.
                     </p>

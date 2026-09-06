@@ -21,7 +21,7 @@
                             id="contact-first-name"
                             name="first_name"
                             autocomplete="given-name"
-                            class="mt-2 block w-full rounded-xl border border-slate-500 bg-white px-4 py-3 text-base text-slate-900 shadow-[inset_0_2px_2px_rgba(0,0,0,0.06)] focus:border-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-700/30"
+                            class="mt-2 block w-full rounded-xl border border-slate-500 bg-white px-4 py-3 text-base text-slate-900 shadow-[inset_0_2px_2px_rgba(0,0,0,0.06)] focus:border-[var(--primary-600)] focus:outline-none focus:ring-2 focus:ring-[var(--primary-600)]/30"
                         />
                     </div>
 
@@ -34,7 +34,7 @@
                             id="contact-last-name"
                             name="last_name"
                             autocomplete="family-name"
-                            class="mt-2 block w-full rounded-xl border border-slate-500 bg-white px-4 py-3 text-base text-slate-900 shadow-[inset_0_2px_2px_rgba(0,0,0,0.06)] focus:border-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-700/30"
+                            class="mt-2 block w-full rounded-xl border border-slate-500 bg-white px-4 py-3 text-base text-slate-900 shadow-[inset_0_2px_2px_rgba(0,0,0,0.06)] focus:border-[var(--primary-600)] focus:outline-none focus:ring-2 focus:ring-[var(--primary-600)]/30"
                         />
                     </div>
 
@@ -47,7 +47,7 @@
                             id="contact-phone"
                             name="phone"
                             autocomplete="tel"
-                            class="mt-2 block w-full rounded-xl border border-slate-500 bg-white px-4 py-3 text-base text-slate-900 shadow-[inset_0_2px_2px_rgba(0,0,0,0.06)] focus:border-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-700/30"
+                            class="mt-2 block w-full rounded-xl border border-slate-500 bg-white px-4 py-3 text-base text-slate-900 shadow-[inset_0_2px_2px_rgba(0,0,0,0.06)] focus:border-[var(--primary-600)] focus:outline-none focus:ring-2 focus:ring-[var(--primary-600)]/30"
                         />
                         <p class="mt-2 text-sm text-slate-500">
                             We call rather than email, so this one matters most.
@@ -62,12 +62,12 @@
                             id="contact-reason"
                             name="reason"
                             rows="4"
-                            class="mt-2 block w-full rounded-xl border border-slate-500 bg-white px-4 py-3 text-base text-slate-900 shadow-[inset_0_2px_2px_rgba(0,0,0,0.06)] focus:border-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-700/30"
+                            class="mt-2 block w-full rounded-xl border border-slate-500 bg-white px-4 py-3 text-base text-slate-900 shadow-[inset_0_2px_2px_rgba(0,0,0,0.06)] focus:border-[var(--primary-600)] focus:outline-none focus:ring-2 focus:ring-[var(--primary-600)]/30"
                         ></textarea>
                     </div>
 
                     <div class="sm:col-span-2">
-                        <button type="submit" class="w-full rounded-xl bg-teal-700 px-5 py-3 text-sm font-semibold text-white shadow-md hover:bg-teal-800 sm:w-auto">
+                        <button type="submit" class="w-full rounded-xl bg-[var(--primary-600)] px-5 py-3 text-sm font-semibold text-white shadow-md hover:bg-[var(--primary-700)] sm:w-auto">
                             Send request
                         </button>
                     </div>
@@ -111,7 +111,7 @@
                         <a href="tel:+16125550119" class="font-semibold text-slate-900 hover:underline">
                             (612) 555-0119
                         </a>
-                        <a href="mailto:front.desk@fernwooddental.example" class="font-medium text-teal-800 hover:underline">
+                        <a href="mailto:front.desk@fernwooddental.example" class="font-medium text-[var(--primary-700)] hover:underline">
                             front.desk@fernwooddental.example
                         </a>
                     </address>

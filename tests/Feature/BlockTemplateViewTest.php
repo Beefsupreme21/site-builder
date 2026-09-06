@@ -47,6 +47,9 @@ test('seeded block templates have blade views', function (string $category, stri
     'stats band' => ['stats', 'stats_band'],
     'cta quote' => ['cta', 'cta_quote'],
     'contact studio' => ['contact', 'contact_studio'],
+    'faqs divided' => ['faqs', 'faqs_divided'],
+    'faqs split' => ['faqs', 'faqs_split'],
+    'faqs accordion' => ['faqs', 'faqs_accordion'],
 ]);
 
 test('seeded block templates render html', function (string $category, string $type) {
@@ -74,4 +77,5 @@ test('seeded block templates render html', function (string $category, string $t
     'feature numbered services' => ['feature', 'services_list'],
     'stats band' => ['stats', 'stats_band'],
     'contact studio' => ['contact', 'contact_studio'],
+    'faqs accordion' => ['faqs', 'faqs_accordion'],
 ]);

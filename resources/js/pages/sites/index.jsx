@@ -1,5 +1,5 @@
 import { PageHeader } from '@/components/page-header';
-import { sites } from '@/lib/routes';
+import { sitePreview, sites } from '@/lib/routes';
 import {
     btnDanger,
     btnPrimary,
@@ -57,8 +57,15 @@ export default function SitesIndex({ sites: siteList }) {
                                             {site.company_name}
                                         </Link>
                                     </td>
-                                    <td className="px-4 py-3 text-neutral-600">
-                                        {site.slug}
+                                    <td className="px-4 py-3">
+                                        <a
+                                            href={sitePreview.home(site)}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-neutral-600 hover:text-neutral-900 hover:underline"
+                                        >
+                                            {site.slug}.com
+                                        </a>
                                     </td>
                                     <td className="px-4 py-3 text-right">
                                         <div className="flex justify-end gap-2">

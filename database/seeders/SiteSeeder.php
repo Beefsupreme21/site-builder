@@ -34,30 +34,6 @@ class SiteSeeder extends Seeder
     {
         return [
             [
-                'slug' => 'acme',
-                'company_name' => 'Acme',
-                'phone' => '(555) 123-4567',
-                'email' => 'hello@acme.example',
-                'logo' => 'https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600',
-                'primary_color' => '#4F46E5',
-                'secondary_color' => '#1E293B',
-                'layout' => ['nav_top', 'slot', 'footer_social'],
-                'pages' => [
-                    'home' => [
-                        'title' => 'Home',
-                        'blocks' => ['split_screenshot', 'content_split'],
-                    ],
-                    'about' => [
-                        'title' => 'About',
-                        'blocks' => ['hero_centered', 'content_simple'],
-                    ],
-                    'contact' => [
-                        'title' => 'Contact',
-                        'blocks' => ['hero_centered', 'contact_form'],
-                    ],
-                ],
-            ],
-            [
                 'slug' => 'ridgeline',
                 'company_name' => 'Ridgeline Coffee',
                 'phone' => '(503) 555-0148',
@@ -104,22 +80,22 @@ class SiteSeeder extends Seeder
                     ],
                     'contact' => [
                         'title' => 'Contact',
-                        'blocks' => ['contact_split'],
+                        'blocks' => ['contact_split', 'faqs_accordion'],
                     ],
                 ],
             ],
             [
-                'slug' => 'alder-and-vine',
-                'company_name' => 'Alder & Vine',
+                'slug' => 'willow',
+                'company_name' => 'Willow',
                 'phone' => '(207) 555-0132',
-                'email' => 'studio@alderandvine.example',
+                'email' => 'studio@willow.example',
                 'logo' => '',
                 'primary_color' => '#065F46',
                 'secondary_color' => '#18181B',
                 'layout' => ['header_studio', 'slot', 'footer_studio'],
                 'pages' => [
                     'home' => [
-                        'title' => 'Alder & Vine',
+                        'title' => 'Willow',
                         'blocks' => [
                             'hero_studio',
                             'services_list',
@@ -134,22 +110,6 @@ class SiteSeeder extends Seeder
                     'contact' => [
                         'title' => 'Contact',
                         'blocks' => ['contact_studio'],
-                    ],
-                ],
-            ],
-            [
-                'slug' => 'northwind',
-                'company_name' => 'Northwind Studio',
-                'phone' => '(555) 987-6543',
-                'email' => 'hello@northwindstudio.example',
-                'logo' => 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?auto=format&fit=crop&w=176&h=44&q=80',
-                'primary_color' => '#DC2626',
-                'secondary_color' => '#171717',
-                'layout' => ['slot'],
-                'pages' => [
-                    'home' => [
-                        'title' => 'Northwind Studio',
-                        'blocks' => ['hero_image', 'content_simple', 'contact_form'],
                     ],
                 ],
             ],
@@ -184,6 +144,8 @@ class SiteSeeder extends Seeder
         );
 
         if ($site->pages()->exists()) {
+            $this->syncStarterBlocks($site);
+
             return;
         }
 
@@ -202,6 +164,30 @@ class SiteSeeder extends Seeder
             $this->seedPageBlocks($page, $pageRecipe['blocks']);
 
             $order++;
+        }
+    }
+
+    /**
+     * @param  list<string>  $blockTypes
+     */
+    private function syncStarterBlocks(Site $site): void
+    {
+        $site->load('layouts.blocks.template', 'pages.blocks.template');
+
+        foreach ($site->layouts as $layout) {
+            foreach ($layout->blocks as $block) {
+                if ($block->template !== null) {
+                    $block->update(['content' => $block->template->default_content]);
+                }
+            }
+        }
+
+        foreach ($site->pages as $page) {
+            foreach ($page->blocks as $block) {
+                if ($block->template !== null) {
+                    $block->update(['content' => $block->template->default_content]);
+                }
+            }
         }
     }
 

@@ -57,6 +57,9 @@ class TemplateSeeder extends Seeder
             ['type' => 'stats_band', 'context' => TemplateContext::Page, 'category' => 'stats', 'name' => 'Stats Band'],
             ['type' => 'cta_quote', 'context' => TemplateContext::Page, 'category' => 'cta', 'name' => 'CTA Quote'],
             ['type' => 'contact_studio', 'context' => TemplateContext::Page, 'category' => 'contact', 'name' => 'Contact Studio'],
+            ['type' => 'faqs_divided', 'context' => TemplateContext::Page, 'category' => 'faqs', 'name' => 'Divided FAQ'],
+            ['type' => 'faqs_split', 'context' => TemplateContext::Page, 'category' => 'faqs', 'name' => 'Split FAQ'],
+            ['type' => 'faqs_accordion', 'context' => TemplateContext::Page, 'category' => 'faqs', 'name' => 'Accordion FAQ'],
         ];
 
         foreach ($library as $template) {

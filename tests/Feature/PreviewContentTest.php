@@ -1,7 +1,9 @@
 <?php
 
 use App\Models\Site;
+use App\Models\Template;
 use App\Support\PreviewContent;
+use App\Support\SiteLogo;
 use Database\Seeders\SiteSeeder;
 use Database\Seeders\TemplateSeeder;
 
@@ -30,11 +32,11 @@ test('seeded multipage preview nav links resolve in preview html', function () {
     $this->seed(TemplateSeeder::class);
     $this->seed(SiteSeeder::class);
 
-    $site = Site::query()->where('slug', 'acme')->firstOrFail();
+    $site = Site::query()->where('slug', 'fernwood')->firstOrFail();
     $about = $site->pages()->where('slug', 'about')->firstOrFail();
     $contact = $site->pages()->where('slug', 'contact')->firstOrFail();
 
-    $this->get('/preview/acme/home')
+    $this->get('/preview/fernwood/home')
         ->assertOk()
         ->assertSee(route('preview.show', [$site, $about]), false)
         ->assertSee(route('preview.show', [$site, $contact]), false);
@@ -42,11 +44,30 @@ test('seeded multipage preview nav links resolve in preview html', function () {
 
 test('stored block html keeps site-root links not preview paths', function () {
     $this->seed(TemplateSeeder::class);
+
+    $site = Site::factory()->create();
+    $layout = $site->defaultLayout();
+    $nav = Template::query()->where('type', 'nav_top')->firstOrFail();
+
+    $block = $layout->blocks()->create([
+        'template_id' => $nav->id,
+        'content' => $nav->default_content,
+        'order' => 0,
+    ]);
+
+    expect($block->content)->toContain('href="/about"');
+    expect($block->content)->not->toContain('/preview/');
+});
+
+test('preview layout headers render the site logo from settings', function () {
+    $this->seed(TemplateSeeder::class);
     $this->seed(SiteSeeder::class);
 
-    $site = Site::query()->where('slug', 'acme')->firstOrFail();
-    $nav = $site->defaultLayout()?->blocks()->whereHas('template', fn ($q) => $q->where('type', 'nav_top'))->first();
+    $site = Site::query()->where('slug', 'ridgeline')->firstOrFail();
+    $site->update(['logo' => '/images/logo.png']);
 
-    expect($nav?->content)->toContain('href="/about"');
-    expect($nav?->content)->not->toContain('/preview/');
+    $this->get('/preview/ridgeline/home')
+        ->assertOk()
+        ->assertSee(SiteLogo::url('/images/logo.png'), false)
+        ->assertDontSee('>RC<', false);
 });

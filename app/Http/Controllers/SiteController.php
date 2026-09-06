@@ -14,7 +14,14 @@ class SiteController extends Controller
     public function index(): Response
     {
         return inertia('sites/index', [
-            'sites' => Site::query()->orderBy('company_name')->get(),
+            'sites' => Site::query()
+                ->orderBy('company_name')
+                ->get()
+                ->map(fn (Site $site): array => [
+                    'id' => $site->id,
+                    'slug' => $site->slug,
+                    'company_name' => $site->company_name,
+                ]),
         ]);
     }
 

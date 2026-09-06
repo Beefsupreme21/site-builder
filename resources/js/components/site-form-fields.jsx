@@ -81,6 +81,7 @@ export function SiteFormFields({ form, logoHint }) {
                     <ColorInput
                         id="primary_color"
                         label="Primary color"
+                        hint="Drives buttons, accents, and brand highlights in the preview."
                         value={form.data.primary_color}
                         onChange={(value) =>
                             form.setData('primary_color', value)
@@ -89,6 +90,7 @@ export function SiteFormFields({ form, logoHint }) {
                     <ColorInput
                         id="secondary_color"
                         label="Secondary color"
+                        hint="Used for supporting accents and dark UI surfaces."
                         value={form.data.secondary_color}
                         onChange={(value) =>
                             form.setData('secondary_color', value)

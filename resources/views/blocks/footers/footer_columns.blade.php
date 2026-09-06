@@ -3,7 +3,7 @@
         <div class="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-4">
             <div class="lg:col-span-2">
                 <div class="flex items-center gap-3">
-                    <span class="flex size-12 shrink-0 items-center justify-center rounded-xl bg-teal-700">
+                    <span class="flex size-12 shrink-0 items-center justify-center rounded-xl bg-[var(--primary-600)]">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" class="size-6 text-white">
                             <path
                                 d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z"

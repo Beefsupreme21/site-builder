@@ -35,9 +35,14 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $logoPath = public_path('images/logo.png');
+
         return [
             ...parent::share($request),
             'name' => config('app.name'),
+            'logo' => is_file($logoPath)
+                ? asset('images/logo.png').'?v='.filemtime($logoPath)
+                : asset('images/logo.png'),
             'csrf_token' => csrf_token(),
             'auth' => [
                 'user' => $request->user(),

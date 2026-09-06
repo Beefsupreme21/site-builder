@@ -114,16 +114,17 @@ test('preview exposes a nine step ramp for each brand color', function () {
 test('preview renders any page by site and page slug', function () {
     $this->seed(SiteSeeder::class);
 
-    $site = Site::query()->where('slug', 'acme')->firstOrFail();
+    $site = Site::query()->where('slug', 'fernwood')->firstOrFail();
     $about = $site->pages()->where('slug', 'about')->firstOrFail();
 
-    $this->get('/preview/acme/about')
+    $this->get('/preview/fernwood/about')
         ->assertOk()
-        ->assertSee('A simple centered hero', false);
+        ->assertSee('Twenty years on the same corner', false);
 
-    $this->get('/preview/acme/contact')
+    $this->get('/preview/fernwood/contact')
         ->assertOk()
-        ->assertSee('Get in touch', false);
+        ->assertSee('Request an appointment', false)
+        ->assertSee('Questions, answered', false);
 });
 
 test('preview index returns 404 when the site has no home page', function () {

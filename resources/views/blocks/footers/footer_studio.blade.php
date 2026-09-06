@@ -3,7 +3,7 @@
         <div class="grid grid-cols-1 gap-12 sm:grid-cols-3">
             <div>
                 <p class="font-serif text-xl tracking-tight text-white">
-                    Alder &amp; Vine
+                    Willow
                 </p>
                 <p class="mt-4 max-w-xs text-base/7 text-zinc-300">
                     Landscape and garden design for coastal Maine, from a studio
@@ -30,8 +30,8 @@
                     <a href="tel:+12075550132" class="font-semibold text-white hover:underline">
                         (207) 555-0132
                     </a>
-                    <a href="mailto:studio@alderandvine.example" class="font-medium text-zinc-300 hover:text-white">
-                        studio@alderandvine.example
+                    <a href="mailto:studio@willow.example" class="font-medium text-zinc-300 hover:text-white">
+                        studio@willow.example
                     </a>
                 </address>
             </div>
@@ -39,7 +39,7 @@
 
         <div class="mt-12 flex flex-col gap-2 border-t border-zinc-800 pt-8 sm:flex-row sm:items-baseline sm:justify-between">
             <p class="text-sm text-zinc-400">
-                &copy; {{ date('Y') }} Alder &amp; Vine Landscape Design.
+                &copy; {{ date('Y') }} Willow Landscape Design.
             </p>
             <p class="text-sm text-zinc-400">
                 Currently booking spring next year.

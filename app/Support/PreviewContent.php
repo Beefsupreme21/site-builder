@@ -2,6 +2,8 @@
 
 namespace App\Support;
 
+use App\Enums\TemplateContext;
+use App\Models\Block;
 use App\Models\Site;
 use App\Models\SitePage;
 use Illuminate\Support\Collection;
@@ -11,7 +13,8 @@ use Illuminate\Support\Collection;
  *
  * Blocks should store the URLs customers want when live, e.g. href="/about".
  * Preview prefixes those paths so they work under /preview/{site}/….
- * Published sites render the HTML unchanged on the customer's domain.
+ * Layout blocks are re-rendered from their Blade view so branding like the
+ * logo always reflects the current site settings.
  */
 class PreviewContent
 {
@@ -28,6 +31,25 @@ class PreviewContent
         $site->loadMissing('pages');
 
         return new self($site, $site->pages->keyBy('slug'));
+    }
+
+    public function renderBlock(Block $block): string
+    {
+        $block->loadMissing('template');
+
+        $content = $block->template !== null
+            && (
+                $block->template->context === TemplateContext::Layout
+                || $block->content === $block->template->default_content
+            )
+            ? BlockTemplateView::render(
+                $block->template->category,
+                $block->template->type,
+                $this->site,
+            )
+            : $block->content;
+
+        return $this->render($content);
     }
 
     public function render(string $content): string

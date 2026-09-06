@@ -18,7 +18,7 @@
                     class="aspect-[3/2] w-full object-cover"
                 />
                 <div>
-                    <p class="font-serif text-2xl text-emerald-800">01</p>
+                    <p class="font-serif text-2xl text-[var(--primary-700)]">01</p>
                     <h2 class="mt-2 font-serif text-3xl text-zinc-900">
                         Survey and soil
                     </h2>
@@ -42,7 +42,7 @@
                     class="aspect-[3/2] w-full object-cover lg:order-last"
                 />
                 <div>
-                    <p class="font-serif text-2xl text-emerald-800">02</p>
+                    <p class="font-serif text-2xl text-[var(--primary-700)]">02</p>
                     <h2 class="mt-2 font-serif text-3xl text-zinc-900">
                         Design and build
                     </h2>
@@ -66,7 +66,7 @@
                     class="aspect-[3/2] w-full object-cover"
                 />
                 <div>
-                    <p class="font-serif text-2xl text-emerald-800">03</p>
+                    <p class="font-serif text-2xl text-[var(--primary-700)]">03</p>
                     <h2 class="mt-2 font-serif text-3xl text-zinc-900">
                         Planting and handover
                     </h2>

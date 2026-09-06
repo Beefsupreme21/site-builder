@@ -16,7 +16,15 @@
                 </div>
                 <div class="flex shrink-0 items-center">
                     <a href="/">
-                        <img src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600" alt="Your Company" class="h-8 w-auto" />
+                        @php
+                            $companyName = $site->company_name ?? 'Your Company';
+                            $logoUrl = isset($site) ? \App\Support\SiteLogo::url($site->logo) : null;
+                        @endphp
+                        @if ($logoUrl)
+                            <img src="{{ $logoUrl }}" alt="{{ $companyName }}" class="h-8 w-auto" />
+                        @else
+                            <img src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600" alt="{{ $companyName }}" class="h-8 w-auto" />
+                        @endif
                     </a>
                 </div>
                 <div class="hidden md:ml-6 md:flex md:space-x-8">

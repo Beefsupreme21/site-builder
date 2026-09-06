@@ -8,7 +8,7 @@ const widths = {
 };
 
 export default function AppLayout({ children, width = 'wide' }) {
-    const { auth } = usePage().props;
+    const { auth, logo, name } = usePage().props;
     const contentWidth = widths[width] ?? widths.wide;
 
     return (
@@ -20,8 +20,8 @@ export default function AppLayout({ children, width = 'wide' }) {
                         className="flex shrink-0 items-center"
                     >
                         <img
-                            src="/images/logo.png"
-                            alt="SiteBuilder"
+                            src={logo}
+                            alt={name}
                             className="h-18 w-auto"
                         />
                     </Link>

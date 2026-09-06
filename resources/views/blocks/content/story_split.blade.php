@@ -8,7 +8,7 @@
             />
 
             <div>
-                <p class="text-xs font-semibold uppercase tracking-wider text-amber-800">
+                <p class="text-xs font-semibold uppercase tracking-wider text-[var(--primary-700)]">
                     Our story
                 </p>
                 <h2 class="mt-3 text-3xl font-semibold tracking-tight text-stone-900 sm:text-4xl">

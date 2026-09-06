@@ -2,8 +2,8 @@
     <div class="mx-auto max-w-6xl px-6 py-16 sm:py-24">
         <div class="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16">
             <div>
-                <span class="inline-flex items-center gap-2 rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-amber-900">
-                    <span class="size-1.5 rounded-full bg-amber-700"></span>
+                <span class="inline-flex items-center gap-2 rounded-full bg-[var(--primary-100)] px-3 py-1 text-xs font-semibold uppercase tracking-wider text-[var(--primary-800)]">
+                    <span class="size-1.5 rounded-full bg-[var(--primary-600)]"></span>
                     Roasted in small batches
                 </span>
 
@@ -18,7 +18,7 @@
                 </p>
 
                 <div class="mt-10 flex flex-wrap items-center gap-6">
-                    <a href="#visit" class="rounded-lg bg-amber-800 px-5 py-3 text-sm font-semibold text-white shadow-md hover:bg-amber-900">
+                    <a href="#visit" class="rounded-lg bg-[var(--primary-700)] px-5 py-3 text-sm font-semibold text-white shadow-md hover:bg-[var(--primary-800)]">
                         Plan your visit
                     </a>
                     <a href="#menu" class="text-sm font-semibold text-stone-900 hover:underline">
